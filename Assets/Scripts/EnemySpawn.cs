@@ -8,67 +8,78 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] List<GameObject> spawnPointList = new List<GameObject>();
     [SerializeField] List<GameObject> enemyPrefabList = new List<GameObject>();
 
-    List<GameObject> randomSpawnPoint = new List<GameObject>();
+    List<int> randomPosList = new List<int>();
+    List<GameObject> cloneEnemy = new List<GameObject>();
+
+    //5以上にするとerrorの可能性ある。5未満は少ない。正の整数ね。
+    const int SpawnAmount = 5;
 
 
-    public void SpawnEnemy(int num)
+
+    public void SpawnControll(int playerDirection)
     {
-        if (num == 1)
+        CloneEnemyDestroy();
+
+        if(playerDirection == 1)
         {
-            Instantiate(enemyPrefabList[Random.Range(0, enemyPrefabList.Count)],
-                        spawnPointList[Random.Range(0, 4)].transform.position,
-                        Quaternion.identity);
+            Spawn(playerDirection,0,5);
         }
-        else if (num == 0)
+        else if(playerDirection == -1)
         {
-            Instantiate(enemyPrefabList[Random.Range(0, enemyPrefabList.Count)],
-                        spawnPointList[Random.Range(2, spawnPointList.Count)].transform.position,
-                        Quaternion.identity);
+            Spawn(playerDirection, 2, 7);
         }
+
+        randomPosList.Clear();
+
     }
 
-
-    public void EnemyFacing(int num)
+    //Left : min=>2, max=>7(2...6の地点)
+    //right: min=>0, max=>5(0...4の地点)
+    private void Spawn(int playerDirection, int min, int max)
     {
-        if(num == 1)
-        { 
-            foreach(GameObject e in enemyPrefabList)
+        for (int i = 0; i < SpawnAmount; i++)
+        {
+            int randomPos = Random.Range(min, max);
+            int randomEnemy = Random.Range(0, enemyPrefabList.Count);
+
+
+            if (SamePointCheck(randomPos))
             {
-                e.transform.localScale = new Vector3(-1,0,0);
+                randomPosList.Add(randomPos);
+                //prefabの値ではなく、cloneの値を変えている（顔の向き）
+                cloneEnemy.Add(Instantiate(enemyPrefabList[randomEnemy], spawnPointList[randomPos].transform.position, Quaternion.identity));
+                for (int k = 0; k < cloneEnemy.Count; k++)
+                {
+                    cloneEnemy[k].transform.localScale = new Vector3(-playerDirection, 1, 1);
+                }
+
             }
         }
-        else if(num == 0)
+    }
+
+    public void CloneEnemyDestroy()
+    {
+        for(int i = 0; i < cloneEnemy.Count; i++)
         {
-            foreach (GameObject e in enemyPrefabList)
+            Destroy(cloneEnemy[i]);
+        }
+        cloneEnemy.Clear();
+    }
+
+    public bool SamePointCheck(int randomPos)
+    {
+        for(int j = 0; j < randomPosList.Count; j++)
+        {
+            if (randomPosList[j] == randomPos)
             {
-                e.transform.localScale = new Vector3(1, 0, 0);
+                return false;
             }
         }
-    }
-    
-    public void SetupSpawnPoint()
-    {
-        for(int i = 0; i < 5; i++)
-        {
-            randomSpawnPoint.Add(spawnPointList[i]);
-        }
-
-        int randomAmount = Random.Range(1, 6);
-        int randomNum = Random.Range(0, 100);
         
-        
-        
-
-        /*
-         * 0からspawnPointList.Count分のspawnPointがあります 
-         * num=1なら0から4
-         * num=0なら2からspawnPointList.Count
-         * 1から5回、被りのないSpawnPointからEnemyを生成する
-         *
-         *
-         */
-
-
+        return true;
     }
 
+
+
+        
 }

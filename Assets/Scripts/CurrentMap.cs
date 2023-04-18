@@ -22,7 +22,7 @@ public class CurrentMap : MonoBehaviour
             mapText.text = "MAP : " + mapFloor;
             e.MapEndPointCollider.isTrigger = true;
         }
-        else if(num == 0)
+        else if(num == -1)
         {
             if(mapFloor > 0)
             {

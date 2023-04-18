@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6197028263124153210}
   - component: {fileID: 5135641708265420940}
   - component: {fileID: 1377949575392417733}
+  - component: {fileID: 7827764683685587159}
   m_Layer: 0
   m_Name: PF Slime - Green
   m_TagString: Untagged
@@ -101,6 +102,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.0313301, y: 0.8472662}
   m_EdgeRadius: 0
+--- !u!114 &7827764683685587159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5160543367549481482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d307f1b6133e1444893763be30c2760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemies: {fileID: 11400000, guid: bd7b8bb9cd79935449912b3a01b76496, type: 2}
 --- !u!1001 &6220294153763969711
 PrefabInstance:
   m_ObjectHideFlags: 0

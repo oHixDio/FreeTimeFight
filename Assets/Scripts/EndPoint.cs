@@ -19,7 +19,7 @@ public class EndPoint : MonoBehaviour
         {
             player.transform.position = leftSpawnPoint.transform.position;
         }
-        else if (num == 0)
+        else if (num == -1)
         {
             player.transform.position = rightSpawnPoint.transform.position;
         }
