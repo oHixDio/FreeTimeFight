@@ -5,4 +5,6 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] ActorStatus actorStatus;
+
+
 }
