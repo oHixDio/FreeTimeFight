@@ -21,8 +21,10 @@ public class ActorStatus : ScriptableObject
     [SerializeField] protected int def = 5;
     [SerializeField] protected int spd = 5;
     [SerializeField] protected int lck = 5;
+    [SerializeField] protected int sumEXP = 0;
     [SerializeField] protected int nextExp = 10;
     [SerializeField] protected int gold = 0;
+    [SerializeField] protected Sprite faceIcon;
 
     //----------------------------------//
 
@@ -37,11 +39,11 @@ public class ActorStatus : ScriptableObject
     }
     public void ShowMaxHP(Text maxHpText)
     {
-        maxHpText.text = " / " + maxHp;
+        maxHpText.text = maxHp.ToString();
     }
-    public void ShowImage(Sprite faceSprite, Image image)
+    public void ShowImage(Image image)
     {
-        image.sprite = faceSprite;
+        image.sprite = faceIcon;
     }
     public void ShowName(Text nameText)
     {
@@ -66,6 +68,10 @@ public class ActorStatus : ScriptableObject
     public void ShowLCK(Text lckText)
     {
         lckText.text = lck.ToString();
+    }
+    public void ShowSumEXP(Text sumText)
+    {
+        sumText.text = sumEXP.ToString();
     }
     public void ShowNextEXP(Text neText)
     {

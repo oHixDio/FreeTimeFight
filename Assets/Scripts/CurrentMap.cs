@@ -7,29 +7,29 @@ public class CurrentMap : MonoBehaviour
 {
     [SerializeField] Text mapText;
 
-    int mapFloor = 0;
+    int mapFloorAmount = 0;
 
     void Start()
     {
-        mapText.text = "MAP : " + mapFloor;
+        mapText.text = "MAP : " + mapFloorAmount;
     }
 
     public void MapFloorChange(EndPoint e, int num)
     {
         if(num == 1)
         {
-            mapFloor++;
-            mapText.text = "MAP : " + mapFloor;
+            mapFloorAmount++;
+            mapText.text = "MAP : " + mapFloorAmount;
             e.MapEndPointCollider.isTrigger = true;
         }
         else if(num == -1)
         {
-            if(mapFloor > 0)
+            if(mapFloorAmount > 0)
             {
-                mapFloor--;
-                mapText.text = "MAP : " + mapFloor;
+                mapFloorAmount--;
+                mapText.text = "MAP : " + mapFloorAmount;
 
-                if(mapFloor == 0)
+                if(mapFloorAmount == 0)
                 {
                     e.MapEndPointCollider.isTrigger = false;
                 }
@@ -37,8 +37,8 @@ public class CurrentMap : MonoBehaviour
             }
             else
             {
-                mapFloor = 0;
-                mapText.text = "MAP : " + mapFloor;
+                mapFloorAmount = 0;
+                mapText.text = "MAP : " + mapFloorAmount;
             }
         }
         

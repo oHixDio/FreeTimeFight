@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5b6575af21885d4dadb9a729b1eb858, type: 3}
-  m_Name: Player
+  m_Name: SlimeGreen
   m_EditorClassIdentifier: 
-  name: "\u3072\u308D"
-  hp: 50
-  maxHp: 100
+  name: "\u30B9\u30E9\u30A4\u30E0"
+  hp: 20
+  maxHp: 20
   level: 1
-  pow: 5
-  def: 5
-  spd: 5
-  lck: 5
+  pow: 2
+  def: 2
+  spd: 2
+  lck: 2
   sumEXP: 0
-  nextExp: 10
+  nextExp: 0
   gold: 0
-  faceIcon: {fileID: 21300000, guid: 1bfb17c3c41163f4e85c1bcc3e13c4f8, type: 3}
+  faceIcon: {fileID: 21300000, guid: 1bf55a207a960bc49af9a3ee65bdb466, type: 3}
