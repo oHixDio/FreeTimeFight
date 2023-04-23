@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 6197028263124153210}
   - component: {fileID: 1377949575392417733}
   - component: {fileID: 5135641708265420940}
-  - component: {fileID: 7827764683685587159}
+  - component: {fileID: 5311212472286144609}
+  - component: {fileID: 9111306335987665150}
   m_Layer: 0
   m_Name: PF Slime - Green
   m_TagString: Enemy
@@ -102,7 +103,21 @@ MonoBehaviour:
   isGrounded: 0
   isDead: 0
   movingBlend: 0
---- !u!114 &7827764683685587159
+--- !u!114 &5311212472286144609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5160543367549481482}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6846360053864d4eb2ac3be81cc4d25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actorStatus: {fileID: 11400000, guid: a4dcc177b125533409624b1646c322ba, type: 2}
+  attackDeleyAmount: 5
+--- !u!114 &9111306335987665150
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -114,7 +129,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d307f1b6133e1444893763be30c2760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actorStatus: {fileID: 11400000, guid: a4dcc177b125533409624b1646c322ba, type: 2}
+  faceIcon: {fileID: 21300000, guid: 1bf55a207a960bc49af9a3ee65bdb466, type: 3}
+  name: "\u30B9\u30E9\u30A4\u30E0"
+  hp: 20
+  maxHp: 20
+  level: 1
+  pow: 2
+  def: 2
+  spd: 2
+  lck: 2
+  dropExp: 5
+  dropGold: 1
+  attackDeleyAmount: 5
 --- !u!1001 &6220294153763969711
 PrefabInstance:
   m_ObjectHideFlags: 0

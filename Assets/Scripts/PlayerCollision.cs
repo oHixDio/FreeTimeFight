@@ -12,6 +12,10 @@ public class PlayerCollision : MonoBehaviour
 
     Actor actor = null;
     Enemy enemy = null;
+    public Enemy Enemy
+    {
+        get { return enemy; }
+    }
 
     void Awake()
     {
@@ -22,12 +26,19 @@ public class PlayerCollision : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         EnterEndPoint(collision);
-        EnterEnemy(collision);
+        if(collision.gameObject.tag == "Enemy")
+        {
+            enemy = collision.gameObject.GetComponent<Enemy>();
+        }
+        
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        ExitEnemy(collision);
+        if (collision.gameObject.tag == "Enemy")
+        {
+            enemy = null;
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -77,18 +88,5 @@ public class PlayerCollision : MonoBehaviour
 
     }
 
-    void EnterEnemy(Collider2D collision)
-    {
-        if (collision.tag != "Enemy") { return; }
-
-        enemy = collision.gameObject.GetComponent<Enemy>();
-        actor.ShowEnemyUI(enemy);
-    }
-    void ExitEnemy(Collider2D collision)
-    {
-        if (collision.tag != "Enemy") { return; }
-
-        enemy = null;
-        actor.HideEnemyUI();
-    }
+    
 }

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ButtonUI : MonoBehaviour
 {
-    [SerializeField] GameObject player;
+    [SerializeField] GameObject mainPlayer;
     Actor actor;
     private void Awake()
     {
-        actor = player.GetComponent<Actor>();
+        actor = mainPlayer.GetComponent<Actor>();
     }
 
     public void OpenInventory()

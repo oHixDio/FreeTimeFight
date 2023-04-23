@@ -7,28 +7,78 @@ using UnityEngine.UI;
 public class ActorStatus : ScriptableObject
 {
 
-    // 継承の実験を行います
-    // 継承が必要になったときにする
 
     //----------基本ステータス----------//
 
-    //追加する場合はサブクラスの変更も修正する
-    [SerializeField] protected new string name = "";
-    [SerializeField] protected int hp = 100;
-    [SerializeField] protected int maxHp = 100;
-    [SerializeField] protected int level = 1;
-    [SerializeField] protected int pow = 5;
-    [SerializeField] protected int def = 5;
-    [SerializeField] protected int spd = 5;
-    [SerializeField] protected int lck = 5;
-    [SerializeField] protected int sumEXP = 0;
-    [SerializeField] protected int nextExp = 10;
-    [SerializeField] protected int gold = 0;
-    [SerializeField] protected Sprite faceIcon;
+    [SerializeField] new string name = "";
+    [SerializeField] int hp = 100;
+    [SerializeField] int maxHp = 100;
+    [SerializeField] int level = 1;
+    [SerializeField] int pow = 5;
+    [SerializeField] int def = 5;
+    [SerializeField] int spd = 5;
+    [SerializeField] int lck = 5;
+    [SerializeField] int sumEXP = 0;
+    [SerializeField] int nextExp = 10;
+    [SerializeField] int gold = 0;
+    [SerializeField] Sprite faceIcon;
 
     //----------------------------------//
 
-    
+    //----------基本ステータス受け渡しメソッド----------//
+
+    public string GetName()
+    {
+        return name;
+    }
+    public int GetHP()
+    {
+        return hp;
+    }
+    public int GetMaxHp()
+    {
+        return maxHp;
+    }
+    public int GetLevel()
+    {
+        return level;
+    }
+    public int GetPow()
+    {
+        return pow;
+    }
+    public int GetDef()
+    {
+        return def;
+    }
+    public int GetSPD()
+    {
+        return spd;
+    }
+    public int GetLck()
+    {
+        return lck;
+    }
+    public int GetSumEXP()
+    {
+        return sumEXP;
+    }
+    public int GetNextEXP()
+    {
+        return nextExp;
+    } 
+    public int Getgold()
+    {
+        return gold;
+    }
+    public Sprite GetFaceIcon()
+    {
+        return faceIcon;
+    }
+
+
+
+
 
     //----------基本Status反映メソッド----------//
 
@@ -81,6 +131,7 @@ public class ActorStatus : ScriptableObject
     {
         goldText.text = gold.ToString();
     }
-    
+
+
     
 }

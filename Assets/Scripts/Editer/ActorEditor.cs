@@ -12,7 +12,7 @@ public class ActorEditor : Editor
         if (GUILayout.Button("Attack"))
         {
             Actor actor = (Actor)target;
-            actor.Attack();
+            //actor.Attack();
         }
     }
 }

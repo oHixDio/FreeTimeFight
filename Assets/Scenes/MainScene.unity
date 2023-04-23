@@ -1513,7 +1513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5797c284482aeb844b5577e9f57c1ae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1532372892224366974}
+  mainPlayer: {fileID: 1532372892224366974}
 --- !u!1 &166834569
 GameObject:
   m_ObjectHideFlags: 0
@@ -24147,7 +24147,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1532372892224366974}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21b661dd84b811c4e87037248ae12a28, type: 3}
   m_Name: 
@@ -24352,6 +24352,7 @@ GameObject:
   - component: {fileID: 730722664260050673}
   - component: {fileID: 7020443176160200007}
   - component: {fileID: 7020443176160200008}
+  - component: {fileID: 7020443176160200009}
   m_Layer: 7
   m_Name: PF Pixel Character
   m_TagString: Player
@@ -25962,7 +25963,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b53201047bcd084481c459a77c51dfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  faceIcon: {fileID: 21300000, guid: 1bfb17c3c41163f4e85c1bcc3e13c4f8, type: 3}
+  name: "\u3072\u308D"
+  hp: 100
+  maxHp: 100
+  level: 1
+  pow: 5
+  def: 5
+  spd: 5
+  lck: 5
+  sumEXP: 0
+  nextExp: 10
+  gold: 0
+  faceImage_p: {fileID: 1100385828}
+  hpText_p: {fileID: 1020621704}
+  maxHpText_p: {fileID: 244032332}
+  nameText_p: {fileID: 99000083}
+  levelText_p: {fileID: 512782507}
+  powText_p: {fileID: 495722060}
+  defText_p: {fileID: 1077124075}
+  spdText_p: {fileID: 974183237}
+  lckText_p: {fileID: 1899464419}
+  seText_p: {fileID: 553402296}
+  neText_p: {fileID: 751597915}
+  goldText_p: {fileID: 1695503187}
+  enemyUICanvas: {fileID: 6759830629092912768}
+  faceImage_e: {fileID: 8251038486930100342}
+  hpText_e: {fileID: 5950780135950200498}
+  maxHpText_e: {fileID: 4980485035471506621}
+  nameText_e: {fileID: 5158638188102155656}
+  levelText_e: {fileID: 5157635822367725053}
+  powText_e: {fileID: 1283828338575776271}
+  defText_e: {fileID: 8658117648385128345}
+  spdText_e: {fileID: 5189194790243816019}
+  lckText_e: {fileID: 6820840982118160265}
+  maxMoveSpeed: 3
+  attackDeleyAmount: 2
+--- !u!114 &7020443176160200009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532372892224366974}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09003131749642740848e080ff34c480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   actorStatus: {fileID: 11400000, guid: cc4770e79a9937448a95fc639987a8e5, type: 2}
+  attackDeleyAmount: 2
   faceImage_p: {fileID: 1100385828}
   hpText_p: {fileID: 1020621704}
   maxHpText_p: {fileID: 244032332}

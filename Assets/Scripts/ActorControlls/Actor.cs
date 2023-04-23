@@ -1,14 +1,31 @@
 using Cainos.CustomizablePixelCharacter;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Actor : MonoBehaviour
 {
-    [SerializeField] ActorStatus actorStatus;
-    PixelCharacter pixcelCharactor;
+    #region ---Field
+    /// <summary>
+    /// ïœêîÇ‹Ç∆Ç‹Ç¡ÇƒÇÈÇÊ
+    /// </summary>
+    [Header("Status")]
+    [SerializeField] Sprite faceIcon;
+    [SerializeField] new string name = "";
+    [SerializeField] int hp = 100;
+    [SerializeField] int maxHp = 100;
+    [SerializeField] int level = 1;
+    [SerializeField] int pow = 5;
+    [SerializeField] int def = 5;
+    [SerializeField] int spd = 5;
+    [SerializeField] int lck = 5;
+    [SerializeField] int sumEXP = 0;
+    [SerializeField] int nextExp = 10;
+    [SerializeField] int gold = 0;
 
     [Header("PlayerUI")]
     [SerializeField] Image faceImage_p;
@@ -36,9 +53,18 @@ public class Actor : MonoBehaviour
     [SerializeField] Text spdText_e;
     [SerializeField] Text lckText_e;
 
-    float moveSpeed = 0f;
+    [Header("Info")]
     [SerializeField] float maxMoveSpeed = 10f;
+    [SerializeField] float attackDeleyAmount = 2f;
 
+
+    // ÇªÇÃëº
+    PixelCharacter pixcelCharactor;
+    PlayerCollision playerCollision;
+    float moveSpeed = 0f;
+    float deleyTime = 0f;
+
+    // set,getÇ≈égópÇ∑ÇÈån
     bool isMove = false;
     public bool IsMove
     {
@@ -57,93 +83,149 @@ public class Actor : MonoBehaviour
     bool besideEnemy = false;
     public bool BesideEnemy
     {
-        set { isLeft = value; }
+        set { besideEnemy = value; }
     }
+    #endregion
+
+
 
     void Awake()
     {
         pixcelCharactor = GetComponent<PixelCharacter>();
+        playerCollision = GetComponent<PlayerCollision>();
     }
     void Start()
     {
-        ShowPlayerStatus();
+        SetPlayerUI();
         isMove = true;
     }
     void Update()
     {
-        MovePlayer();  
+        SetPlayerUI();
+        ShowEnemyUI(playerCollision.Enemy);
+
+        MovePlayer();
+
+        if (besideEnemy)
+        {
+            Attack();
+        }
     }
 
+    
+    
+    
+
     #region ---PlayerUI Method
-    private void ShowPlayerStatus()
+    private void SetPlayerUI()
     {
-        actorStatus.ShowHP(hpText_p);
-        actorStatus.ShowMaxHP(maxHpText_p);
-        actorStatus.ShowImage(faceImage_p);
-        actorStatus.ShowName(nameText_p);
-        actorStatus.ShowLevel(levelText_p);
-        actorStatus.ShowPOW(powText_p);
-        actorStatus.ShowDEF(defText_p);
-        actorStatus.ShowSPD(spdText_p);
-        actorStatus.ShowLCK(lckText_p);
-        actorStatus.ShowSumEXP(seText_p);
-        actorStatus.ShowNextEXP(neText_p);
-        actorStatus.ShowGold(goldText_p);
+        faceImage_p.sprite = faceIcon;
+        nameText_p.text = name;
+        hpText_p.text = hp.ToString();
+        maxHpText_p.text = maxHp.ToString();
+        levelText_p.text = level.ToString();
+        powText_p.text = pow.ToString();
+        defText_p.text = def.ToString();
+        spdText_p.text = spd.ToString();
+        lckText_p.text = lck.ToString();
+        seText_p.text = sumEXP.ToString();
+        neText_p.text = nextExp.ToString();
+        goldText_p.text = gold.ToString();
+
+        if(this.hp <= 0)
+        {
+            this.hp = 0;
+            Died();
+        }
     }
     #endregion
 
 
     #region ---EnemyUI Method
-    private void ShowEnemyStatus(Enemy enemy)
+    public void SetEnemyUI(Enemy enemy)
     {
-        enemy.ActorStatus.ShowHP(hpText_e);
-        enemy.ActorStatus.ShowMaxHP(maxHpText_e);
-        enemy.ActorStatus.ShowImage(faceImage_e);
-        enemy.ActorStatus.ShowName(nameText_e);
-        enemy.ActorStatus.ShowLevel(levelText_e);
-        enemy.ActorStatus.ShowPOW(powText_e);
-        enemy.ActorStatus.ShowDEF(defText_e);
-        enemy.ActorStatus.ShowSPD(spdText_e);
-        enemy.ActorStatus.ShowLCK(lckText_e);
+        faceImage_e.sprite = enemy.GetFaceIcon();
+        nameText_e.text = enemy.GetName();
+        hpText_e.text = enemy.GetEnemyStatus("hp").ToString();
+        maxHpText_e.text = enemy.GetEnemyStatus("maxHp").ToString();
+        levelText_e.text = enemy.GetEnemyStatus("level").ToString();
+        powText_e.text = enemy.GetEnemyStatus("pow").ToString();
+        defText_e.text = enemy.GetEnemyStatus("def").ToString();
+        spdText_e.text = enemy.GetEnemyStatus("spd").ToString();
+        lckText_e.text = enemy.GetEnemyStatus("lck").ToString();
+
     }
 
     public void ShowEnemyUI(Enemy enemy)
     {
-        enemyUICanvas.SetActive(true);
-        ShowEnemyStatus(enemy);
-    }
-    public void HideEnemyUI()
-    {
-        enemyUICanvas.SetActive(false);
+        
+        if (playerCollision.Enemy != null)
+        {
+            SetEnemyUI(enemy);
+            enemyUICanvas.SetActive(true);
+        }
+        else if (playerCollision.Enemy == null)
+        {
+            enemyUICanvas.SetActive(false);
+        }
+        
     }
     #endregion
 
-    
+
 
 
     #region ---PlayerControlls Method
-    public void Attack()
+    void Attack()
     {
-        
-        pixcelCharactor.Attack();
+
+        deleyTime += Time.deltaTime;
+
+        if (attackDeleyAmount < deleyTime)
+        {
+            pixcelCharactor.Attack();
+            if(playerCollision.Enemy != null)
+            {
+                playerCollision.Enemy.Damage(this.pow);
+            }
+            deleyTime = 0;
+        }
     }
+
+    public void Damage(int pow)
+    {
+        this.hp -= pow;
+    }
+
+    void Died()
+    {
+        pixcelCharactor.IsDead = true;
+        Destroy(this.gameObject,1f);
+    }
+
+
 
     public void MovePlayer()
     {
         MoveSpeedBlender();
+        if (!isRight && !isLeft || !isMove)
+        {
+            pixcelCharactor.MovingBlend = 0f;
+        }
+
         if (isRight)
         {
             pixcelCharactor.Facing = (int)Mathf.Abs(moveSpeed / moveSpeed);
             if (!isMove) { return; }
             else if (isMove)
             {
+                //this.gameObject.transform.position += new Vector3(moveSpeed*Time.deltaTime, 0,0);
                 this.gameObject.transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
                 pixcelCharactor.MovingBlend = Mathf.Clamp01(moveSpeed);
             }
         }
         else if (isLeft)
         {
-            Debug.Log("AAA");
             pixcelCharactor.Facing = -(int)Mathf.Abs(moveSpeed / moveSpeed);
             if (!isMove) { return; }
             else if (isMove)
@@ -153,10 +235,12 @@ public class Actor : MonoBehaviour
                 pixcelCharactor.MovingBlend = Mathf.Clamp01(moveSpeed);
             }
         }
-        
+
+
+
     }
-    
-    public void MoveSpeedBlender()
+
+    void MoveSpeedBlender()
     {
         if (isRight || isLeft)
         {
@@ -175,7 +259,7 @@ public class Actor : MonoBehaviour
         }
     }
 
-    
+
 
 
     #endregion
