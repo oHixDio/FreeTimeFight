@@ -16,17 +16,25 @@ public class EnemySpawn : MonoBehaviour
 
 
 
-    public void SpawnControll(int playerDirection)
+    public void SpawnControll(int playerDirection, int mapAmount)
     {
         CloneEnemyDestroy();
 
-        if(playerDirection == 1)
+        if (playerDirection == 1)
         {
-            Spawn(playerDirection,0,5);
+            if (mapAmount != 0)
+            {
+                Spawn(playerDirection, 0, 5);
+            }
+            
         }
-        else if(playerDirection == -1)
+        else if (playerDirection == -1)
         {
-            Spawn(playerDirection, 2, 7);
+            if (mapAmount != 0)
+            {
+                Spawn(playerDirection, 2, 7);
+            }
+            
         }
 
         randomPosList.Clear();

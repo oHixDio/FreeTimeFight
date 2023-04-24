@@ -25975,6 +25975,7 @@ MonoBehaviour:
   sumEXP: 0
   nextExp: 10
   gold: 0
+  statusAddPoint: 0
   faceImage_p: {fileID: 1100385828}
   hpText_p: {fileID: 1020621704}
   maxHpText_p: {fileID: 244032332}
@@ -25987,6 +25988,7 @@ MonoBehaviour:
   seText_p: {fileID: 553402296}
   neText_p: {fileID: 751597915}
   goldText_p: {fileID: 1695503187}
+  statusAddPoint_p: {fileID: 2107854262}
   enemyUICanvas: {fileID: 6759830629092912768}
   faceImage_e: {fileID: 8251038486930100342}
   hpText_e: {fileID: 5950780135950200498}

@@ -32,6 +32,8 @@ public class Enemy : MonoBehaviour
     {
         set { besideActor = value; }
     }
+    bool isDied = false;
+    bool isDestroy = false;
 
 
     void Awake()
@@ -40,6 +42,11 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
+        if (isDestroy) { return; }
+        if (isDied)
+        {
+            Died();
+        }
         if (besideActor)
         {
             Attack();
@@ -47,7 +54,7 @@ public class Enemy : MonoBehaviour
         if (this.hp <= 0)
         {
             this.hp = 0;
-            Died();
+            isDied = true;
         }
     }
 
@@ -94,6 +101,33 @@ public class Enemy : MonoBehaviour
     {
         return this.name;
     }
+    
+    public bool GetEnemyDied()
+    {
+        return isDied;
+    }
+
+    bool isStatusUp = false;
+    public void CurrentStatus(int mapAmount)
+    {
+        if (mapAmount <= 1) { return; }
+        
+        if (isStatusUp == false)
+        {
+            mapAmount--;
+            this.level += mapAmount;
+            this.hp += mapAmount * 5;
+            this.maxHp += mapAmount * 5;
+            this.pow += mapAmount;
+            this.def += mapAmount;
+            this.spd += mapAmount;
+            this.lck += mapAmount;
+            this.dropExp += mapAmount;
+            isStatusUp = true;
+        }
+    }
+    
+
 
 
     void Attack()
@@ -121,6 +155,8 @@ public class Enemy : MonoBehaviour
     {
         pixelMonster.IsDead = true;
         Destroy(this.gameObject, 1f);
+        actor.CurrentPlayerEXP(dropExp);
+        isDestroy = true;
     }
 
     void OnCollisionEnter2D(Collision2D collision)

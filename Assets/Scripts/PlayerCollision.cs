@@ -12,6 +12,9 @@ public class PlayerCollision : MonoBehaviour
 
     Actor actor = null;
     Enemy enemy = null;
+    EndPoint end = null;
+    CurrentMap current = null;
+    EnemySpawn spawn = null;
     public Enemy Enemy
     {
         get { return enemy; }
@@ -29,6 +32,7 @@ public class PlayerCollision : MonoBehaviour
         if(collision.gameObject.tag == "Enemy")
         {
             enemy = collision.gameObject.GetComponent<Enemy>();
+            enemy.CurrentStatus(current.GetMapFloorAmount());
         }
         
     }
@@ -68,22 +72,26 @@ public class PlayerCollision : MonoBehaviour
     {
         if (collision.tag != "RightEndPoint" && collision.tag != "LeftEndPoint") { return; }
 
-        EndPoint end = collision.gameObject.transform.GetComponentInParent<EndPoint>();
-        CurrentMap current = collision.gameObject.transform.GetComponentInParent<CurrentMap>();
-        EnemySpawn spawn = collision.gameObject.transform.GetComponentInParent<EnemySpawn>();
+        if(end == null)
+        {
+            end = collision.gameObject.transform.GetComponentInParent<EndPoint>();
+            current = collision.gameObject.transform.GetComponentInParent<CurrentMap>();
+            spawn = collision.gameObject.transform.GetComponentInParent<EnemySpawn>();
+        }
+        
 
         if (collision.tag == "RightEndPoint")
         {
             end.SpawnPlayer(this.gameObject, right);
             current.MapFloorChange(end, right);
-            spawn.SpawnControll(right);
+            spawn.SpawnControll(right, current.GetMapFloorAmount());
         }
 
         if (collision.tag == "LeftEndPoint")
         {
             end.SpawnPlayer(this.gameObject, left);
             current.MapFloorChange(end, left);
-            spawn.SpawnControll(left);
+            spawn.SpawnControll(left, current.GetMapFloorAmount());
         }
 
     }

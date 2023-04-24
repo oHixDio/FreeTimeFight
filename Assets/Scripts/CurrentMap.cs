@@ -43,4 +43,9 @@ public class CurrentMap : MonoBehaviour
         }
         
     }
+
+    public int GetMapFloorAmount()
+    {
+        return mapFloorAmount;
+    }
 }

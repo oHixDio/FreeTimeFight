@@ -26,6 +26,7 @@ public class Actor : MonoBehaviour
     [SerializeField] int sumEXP = 0;
     [SerializeField] int nextExp = 10;
     [SerializeField] int gold = 0;
+    [SerializeField] int statusAddPoint = 0;
 
     [Header("PlayerUI")]
     [SerializeField] Image faceImage_p;
@@ -40,6 +41,7 @@ public class Actor : MonoBehaviour
     [SerializeField] Text seText_p;
     [SerializeField] Text neText_p;
     [SerializeField] Text goldText_p;
+    [SerializeField] Text statusAddPoint_p;
 
     [Header("EnemyUI")]
     [SerializeField] GameObject enemyUICanvas;
@@ -85,6 +87,7 @@ public class Actor : MonoBehaviour
     {
         set { besideEnemy = value; }
     }
+    bool isDiedOfBesideEnemy = false;
     #endregion
 
 
@@ -131,11 +134,35 @@ public class Actor : MonoBehaviour
         seText_p.text = sumEXP.ToString();
         neText_p.text = nextExp.ToString();
         goldText_p.text = gold.ToString();
+        statusAddPoint_p.text = statusAddPoint.ToString();
 
         if(this.hp <= 0)
         {
             this.hp = 0;
             Died();
+        }
+    }
+
+    public void CurrentPlayerEXP(int dropEXP)
+    {
+        sumEXP += dropEXP;
+        for(int i = 0; i < dropEXP; i++)
+        {
+            this.nextExp -= dropEXP/dropEXP;
+            LevelUp();
+        }
+        
+
+    }
+    public void LevelUp()
+    {
+        Debug.Log("Hi");
+        if(nextExp == 0)
+        {
+            Debug.Log("LevelUP!!");
+            level++;
+            nextExp += level*10;
+            statusAddPoint += 5;
         }
     }
     #endregion
