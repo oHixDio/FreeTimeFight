@@ -22,10 +22,12 @@ public class Actor : MonoBehaviour
     [SerializeField] int pow = 5;
     [SerializeField] int def = 5;
     [SerializeField] int spd = 5;
+    [SerializeField] int maxSpd = 500;
     [SerializeField] int lck = 5;
+    [SerializeField] int maxLck = 500;
     [SerializeField] int sumEXP = 0;
     [SerializeField] int nextExp = 10;
-    [SerializeField] int gold = 0;
+    [SerializeField] int gold = 0;              //todo: ‹Z”\’l‚É‚·‚é
     [SerializeField] int statusAddPoint = 0;
 
     [Header("PlayerUI")]
@@ -57,14 +59,16 @@ public class Actor : MonoBehaviour
 
     [Header("Info")]
     [SerializeField] float maxMoveSpeed = 10f;
-    [SerializeField] float attackDeleyAmount = 2f;
-
+    [SerializeField] float originDeleyAmount = 5f;
+    [SerializeField] int damageAdjust = 0;
 
     // ‚»‚Ì‘¼
     PixelCharacter pixcelCharactor;
     PlayerCollision playerCollision;
     float moveSpeed = 0f;
-    float deleyTime = 0f;
+    float attackDeleyTime = 0f;
+    int damageAmount = 0;
+    int criticalDamage = 0;
 
     // set,get‚ÅŽg—p‚·‚éŒn
     bool isMove = false;
@@ -87,7 +91,8 @@ public class Actor : MonoBehaviour
     {
         set { besideEnemy = value; }
     }
-    bool isDiedOfBesideEnemy = false;
+    bool isDied = false;
+    bool isDestroy = false;
     #endregion
 
 
@@ -105,6 +110,7 @@ public class Actor : MonoBehaviour
     void Update()
     {
         SetPlayerUI();
+        if (isDestroy) { return; }
         ShowEnemyUI(playerCollision.Enemy);
 
         MovePlayer();
@@ -113,13 +119,17 @@ public class Actor : MonoBehaviour
         {
             Attack();
         }
+        if (isDied)
+        {
+            Died();
+        }
     }
 
     
     
     
 
-    #region ---PlayerUI Method
+    #region ---PlayerStatus&UI Method
     private void SetPlayerUI()
     {
         faceImage_p.sprite = faceIcon;
@@ -139,8 +149,15 @@ public class Actor : MonoBehaviour
         if(this.hp <= 0)
         {
             this.hp = 0;
-            Died();
+            isDied = true;
         }
+
+        if (isDestroy)
+        {
+            enemyUICanvas.gameObject.SetActive(false);
+        }
+
+
     }
 
     public void CurrentPlayerEXP(int dropEXP)
@@ -149,21 +166,121 @@ public class Actor : MonoBehaviour
         for(int i = 0; i < dropEXP; i++)
         {
             this.nextExp -= dropEXP/dropEXP;
-            LevelUp();
+            if (nextExp == 0)
+            {
+                LevelUp();
+            }
+            
         }
         
 
     }
+
     public void LevelUp()
     {
-        Debug.Log("Hi");
-        if(nextExp == 0)
+        Debug.Log("LevelUP!!");
+        level++;
+        nextExp += level * 10;
+        statusAddPoint += 5;
+    }
+
+    public void UpStatus(string status)
+    {
+        if(statusAddPoint > 0)
         {
-            Debug.Log("LevelUP!!");
-            level++;
-            nextExp += level*10;
-            statusAddPoint += 5;
+            switch (status)
+            {
+                case "pow":
+                    this.pow++;
+                    break;
+                case "def":
+                    this.def++;
+                    break;
+                case "spd":
+                    this.spd++;
+                    break;
+                case "lck":
+                    this.lck++;
+                    break;
+                case "hp":
+                    this.hp += 5;
+                    this.maxHp += 5;
+                    break;
+                case "gold":
+                    this.gold += 5;
+                    break;
+            }
+            statusAddPoint--;
         }
+        
+    }
+    public void DownStatus(string status)
+    {
+        if(status == "pow" && this.pow > 5)
+        {
+            this.pow--;
+            this.statusAddPoint++;
+        }
+        if (status == "def" && this.def > 5)
+        {
+            this.def--;
+            this.statusAddPoint++;
+        }
+        if (status == "spd" && this.spd > 5)
+        {
+            this.spd--;
+            this.statusAddPoint++;
+        }
+        if (status == "lck" && this.lck > 5)
+        {
+            this.lck--;
+            this.statusAddPoint++;
+        }
+        if (status == "maxHp" && this.maxHp > 100)
+        {
+            this.maxHp -= 5;
+            if(this.maxHp <= this.hp)
+            {
+                this.hp = this.maxHp;
+            }
+            this.statusAddPoint++;
+        }
+        if (status == "gold" && this.gold > 20)
+        {
+            maxHp -= 5;
+
+            this.statusAddPoint++;
+        }
+    }
+
+    public int DamageAmount(int otherDef)
+    {
+        // todo: damageAmount‚Éƒ‰ƒ“ƒ_ƒ€«‚ðŽ‚½‚¹‚é
+        // todo: •ŠíUŒ‚—Í‚ð‰ÁŽZ‚·‚é
+        this.damageAmount = (this.pow / 2 - otherDef / 4) * this.damageAdjust;
+        int critical = Random.Range(0, this.lck + maxLck);
+
+        if (critical > maxLck)
+        {
+            Debug.Log("ƒNƒŠƒeƒBƒJƒ‹II");
+            return criticalDamage = damageAmount * 2;
+
+        }
+        if (damageAmount > 5)
+        {
+            return damageAmount;
+        }
+        else
+        {
+            return Random.Range(0, 6);
+        }
+    }
+    
+    
+
+    public int GetDefAmount()
+    {
+        return this.def;
     }
     #endregion
 
@@ -206,28 +323,32 @@ public class Actor : MonoBehaviour
     void Attack()
     {
 
-        deleyTime += Time.deltaTime;
+        attackDeleyTime += Time.deltaTime;
 
-        if (attackDeleyAmount < deleyTime)
+        if (this.originDeleyAmount < attackDeleyTime)
         {
             pixcelCharactor.Attack();
             if(playerCollision.Enemy != null)
             {
-                playerCollision.Enemy.Damage(this.pow);
+                playerCollision.Enemy.Damage(DamageAmount(playerCollision.Enemy.GetEnemyStatus("def")));
             }
-            deleyTime = 0;
+            attackDeleyTime = 0;
         }
     }
 
-    public void Damage(int pow)
+    public void Damage(int damageAmount)
     {
-        this.hp -= pow;
+        
+        
+        Debug.Log(damageAmount);
+        this.hp -= damageAmount;
     }
 
     void Died()
     {
         pixcelCharactor.IsDead = true;
-        Destroy(this.gameObject,1f);
+        Destroy(this.gameObject,2f);
+        isDestroy = true;
     }
 
 
@@ -291,21 +412,11 @@ public class Actor : MonoBehaviour
 
     #endregion
 
-    // ActorStatus‚ðŽæ“¾
-    // MAP‚Ì”‚ðŽæ“¾•XV
-
-    // Enemy‚Ìê‡
-    // Level ¨ level + MapCurrent
-    // HP ¨ HP + (MapCurrent + hpUpAmount)
-    // POW ¨ POW + MapCurrent
-    // DEF ¨ DEF + MapCurrent
-    // SPD ¨ SPD + MapCurrent
-    // LCK ¨ LCK + MapCurrent
-    // Dead ¨ DXP + NXP
-
-    // Player‚Ìê‡
-    // NXP ¨ 
-    // Level ¨ NXP == 0
-    // Levelup ¨ StatusPoint + 10, NXP + (Level*100)
-    // 
+    // damage’l ¨@damageAmount  = ((this.pow / 2 - other.def / 4) + weaponPow) * damageAdjust
+    // í‚É—”‚ª—~‚µ‚¢
+    // attackDeley’l ¨ attackDeley = originDeleyAmount - ((originDeleyAmount / maxSpd) * this.spd);
+    
+    //UŒ‚ŠÔŠu=100*(Œ³‚ÌUŒ‚ŠÔŠu+UŒ‚ŠÔŠu’Zkor‰„’·)€(100+(UŒ‚‘¬“x‘‰Áor’Zk)
+    // 0.3`5•b@‰Šú’l‚T
+    // ˆê’è’lˆÈã‘‚­‚·‚é‚ÆAnimaion‚ª‚¨‚©‚µ‚­‚È‚é‚Ì‚Å’²®•K{
 }

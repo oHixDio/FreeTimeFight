@@ -16,14 +16,14 @@ public class ButtonUI : MonoBehaviour
         Debug.Log("OpenInventory!!!!");
     }
 
-    public void MinusButton()
+    public void MinusButton(string status)
     {
-        Debug.Log("Minus");
+        actor.DownStatus(status);
     }
 
-    public void PlusButton()
+    public void PlusButton(string status)
     {
-        Debug.Log("Plus");
+        actor.UpStatus(status);
     }
 
     public void SystemButton()

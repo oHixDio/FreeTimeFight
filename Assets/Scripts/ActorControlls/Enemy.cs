@@ -15,17 +15,23 @@ public class Enemy : MonoBehaviour
     [SerializeField] int pow = 2;
     [SerializeField] int def = 2;
     [SerializeField] int spd = 2;
+    [SerializeField] int maxSpd = 500;
     [SerializeField] int lck = 2;
+    [SerializeField] int maxLck = 500;
     [SerializeField] int dropExp = 10;
     [SerializeField] int dropGold = 0;
-
+    
 
     [Header("Infoooo")]
-    [SerializeField] float attackDeleyAmount = 5f;
+    [SerializeField] float originDeleyAmount = 5f;
+    [SerializeField] int damageAdjust = 0;
 
     PixelMonster pixelMonster;
     Actor actor;
     float deleyTime = 0f;
+    float attackDeley = 0f;
+    int damageAmount = 0;
+    int criticalDamage = 0;
 
     bool besideActor = false;
     public bool BesideActor
@@ -43,6 +49,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         if (isDestroy) { return; }
+        
         if (isDied)
         {
             Died();
@@ -106,6 +113,34 @@ public class Enemy : MonoBehaviour
     {
         return isDied;
     }
+    public int DamageAmount(int otherDef)
+    {
+        this.damageAmount = (this.pow / 2 - otherDef / 4) * this.damageAdjust;
+        int critical = Random.Range(0, this.lck + maxLck);
+
+        if (critical > maxLck)
+        {
+            Debug.Log("クリティカル！！");
+            return criticalDamage = damageAmount * 2;
+
+        }
+        if (damageAmount > 5)
+        {
+            return damageAmount;
+        }
+        else
+        {
+            return Random.Range(0, 6);
+        }
+        
+    }
+
+    public float AttackDeleyAmount()
+    {
+        // attackDeley初期値５
+        attackDeley = originDeleyAmount - ((originDeleyAmount / maxSpd) * this.spd);
+        return attackDeley;
+    }
 
     bool isStatusUp = false;
     public void CurrentStatus(int mapAmount)
@@ -116,8 +151,8 @@ public class Enemy : MonoBehaviour
         {
             mapAmount--;
             this.level += mapAmount;
-            this.hp += mapAmount * 5;
-            this.maxHp += mapAmount * 5;
+            this.hp += mapAmount * 12;
+            this.maxHp += mapAmount * 12;
             this.pow += mapAmount;
             this.def += mapAmount;
             this.spd += mapAmount;
@@ -134,21 +169,21 @@ public class Enemy : MonoBehaviour
     {
         this.deleyTime += Time.deltaTime;
 
-        if (this.attackDeleyAmount < this.deleyTime)
+        if (AttackDeleyAmount() < this.deleyTime)
         {
             pixelMonster.Attack();
             if (actor != null)
             {
-                actor.Damage(this.pow);
+                actor.Damage(DamageAmount(actor.GetDefAmount()));
             }
             this.deleyTime = 0;
         }
     }
 
-    public void Damage(int pow)
+    public void Damage(int damageAmount)
     {
-        this.hp -= pow;
-
+        Debug.Log(damageAmount);
+        this.hp -= damageAmount;
     }
 
     void Died()

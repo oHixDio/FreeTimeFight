@@ -978,13 +978,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: PlusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: gold
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &89864201
@@ -1638,13 +1638,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: PlusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: def
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &179009237
@@ -1802,13 +1802,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: PlusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: lck
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &185354279
@@ -10958,13 +10958,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: MinusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: spd
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &932842820
@@ -11822,13 +11822,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: MinusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: gold
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &974183235
@@ -13206,13 +13206,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: MinusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: pow
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1125537694
@@ -14832,13 +14832,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: MinusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: def
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1241387077
@@ -15612,13 +15612,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: MinusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: maxHp
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1305302428
@@ -17065,13 +17065,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: PlusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: hp
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1473653721
@@ -21841,13 +21841,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: PlusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: spd
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1928149837
@@ -22050,13 +22050,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: PlusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: pow
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1955350097
@@ -22183,13 +22183,13 @@ MonoBehaviour:
       - m_Target: {fileID: 163941163}
         m_TargetAssemblyTypeName: ButtonUI, Assembly-CSharp
         m_MethodName: MinusButton
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: lck
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1980783585
@@ -25971,7 +25971,9 @@ MonoBehaviour:
   pow: 5
   def: 5
   spd: 5
+  maxSpd: 500
   lck: 5
+  maxLck: 500
   sumEXP: 0
   nextExp: 10
   gold: 0
@@ -26000,7 +26002,8 @@ MonoBehaviour:
   spdText_e: {fileID: 5189194790243816019}
   lckText_e: {fileID: 6820840982118160265}
   maxMoveSpeed: 3
-  attackDeleyAmount: 2
+  originDeleyAmount: 5
+  damageAdjust: 3
 --- !u!114 &7020443176160200009
 MonoBehaviour:
   m_ObjectHideFlags: 0

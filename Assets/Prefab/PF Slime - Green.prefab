@@ -141,6 +141,7 @@ MonoBehaviour:
   dropExp: 5
   dropGold: 1
   attackDeleyAmount: 5
+  damageAdjust: 2
 --- !u!1001 &6220294153763969711
 PrefabInstance:
   m_ObjectHideFlags: 0
