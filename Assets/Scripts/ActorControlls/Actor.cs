@@ -44,6 +44,7 @@ public class Actor : MonoBehaviour
     [SerializeField] Text neText_p;
     [SerializeField] Text goldText_p;
     [SerializeField] Text statusAddPoint_p;
+    [SerializeField] GameObject popupEventCanvas;
 
     [Header("EnemyUI")]
     [SerializeField] GameObject enemyUICanvas;
@@ -65,7 +66,10 @@ public class Actor : MonoBehaviour
     // ÇªÇÃëº
     PixelCharacter pixcelCharactor;
     PlayerCollision playerCollision;
+    [SerializeField] GameObject uiManagerObj;
+    UIManager uiManager;
     float moveSpeed = 0f;
+    float attackDeley = 0;
     float attackDeleyTime = 0f;
     int damageAmount = 0;
     int criticalDamage = 0;
@@ -91,6 +95,11 @@ public class Actor : MonoBehaviour
     {
         set { besideEnemy = value; }
     }
+    bool besideDoor = false;
+    public bool BesideDoor
+    {
+        set { besideDoor = value;}
+    }
     bool isDied = false;
     bool isDestroy = false;
     #endregion
@@ -101,28 +110,28 @@ public class Actor : MonoBehaviour
     {
         pixcelCharactor = GetComponent<PixelCharacter>();
         playerCollision = GetComponent<PlayerCollision>();
+        uiManager = uiManagerObj.GetComponent<UIManager>();
     }
     void Start()
     {
-        SetPlayerUI();
+        //SetPlayerUI();
         isMove = true;
     }
     void Update()
     {
-        SetPlayerUI();
+        //SetPlayerUI();
+
+        if (isDied) { Died(); }
+
         if (isDestroy) { return; }
+
+        //PopupEventUI();
+
         ShowEnemyUI(playerCollision.Enemy);
 
         MovePlayer();
 
-        if (besideEnemy)
-        {
-            Attack();
-        }
-        if (isDied)
-        {
-            Died();
-        }
+        if (besideEnemy) { Attack(); }
     }
 
     
@@ -130,7 +139,7 @@ public class Actor : MonoBehaviour
     
 
     #region ---PlayerStatus&UI Method
-    private void SetPlayerUI()
+    void SetPlayerUI()
     {
         faceImage_p.sprite = faceIcon;
         nameText_p.text = name;
@@ -160,6 +169,18 @@ public class Actor : MonoBehaviour
 
     }
 
+    void PopupEventUI()
+    {
+        if (besideDoor)
+        {
+            popupEventCanvas.gameObject.SetActive(true);
+        }
+        else if (!besideDoor)
+        {
+            popupEventCanvas.gameObject.SetActive(false);
+        }
+    }
+
     public void CurrentPlayerEXP(int dropEXP)
     {
         sumEXP += dropEXP;
@@ -175,8 +196,7 @@ public class Actor : MonoBehaviour
         
 
     }
-
-    public void LevelUp()
+    void LevelUp()
     {
         Debug.Log("LevelUP!!");
         level++;
@@ -253,7 +273,7 @@ public class Actor : MonoBehaviour
         }
     }
 
-    public int DamageAmount(int otherDef)
+    int DamageAmount(int otherDef)
     {
         // todo: damageAmountÇ…ÉâÉìÉ_ÉÄê´ÇéùÇΩÇπÇÈ
         // todo: ïêäÌçUåÇóÕÇâ¡éZÇ∑ÇÈ
@@ -275,8 +295,13 @@ public class Actor : MonoBehaviour
             return Random.Range(0, 6);
         }
     }
-    
-    
+    float AttackDeleyAmount()
+    {
+        // attackDeleyèâä˙ílÇT
+        attackDeley = originDeleyAmount - ((originDeleyAmount / maxSpd) * this.spd);
+        return attackDeley;
+    }
+
 
     public int GetDefAmount()
     {
@@ -286,7 +311,7 @@ public class Actor : MonoBehaviour
 
 
     #region ---EnemyUI Method
-    public void SetEnemyUI(Enemy enemy)
+    void SetEnemyUI(Enemy enemy)
     {
         faceImage_e.sprite = enemy.GetFaceIcon();
         nameText_e.text = enemy.GetName();
@@ -300,7 +325,7 @@ public class Actor : MonoBehaviour
 
     }
 
-    public void ShowEnemyUI(Enemy enemy)
+    void ShowEnemyUI(Enemy enemy)
     {
         
         if (playerCollision.Enemy != null)
@@ -325,7 +350,7 @@ public class Actor : MonoBehaviour
 
         attackDeleyTime += Time.deltaTime;
 
-        if (this.originDeleyAmount < attackDeleyTime)
+        if (AttackDeleyAmount() < attackDeleyTime)
         {
             pixcelCharactor.Attack();
             if(playerCollision.Enemy != null)
@@ -353,7 +378,7 @@ public class Actor : MonoBehaviour
 
 
 
-    public void MovePlayer()
+    void MovePlayer()
     {
         MoveSpeedBlender();
         if (!isRight && !isLeft || !isMove)

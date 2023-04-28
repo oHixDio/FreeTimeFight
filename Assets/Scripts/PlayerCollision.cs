@@ -15,6 +15,7 @@ public class PlayerCollision : MonoBehaviour
     EndPoint end = null;
     CurrentMap current = null;
     EnemySpawn spawn = null;
+
     public Enemy Enemy
     {
         get { return enemy; }
@@ -29,32 +30,31 @@ public class PlayerCollision : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         EnterEndPoint(collision);
+
         if(collision.gameObject.tag == "Enemy")
         {
             enemy = collision.gameObject.GetComponent<Enemy>();
             enemy.CurrentStatus(current.GetMapFloorAmount());
         }
-        
+        if(collision.gameObject.tag == "Door") { actor.BesideDoor = true; }
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            enemy = null;
-        }
+        if (collision.gameObject.tag == "Enemy") { enemy = null; }
+        
+        if (collision.gameObject.tag == "Door") { actor.BesideDoor = false; }
+        
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "MapEndPoint" || collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "MapEndPoint" || collision.gameObject.tag == "Enemy") 
         {
             actor.IsMove = false;
         }
-        if (collision.gameObject.tag == "Enemy")
-        {
-            actor.BesideEnemy = true;
-        }
+
+        if (collision.gameObject.tag == "Enemy") { actor.BesideEnemy = true; }
     }
     void OnCollisionExit2D(Collision2D collision)
     {
@@ -62,10 +62,8 @@ public class PlayerCollision : MonoBehaviour
         {
             actor.IsMove = true;
         }
-        if (collision.gameObject.tag == "Enemy")
-        {
-            actor.BesideEnemy = false;
-        }
+
+        if (collision.gameObject.tag == "Enemy") { actor.BesideEnemy = false; }
     }
 
     void EnterEndPoint(Collider2D collision)

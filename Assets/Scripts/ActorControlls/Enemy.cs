@@ -29,7 +29,6 @@ public class Enemy : MonoBehaviour
     PixelMonster pixelMonster;
     Actor actor;
     float deleyTime = 0f;
-    float attackDeley = 0f;
     int damageAmount = 0;
     int criticalDamage = 0;
 
@@ -49,15 +48,11 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         if (isDestroy) { return; }
-        
-        if (isDied)
-        {
-            Died();
-        }
-        if (besideActor)
-        {
-            Attack();
-        }
+
+        if (isDied) { Died(); }
+
+        if (besideActor) { Attack(); }
+
         if (this.hp <= 0)
         {
             this.hp = 0;
@@ -135,13 +130,6 @@ public class Enemy : MonoBehaviour
         
     }
 
-    public float AttackDeleyAmount()
-    {
-        // attackDeley‰Šú’l‚T
-        attackDeley = originDeleyAmount - ((originDeleyAmount / maxSpd) * this.spd);
-        return attackDeley;
-    }
-
     bool isStatusUp = false;
     public void CurrentStatus(int mapAmount)
     {
@@ -169,7 +157,7 @@ public class Enemy : MonoBehaviour
     {
         this.deleyTime += Time.deltaTime;
 
-        if (AttackDeleyAmount() < this.deleyTime)
+        if (originDeleyAmount < this.deleyTime)
         {
             pixelMonster.Attack();
             if (actor != null)

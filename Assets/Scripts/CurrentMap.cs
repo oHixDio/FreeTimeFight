@@ -6,46 +6,58 @@ using UnityEngine.UI;
 public class CurrentMap : MonoBehaviour
 {
     [SerializeField] Text mapText;
+    [SerializeField] GameObject uiManagerobj;
+    UIManager uiManager;
 
-    int mapFloorAmount = 0;
+    [SerializeField] int mapAmount = 0;
 
+    void Awake()
+    {
+        uiManager = uiManagerobj.GetComponent<UIManager>();
+    }
     void Start()
     {
-        mapText.text = "MAP : " + mapFloorAmount;
+        uiManager.ChengeMapAmountText(mapAmount);
     }
 
-    public void MapFloorChange(EndPoint e, int num)
+    public void MapFloorChange(EndPoint endPoint, int num)
     {
-        if(num == 1)
+        if (num == 1)
         {
-            mapFloorAmount++;
-            mapText.text = "MAP : " + mapFloorAmount;
-            e.MapEndPointCollider.isTrigger = true;
+            mapAmount++;
+            uiManager.ChengeMapAmountText(mapAmount);
+            endPoint.MapEndPointCollider.isTrigger = true;
         }
-        else if(num == -1)
+        else if (num == -1)
         {
-            if(mapFloorAmount > 0)
+            if (mapAmount > 0)
             {
-                mapFloorAmount--;
-                mapText.text = "MAP : " + mapFloorAmount;
+                mapAmount--;
+                uiManager.ChengeMapAmountText(mapAmount);
 
-                if(mapFloorAmount == 0)
+                if (mapAmount == 0)
                 {
-                    e.MapEndPointCollider.isTrigger = false;
+                    endPoint.MapEndPointCollider.isTrigger = false;
                 }
-                
+
             }
             else
             {
-                mapFloorAmount = 0;
-                mapText.text = "MAP : " + mapFloorAmount;
+                mapAmount = 0;
+                uiManager.ChengeMapAmountText(mapAmount);
             }
         }
-        
+        uiManager.SpawnWorldObj(mapAmount);
+    }    
+
+    // CurrentMapを他で取得するより条件がそろっているここにメソッドを置くのが良いと思った
+    public void ExceptionSpawnWorldObj()
+    {
+        uiManager.SpawnWorldObj(mapAmount);
     }
 
     public int GetMapFloorAmount()
     {
-        return mapFloorAmount;
+        return mapAmount;
     }
 }

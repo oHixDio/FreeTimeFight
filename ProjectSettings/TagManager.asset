@@ -9,6 +9,7 @@ TagManager:
   - LeftEndPoint
   - Enemy
   - MapEndPoint
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -16,11 +17,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - WorldObj
   - Player
   - PlayerArea
   - EndPoint
-  - 
+  - Door
   - 
   - 
   - 
@@ -52,9 +53,18 @@ TagManager:
   - name: MAP
     uniqueID: 4227373931
     locked: 0
+  - name: EnemyUI
+    uniqueID: 1145466615
+    locked: 0
+  - name: WorldObj
+    uniqueID: 1611100571
+    locked: 0
   - name: UI
     uniqueID: 3280825675
     locked: 0
-  - name: EnemyUI
-    uniqueID: 1145466615
+  - name: HouseUI
+    uniqueID: 1328817709
+    locked: 0
+  - name: Door
+    uniqueID: 3560328653
     locked: 0
