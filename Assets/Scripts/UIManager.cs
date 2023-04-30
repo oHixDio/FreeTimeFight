@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -13,16 +14,29 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject snowBG;
     List<GameObject> bgList = new List<GameObject>();
 
-    
+
     [Header("SystemUICanvas")]
     [SerializeField] GameObject systemUICanvas;
     [SerializeField] Text mapAmountText;
     [SerializeField] GameObject popupInfoFrame;
     [SerializeField] Text popupInfoText;
+    [SerializeField] GameObject systemMain;
     [SerializeField] GameObject systemFooter;
     [SerializeField] GameObject systemPanel;
     [SerializeField] GameObject levelupPanel;
     [SerializeField] GameObject achievementPanel;
+    [SerializeField] Text systemPowText;
+    [SerializeField] Text systemDefText;
+    [SerializeField] Text systemSpdText;
+    [SerializeField] Text systemLckText;
+    [SerializeField] Text systemSklText;
+    [SerializeField] Text systemcurrentHpText;
+    [SerializeField] Text systemStatusAddPointText;
+
+    string levelupLine = "<color=#ffd400>Level UP!!</color>";
+    string dropExpLine = "EXP";
+    string goldLine = "G";
+
     bool showSystemPanel = false;
     bool showLevelupPanel = false;
     bool showAchievementPanel = false;
@@ -35,7 +49,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject playerfooter;
     [SerializeField] Image playerHPBar;
     [SerializeField] Text playerHPText;
-    [SerializeField] Text playerMaxHPText;
+    [SerializeField] Text playerCurrentHPText;
     [SerializeField] Image playerIcon;
     [SerializeField] Text playerNameText;
     [SerializeField] Text playerLevelText;
@@ -56,7 +70,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text playerEventText;
     [SerializeField] Text playerGoldText;
 
-     
+
     [Header("EnemyUICanvas")]
     [SerializeField] GameObject enemyUICanvas;
     [SerializeField] Image enemyHpBar;
@@ -92,13 +106,23 @@ public class UIManager : MonoBehaviour
     {
         set { isMainArea = value; }
     }
-    
-    
+
+
+    [SerializeField] GameObject mapPoint;
+    EnemySpawn enemySpawn;
+    CurrentMap currentMap;
+    Actor actor;
+    UIAudio uiAudio;
+
 
 
 
     void Awake()
     {
+        enemySpawn = mapPoint.GetComponent<EnemySpawn>();
+        currentMap = mapPoint.GetComponent<CurrentMap>();
+        actor = player.GetComponent<Actor>();
+        uiAudio = GetComponent<UIAudio>();
         SetBGList();
         SethouseList();
         SetWorldObjList();
@@ -107,20 +131,38 @@ public class UIManager : MonoBehaviour
     {
         GameStartShowUI();
     }
+    void Update()
+    {
+        BesideAnyAreaChecker();
+        ResetEventButton();
+    }
 
     void GameStartShowUI()
     {
         // Gameが始まったときのUI
-        HideBG();
-        HideSystemMenu();
-        ShowAnyArea(0);
-    }
-    
+        isMainArea = true;
+        player.SetActive(true);
+        mainTileMap.SetActive(true);
+        playerUICancvas.SetActive(true);
+        systemMain.SetActive(true);
+        systemFooter.SetActive(true);
+        SpawnWorldObj(currentMap.GetMapAmount());
 
+        if (0 < currentMap.GetMapAmount())
+        {
+            enemySpawn.SpawnControll(1, currentMap.GetMapAmount());
+        }
+
+        uiAudio.PlayBGM();
+    }
+
+
+
+    #region ---BGUICanvasMethod
     /// <summary>
     /// todo 1
     /// </summary>
-    #region ---BGUICanvasMethod
+
     // バリエーション追加したら必ずAdd()
     void SetBGList()
     {
@@ -132,12 +174,12 @@ public class UIManager : MonoBehaviour
 
     void HideBG()
     {
-        for(int i = 0; i < bgList.Count; i++)
+        for (int i = 0; i < bgList.Count; i++)
         {
             bgList[i].SetActive(false);
         }
     }
-    
+
     public void ChengeBG()
     {
         HideBG();
@@ -146,23 +188,37 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+
+    #region ---SystemUIMethod
     /// <summary>
     /// todo 0
     /// </summary>
-    #region ---SystemUIMethod
+
+    public void SetLevelUpPanelText(int pow, int def, int spd, int lck, int skl, int currentHp, int staatusAddPoint)
+    {
+        systemPowText.text = pow.ToString();
+        systemDefText.text = def.ToString();
+        systemSpdText.text = spd.ToString();
+        systemLckText.text = lck.ToString();
+        systemSklText.text = skl.ToString();
+        systemcurrentHpText.text = currentHp.ToString();
+        systemStatusAddPointText.text = staatusAddPoint.ToString();
+    }
+
     void HideSystemMenu()
     {
         systemPanel.SetActive(false);
         levelupPanel.SetActive(false);
         achievementPanel.SetActive(false);
     }
-
     public void ShowSystemMenu(int menuNum)
     {
         HideSystemMenu();
         playerMain.SetActive(false);
         playerfooter.SetActive(false);
+        HideEnemyUI();
 
+        uiAudio.SystemButtonSE();
 
         if (menuNum == 0)
         {
@@ -176,6 +232,7 @@ public class UIManager : MonoBehaviour
             else
             {
                 HideSystemMenu();
+                ShowEnemyUI();
                 playerMain.SetActive(true);
                 playerfooter.SetActive(true);
                 showSystemPanel = false;
@@ -193,6 +250,7 @@ public class UIManager : MonoBehaviour
             else
             {
                 HideSystemMenu();
+                ShowEnemyUI();
                 playerMain.SetActive(true);
                 playerfooter.SetActive(true);
                 showLevelupPanel = false;
@@ -210,6 +268,7 @@ public class UIManager : MonoBehaviour
             else
             {
                 HideSystemMenu();
+                ShowEnemyUI();
                 playerMain.SetActive(true);
                 playerfooter.SetActive(true);
                 showAchievementPanel = false;
@@ -217,42 +276,93 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ChengeMapAmountText(int mapAmount)
+    public void ChangeMapAmountText(int mapAmount)
     {
-        mapAmountText.text = "MAP : " + mapAmount.ToString();
+        mapAmountText.text = "MAP:" + mapAmount.ToString();
+    }
+
+    // PopupUI関係
+    // type => 0:null 1:nullではない
+    public string SetLevelLine(int num)
+    {
+        if (num == 1)
+        {
+            return levelupLine;
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+    public string SetDropExpLine(int num, int otherDropExp)
+    {
+        if (num == 1)
+        {
+            return otherDropExp + dropExpLine;
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+    public string SetGoldLine(int num, int otherDropGold)
+    {
+        if (num == 1)
+        {
+            return otherDropGold + goldLine;
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+    public string SetEnemyKillLine(string l, string e, string g)
+    {
+        return l + " " + e + " " + g;
+    }
+    public void ShowEnemyKillPopup(int l, int e, int exp, int g, int gold)
+    {
+        popupInfoFrame.SetActive(true);
+        popupInfoText.text = SetEnemyKillLine(SetLevelLine(l), SetDropExpLine(e, exp), SetGoldLine(g, gold));
+        Invoke("HidePopupInfoFrame", 3.5f);
+    }
+    public void HidePopupInfoFrame()
+    {
+        popupInfoFrame.SetActive(false);
     }
     #endregion
 
-    /// <summary>
-    /// todo 3
-    /// </summary>
+
     #region ---PlayerUIMethod
-    void SetPlayerInfoUI(Sprite faceIcon, string name, int level)
+    /// <summary>
+    /// todo 2
+    /// </summary>
+    public void SetPlayerInfoUI(Sprite faceIcon, string name, int level)
     {
         playerIcon.sprite = faceIcon;
         playerNameText.text = name;
         playerLevelText.text = level.ToString();
     }
     // todo: 武器、防具、ペットの引数を記述する
-    void SetPlayerInventoryText()
+    public void SetPlayerInventoryText()
     {
-        playerWeaponText.text = "";
-        playerArmorText.text = "";
-        playerPetText.text = "";
+        playerWeaponText.text = string.Empty;
+        playerArmorText.text = string.Empty;
+        playerPetText.text = string.Empty;
     }
     // todo: スキル引数を渡す
-    void SetPlayerSkillText()
+    public void SetPlayerSkillText()
     {
         playerFstSkillText.text = string.Empty;
         playerSndSkillText.text = string.Empty;
         playerTrdSkillText.text = string.Empty;
     }
-    void SetPlayerHPText(int hp, int maxHP)
+    public void SetPlayerHPText(int hp, int currentHP)
     {
         playerHPText.text = hp.ToString();
-        playerMaxHPText.text = maxHP.ToString();
+        playerCurrentHPText.text = currentHP.ToString();
     }
-    void SetPlayerStatusText(int pow, int def, int spd, int lck, int skl)
+    public void SetPlayerStatusText(int pow, int def, int spd, int lck, int skl)
     {
         playerPowText.text = pow.ToString();
         playerDefText.text = def.ToString();
@@ -260,68 +370,89 @@ public class UIManager : MonoBehaviour
         playerLckText.text = lck.ToString();
         playerSklText.text = skl.ToString();
     }
-    void SetPlayerEXPText(int sumtext, int nextEXP)
+    public void SetPlayerEXPText(int sumtext, int nextEXP)
     {
         playerSumEXPText.text = sumtext.ToString();
         playerNextEXPText.text = nextEXP.ToString();
     }
-    // todo: イベント引数を渡す
-    void SetPlayerEventText()
+    public void SetPlayerHPbar(int hp, int currentHp)
     {
-        playerEventText.text = string.Empty;
+        float hpAmount = (float)hp / (float)currentHp;
+        playerHPBar.fillAmount = hpAmount;
     }
-    void SetplayerGoldText(int gold)
+    public void SetplayerGoldText(int gold)
     {
         playerGoldText.text = gold.ToString();
     }
 
-    void HideEventButton()
+    void BesideAnyAreaChecker()
     {
-        playerEventButton.gameObject.SetActive(false);
+        if (actor.IsDied) { return; }
+
+        if (actor.BesideHouseArea || actor.BesideWeaponArea || actor.BesideArmorArea)
+        {
+            playerEventButton.SetActive(true);
+            playerEventText.text = "入る";
+        }
+        else { playerEventButton.SetActive(false); }
+    }
+    
+    void ResetEventButton()
+    {
+        if (!actor.IsDied) { return; }
+        uiAudio.StopBGM();
+        playerEventText.text = "戻る";
+        playerEventButton.SetActive(true);
     }
 
-    void ShowEventButton()
-    {
-        playerEventButton.gameObject.SetActive(true);
-    }
+
+
     #endregion
 
     #region ---EnemyUIMethod
-    void SetEnemyInfoUI(Sprite faceIcon, string name, int level)
+    public void SetEnemyInfoUI(Sprite faceIcon, string name, int level)
     {
         enemyIcon.sprite = faceIcon;
         enemyIcon.name = name;
         enemyLevelText.text = level.ToString();
     }
-    void SetEnemyHPText(int hp, int maxHp)
+    public void SetEnemyHPText(int hp, int maxHp)
     {
         enemyHpText.text = hp.ToString();
         enemyMaxHPText.text = maxHp.ToString();
     }
-    void SetEnemyStatusText(int pow, int def, int spd, int lck)
+    public void SetEnemyStatusText(int pow, int def, int spd, int lck)
     {
         enemyPowText.text = pow.ToString();
         enemyDefText.text = def.ToString();
         enemySpdText.text = spd.ToString();
         enemyLckText.text = lck.ToString();
     }
+    public void SetEnemyHPbar(int hp, int maxHp)
+    {
+        float hpAmount = (float)hp / (float)maxHp;
+        enemyHpBar.fillAmount = hpAmount;
+    }
 
-    void HideEnemyUI()
+    public void HideEnemyUI()
     {
         enemyUICanvas.SetActive(false);
     }
 
-    void ShowEnemyUI()
+    public void ShowEnemyUI()
     {
+        if (actor.Enemy == null) { return; }
+
         enemyUICanvas.SetActive(true);
     }
 
     #endregion
 
+
+    #region ---StageUIMethod
     /// <summary>
     /// todo 0
     /// </summary>
-    #region ---StageUIMethod
     // バリエーション追加したら必ずAdd()
     void SethouseList()
     {
@@ -370,56 +501,66 @@ public class UIManager : MonoBehaviour
 
         if (!isMainArea) { return; }
 
+        
+
         // if文の実行順注意
-        if (mapCurrent == 0)
+        
+        if (mapCurrent == 0 || mapCurrent % 10 == 0 && !(mapCurrent % 30 == 0))
         {
             firstMapHouse.gameObject.SetActive(true);
+            return;
         }
-        else if (mapCurrent % 30 == 0)
+        if (mapCurrent % 30 == 0)
         {
             bossWorldObj.gameObject.SetActive(true);
+            return;
         }
-        else if (mapCurrent % 10 == 0 && !(mapCurrent % 20 == 0))
-        {
-            weaponShop.gameObject.SetActive(true);
-        }
-        else if (mapCurrent % 10 == 0 && mapCurrent % 20 == 0)
+        else if (mapCurrent == 2)
         {
             armorShop.gameObject.SetActive(true);
+            return;
         }
-        else if (mapCurrent % 2 == 0)
+        else if (mapCurrent== 1)
+        {
+            weaponShop.gameObject.SetActive(true);
+            return;
+        }
+        else if (mapCurrent % 2 == 0 && !(mapCurrent == 2))
         {
             secondWorldObj.gameObject.SetActive(true);
+            return;
         }
         else if (mapCurrent % 3 == 0)
         {
             thirdWorldObj.gameObject.SetActive(true);
+            return;
         }
         else
         {
             firstWorldObj.gameObject.SetActive(true);
+            return;
         }
 
     }
 
-    void ShowAnyArea(int areaNum)
+
+    void ShowAnyArea()
     {
-        isMainArea = false;
-        HideMainArea();
-        player.SetActive(false);
-        
-        if (areaNum == 0)
+        if (actor.BesideHouseArea)
         {
             houseArea.SetActive(true);
         }
-        else if (areaNum == 1)
+        else if (actor.BesideWeaponArea)
         {
-            houseArea.SetActive(true);
+            weaponArea.SetActive(true);
         }
-        else if (areaNum == 2)
+        else if (actor.BesideArmorArea)
         {
             armorArea.SetActive(true);
         }
+
+        HideMainArea();
+        player.SetActive(false);
     }
     void ShowMainArea()
     {
@@ -436,10 +577,87 @@ public class UIManager : MonoBehaviour
     #region ---ButtonUIMethod
     public void GoOutHouse()
     {
+        isMainArea = true;
         ShowMainArea();
         ChengeBG();
-        isMainArea = true;
+        SpawnWorldObj(currentMap.GetMapAmount());
+        
+        enemySpawn.ShowCloneEnemy();
 
+        uiAudio.PlayBGM();
+        uiAudio.SystemButtonSE();
+    }
+    public void InTheHouse()
+    {
+        if (actor.IsDied) { return; }
+
+        isMainArea = false;
+        ShowAnyArea();
+        HideWorldObj();
+        enemySpawn.HideCloneEnemy();
+        
+        uiAudio.StopBGM();
+        uiAudio.SystemButtonSE();
+    }
+
+    public void ResetButton()
+    {
+        if (!actor.IsDied) { return; }
+
+        isMainArea = false;
+
+        // UI変更
+        houseArea.SetActive(true);
+        HideWorldObj();
+        HideMainArea();
+        enemySpawn.CloneEnemyDestroy();
+
+        // Player調整
+        player.SetActive(false);
+        actor.FullHelth();
+        actor.ResetActorPosition();
+
+        // MapCurrentリセット
+        currentMap.ResetMapAmount();
+        ChangeMapAmountText(currentMap.GetMapAmount());
+
+        // 音楽
+        uiAudio.StopBGM();
+        uiAudio.SystemButtonSE();
+    }
+
+    public void StatusMinusButton(string status)
+    {
+        actor.DownStatus(status);
+    }
+
+    public void StatusPlusButton(string status)
+    {
+        actor.UpStatus(status);
+    }
+
+    public void FullHealthButton()
+    {
+        actor.FullHelth();
+        uiAudio.FullHealthSE();
+    }
+
+    public void RightPanelDown()
+    {
+        actor.IsRight = true;
+    }
+    public void RightPanelUp()
+    {
+        actor.IsRight = false;
+    }
+
+    public void LeftPanelDown()
+    {
+        actor.IsLeft = true;
+    }
+    public void LeftPanelUp()
+    {
+        actor.IsLeft = false;
     }
     #endregion
 }

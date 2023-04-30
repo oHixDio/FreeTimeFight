@@ -7,6 +7,7 @@ public class EnemySpawn : MonoBehaviour
 {
     [SerializeField] List<GameObject> spawnPointList = new List<GameObject>();
     [SerializeField] List<GameObject> enemyPrefabList = new List<GameObject>();
+    [SerializeField] GameObject bossPrefab;
 
     List<int> randomPosList = new List<int>();
     List<GameObject> cloneEnemy = new List<GameObject>();
@@ -22,6 +23,11 @@ public class EnemySpawn : MonoBehaviour
 
         if (playerDirection == 1)
         {
+            if (mapAmount == 30)
+            {
+                BossSpawn(playerDirection);
+                return;
+            }
             if (mapAmount != 0)
             {
                 Spawn(playerDirection, 0, 5);
@@ -43,7 +49,7 @@ public class EnemySpawn : MonoBehaviour
 
     //Left : min=>2, max=>7(2...6の地点)
     //right: min=>0, max=>5(0...4の地点)
-    private void Spawn(int playerDirection, int min, int max)
+    void Spawn(int playerDirection, int min, int max)
     {
         for (int i = 0; i < SpawnAmount; i++)
         {
@@ -65,6 +71,12 @@ public class EnemySpawn : MonoBehaviour
         }
     }
 
+    void BossSpawn(int playerDirection)
+    {
+        cloneEnemy.Add(Instantiate(bossPrefab, spawnPointList[1].transform.position, Quaternion.identity));
+        cloneEnemy[0].transform.localScale = new Vector3(-playerDirection, 1, 1);
+    }
+
     public void CloneEnemyDestroy()
     {
         for(int i = 0; i < cloneEnemy.Count; i++)
@@ -72,6 +84,23 @@ public class EnemySpawn : MonoBehaviour
             Destroy(cloneEnemy[i]);
         }
         cloneEnemy.Clear();
+    }
+
+    public void HideCloneEnemy()
+    {
+        for (int i = 0; i < cloneEnemy.Count; i++)
+        {
+            if (cloneEnemy[i] == null) { continue; }
+            cloneEnemy[i].gameObject.SetActive(false);
+        }
+    }
+    public void ShowCloneEnemy()
+    {
+        for (int i = 0; i < cloneEnemy.Count; i++)
+        {
+            if (cloneEnemy[i] == null) { continue; }
+            cloneEnemy[i].gameObject.SetActive(true);
+        }
     }
 
     public bool SamePointCheck(int randomPos)

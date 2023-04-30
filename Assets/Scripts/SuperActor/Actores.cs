@@ -6,91 +6,92 @@ using UnityEngine;
 
 public class Actores : MonoBehaviour
 {
-    [SerializeField] ActorStatus actorStatus;
-    public ActorStatus ActorStatus
-    {
-        get { return actorStatus; }
-    }
-
-    protected new string name = "";
-    protected int hp = 0;
-    protected int maxHp = 0;
-    protected int level = 0;
-    protected int pow = 0;
-    protected int def = 0;
-    protected int spd = 0;
-    protected int lck = 0;
-    protected int sumEXP = 0;
-    protected int nextEXP = 0;
-    protected int gold = 0;
-    protected Sprite faceIcon = null;
-
-    [SerializeField] protected float attackDeleyAmount = 2f;
-    protected float deleyTime = 0f;
-
-
-    //----------boolean工房----------//
-    protected bool isMove = false;
-    public bool IsMove
-    {
-        set { isMove = value; }
-    }
-    protected bool isRight = false;
-    public bool IsRight
-    {
-        set { isRight = value; }
-    }
-    protected bool isLeft = false;
-    public bool IsLeft
-    {
-        set { isLeft = value; }
-    }
-    protected bool besideActor = false;
-    public bool BesideActor
-    {
-        set { besideActor = value; }
-    }
-    //--------------------------------//
-
-
-
-
-
-
-
+    /*
+    [Header("Status")]
+    [SerializeField] Sprite faceIcon;
+    [SerializeField] new string name = "";
+    [SerializeField] int hp = 100;
+    [SerializeField] int level = 1;
+    [SerializeField] int pow = 5;
+    [SerializeField] int spd = 5;
+    [SerializeField] int mob = 5;
+    [SerializeField] int lck = 5;
+    [SerializeField] int skl = 20;
+    [SerializeField] int sumEXP = 0;
+    [SerializeField] int nextExp = 10;
+    [SerializeField] int gold = 0;
+    [SerializeField] int statusAddPoint = 0;
     
+    int maxHp = 100;
+    int maxLevel = 1250;
+    int maxPow = 250;
+    int maxSpd = 250;
+    int maxMob = 250;
+    int maxLck = 250;
+    int maxskl = 1250;
+    int weaponPow = 0;
 
-    public void SetStatus()
+    float attackDeleyTime = 0f;
+    int damageAmount = 0;
+    int criticalDamage = 0;
+
+    bool isDied = false;
+    bool isDestroy = false;
+
+    ActorSE actorSE = null;
+
+    int DamageAmount()
     {
-        this.name = actorStatus.GetName();
-        this.hp = actorStatus.GetHP();
-        this.maxHp = actorStatus.GetMaxHp();
-        this.level = actorStatus.GetLevel();
-        this.pow = actorStatus.GetPow();
-        this.def = actorStatus.GetDef();
-        this.spd = actorStatus.GetSPD();
-        this.lck = actorStatus.GetLck();
-        this.sumEXP = actorStatus.GetSumEXP();
-        this.nextEXP = actorStatus.GetNextEXP();
-        this.gold = actorStatus.Getgold();
-        this.faceIcon = actorStatus.GetFaceIcon();
-    }
+        this.damageAmount = this.pow + this.weaponPow;
+        int critical = Random.Range(0, this.lck + this.maxLck);
 
-    protected void Attack(PixelCharacter pixelCharacter)
-    {
-
-        deleyTime += Time.deltaTime;
-
-        if (attackDeleyAmount < deleyTime)
+        if (critical > this.maxLck)
         {
-            pixelCharacter.Attack();
-            deleyTime = 0;
+            Debug.Log("クリティカル！！");
+            actorSE.CriticalAttackSE();
+            return criticalDamage = damageAmount * 2;
+        }
+        if (damageAmount > 5)
+        {
+            actorSE.AttackSE();
+            return damageAmount;
+        }
+        else
+        {
+            actorSE.AttackSE();
+            return Random.Range(0, 6);
         }
     }
 
-    protected int Damege()
+
+
+    void Attack()
     {
-        return this.pow;
+
+        attackDeleyTime += Time.deltaTime;
+
+        if (AttackDeleyAmount() < attackDeleyTime)
+        {
+            pixcelCharactor.Attack();
+            if (enemy != null)
+            {
+                enemy.Damage(DamageAmount(enemy.GetEnemyStatus("def")));
+            }
+            attackDeleyTime = 0;
+        }
     }
 
+    public void Damage(int damageAmount)
+    {
+        this.hp -= damageAmount;
+    }
+
+    void Died()
+    {
+        pixcelCharactor.IsDead = true;
+        Destroy(this.gameObject, 2f);
+        isDestroy = true;
+    }
+
+    */
 }

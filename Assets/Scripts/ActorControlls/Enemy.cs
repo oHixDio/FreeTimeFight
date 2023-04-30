@@ -19,15 +19,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] int lck = 2;
     [SerializeField] int maxLck = 500;
     [SerializeField] int dropExp = 10;
-    [SerializeField] int dropGold = 0;
+    [SerializeField] int dropGold = 10;
     
 
     [Header("Infoooo")]
-    [SerializeField] float originDeleyAmount = 5f;
+    [SerializeField] float maxDeleyAmount = 5f;
     [SerializeField] int damageAdjust = 0;
 
     PixelMonster pixelMonster;
     Actor actor;
+    ActorSE actorSE;
+    BoxCollider2D boxCollider2D;
+
     float deleyTime = 0f;
     int damageAmount = 0;
     int criticalDamage = 0;
@@ -44,20 +47,23 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         pixelMonster = GetComponent<PixelMonster>();
+        actorSE = GetComponent<ActorSE>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
     }
     void Update()
     {
-        if (isDestroy) { return; }
-
-        if (isDied) { Died(); }
-
-        if (besideActor) { Attack(); }
-
         if (this.hp <= 0)
         {
             this.hp = 0;
             isDied = true;
         }
+        if (isDestroy) { return; }
+
+        if (isDied) { Died(); }
+
+
+        if (besideActor) { Attack(); }
+
     }
 
     public int GetEnemyStatus(string status)
@@ -104,27 +110,25 @@ public class Enemy : MonoBehaviour
         return this.name;
     }
     
-    public bool GetEnemyDied()
+    public int DamageAmount()
     {
-        return isDied;
-    }
-    public int DamageAmount(int otherDef)
-    {
-        this.damageAmount = (this.pow / 2 - otherDef / 4) * this.damageAdjust;
+        this.damageAmount = this.pow;
         int critical = Random.Range(0, this.lck + maxLck);
 
         if (critical > maxLck)
         {
             Debug.Log("クリティカル！！");
+            actorSE.CriticalAttackSE();
             return criticalDamage = damageAmount * 2;
-
         }
         if (damageAmount > 5)
         {
+            actorSE.AttackSE();
             return damageAmount;
         }
         else
         {
+            actorSE.AttackSE();
             return Random.Range(0, 6);
         }
         
@@ -157,12 +161,13 @@ public class Enemy : MonoBehaviour
     {
         this.deleyTime += Time.deltaTime;
 
-        if (originDeleyAmount < this.deleyTime)
+        if (maxDeleyAmount < this.deleyTime)
         {
             pixelMonster.Attack();
             if (actor != null)
             {
-                actor.Damage(DamageAmount(actor.GetDefAmount()));
+                actor.Damage(DamageAmount());
+                
             }
             this.deleyTime = 0;
         }
@@ -170,16 +175,24 @@ public class Enemy : MonoBehaviour
 
     public void Damage(int damageAmount)
     {
-        Debug.Log(damageAmount);
         this.hp -= damageAmount;
     }
 
     void Died()
     {
         pixelMonster.IsDead = true;
-        Destroy(this.gameObject, 1f);
-        actor.CurrentPlayerEXP(dropExp);
+        actor.CurrentPlayerEXPAndGold(dropExp,Random.Range(1,dropGold));
+        boxCollider2D.enabled = false;
+        //this.tag = "Untagged";
+        //actor.BesideEnemy = false;
+        //actor.IsMove = true;
+        Destroy(this.gameObject, 1.5f);
         isDestroy = true;
+    }
+
+    void DiedHide()
+    {
+        this.gameObject.SetActive(false);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

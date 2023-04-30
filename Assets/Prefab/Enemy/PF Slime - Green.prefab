@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 6197028263124153210}
   - component: {fileID: 1377949575392417733}
   - component: {fileID: 5135641708265420940}
-  - component: {fileID: 5311212472286144609}
   - component: {fileID: 9111306335987665150}
+  - component: {fileID: 3475732594137187458}
+  - component: {fileID: 38264997229423505}
   m_Layer: 0
   m_Name: PF Slime - Green
   m_TagString: Enemy
@@ -103,20 +104,6 @@ MonoBehaviour:
   isGrounded: 0
   isDead: 0
   movingBlend: 0
---- !u!114 &5311212472286144609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5160543367549481482}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6846360053864d4eb2ac3be81cc4d25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  actorStatus: {fileID: 11400000, guid: a4dcc177b125533409624b1646c322ba, type: 2}
-  attackDeleyAmount: 5
 --- !u!114 &9111306335987665150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,11 +124,127 @@ MonoBehaviour:
   pow: 2
   def: 2
   spd: 2
+  maxSpd: 500
   lck: 2
+  maxLck: 500
   dropExp: 5
   dropGold: 1
-  attackDeleyAmount: 5
+  originDeleyAmount: 5
   damageAdjust: 2
+--- !u!114 &3475732594137187458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5160543367549481482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50d3a94f6747a404ba663e3938ee97a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackSE: {fileID: 8300000, guid: 7c47b20bb9874304a809dc5580d403ba, type: 3}
+  criticalSE: {fileID: 8300000, guid: 88b1cbe3caa3fee4b8b103b5edd7aba9, type: 3}
+  levelUpSE: {fileID: 0}
+  statusUpSE: {fileID: 0}
+  statusDownSE: {fileID: 0}
+  systemErrorSE: {fileID: 0}
+--- !u!82 &38264997229423505
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5160543367549481482}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &6220294153763969711
 PrefabInstance:
   m_ObjectHideFlags: 0

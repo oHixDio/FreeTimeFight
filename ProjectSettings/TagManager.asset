@@ -9,7 +9,9 @@ TagManager:
   - LeftEndPoint
   - Enemy
   - MapEndPoint
-  - Door
+  - HouseDoor
+  - WeaponDoor
+  - ArmorDoor
   layers:
   - Default
   - TransparentFX

@@ -10,71 +10,64 @@ using UnityEngine.UI;
 public class Actor : MonoBehaviour
 {
     #region ---Field
-    /// <summary>
-    /// ïœêîÇ‹Ç∆Ç‹Ç¡ÇƒÇÈÇÊ
-    /// </summary>
+
     [Header("Status")]
     [SerializeField] Sprite faceIcon;
-    [SerializeField] new string name = "";
+    new string name = "Ç‰Ç§ÇµÇ·";
     [SerializeField] int hp = 100;
-    [SerializeField] int maxHp = 100;
-    [SerializeField] int level = 1;
+    int level = 1;
     [SerializeField] int pow = 5;
-    [SerializeField] int def = 5;
-    [SerializeField] int spd = 5;
-    [SerializeField] int maxSpd = 500;
-    [SerializeField] int lck = 5;
-    [SerializeField] int maxLck = 500;
-    [SerializeField] int sumEXP = 0;
-    [SerializeField] int nextExp = 10;
-    [SerializeField] int gold = 0;              //todo: ãZî\ílÇ…Ç∑ÇÈ
-    [SerializeField] int statusAddPoint = 0;
-
-    [Header("PlayerUI")]
-    [SerializeField] Image faceImage_p;
-    [SerializeField] Text hpText_p;
-    [SerializeField] Text maxHpText_p;
-    [SerializeField] Text nameText_p;
-    [SerializeField] Text levelText_p;
-    [SerializeField] Text powText_p;
-    [SerializeField] Text defText_p;
-    [SerializeField] Text spdText_p;
-    [SerializeField] Text lckText_p;
-    [SerializeField] Text seText_p;
-    [SerializeField] Text neText_p;
-    [SerializeField] Text goldText_p;
-    [SerializeField] Text statusAddPoint_p;
-    [SerializeField] GameObject popupEventCanvas;
-
-    [Header("EnemyUI")]
-    [SerializeField] GameObject enemyUICanvas;
-    [SerializeField] Image faceImage_e;
-    [SerializeField] Text hpText_e;
-    [SerializeField] Text maxHpText_e;
-    [SerializeField] Text nameText_e;
-    [SerializeField] Text levelText_e;
-    [SerializeField] Text powText_e;
-    [SerializeField] Text defText_e;
-    [SerializeField] Text spdText_e;
-    [SerializeField] Text lckText_e;
+    int spd = 5;
+    int def = 5;
+    int lck = 5;
+    int skl = 20;
 
     [Header("Info")]
-    [SerializeField] float maxMoveSpeed = 10f;
-    [SerializeField] float originDeleyAmount = 5f;
-    [SerializeField] int damageAdjust = 0;
-
-    // ÇªÇÃëº
-    PixelCharacter pixcelCharactor;
-    PlayerCollision playerCollision;
     [SerializeField] GameObject uiManagerObj;
-    UIManager uiManager;
-    float moveSpeed = 0f;
-    float attackDeley = 0;
-    float attackDeleyTime = 0f;
-    int damageAmount = 0;
-    int criticalDamage = 0;
+    [SerializeField] GameObject mapPoint;
+    [SerializeField] float maxMobility = 4f;
+    [SerializeField] float maxDeleyAmount = 5f;
 
-    // set,getÇ≈égópÇ∑ÇÈån
+    int maxLevel = 1250;
+    int currentHp = 100;
+    int maxHp = 2000;
+    int maxPow = 250;  // çUåÇóÕÇ…âeãø
+    int maxDef = 250;  // ñhå‰óÕÇ…âeãø
+    int maxSpd = 250;  // çUåÇë¨ìxÇ…âeãø
+    int maxLck = 250;  // ÉNÉäÉeÉBÉJÉãó¶Ç…âeãø
+    int maxskl = 1250; // ãZî\ílÇ…âeãø
+    int sumEXP = 0;
+    int nextExp = 10;
+    int statusAddPoint = 0;
+    int gold = 0;
+
+    int weaponPow = 3;
+    float Mobility = 0f;
+    int damageAmount = 0;
+    int DefenseAmount = 0;
+    float attackDeleyAmount = 0;
+    float attackDeleyTime = 0f;
+    const float minDeleyTime = 0.3f;
+    int criticalDamage = 0;
+    
+    PixelCharacter pixcelCharactor = null;
+    UIManager uiManager = null;
+    EndPoint end = null;
+    CurrentMap current = null;
+    EnemySpawn spawn = null;
+    ActorSE actorSE = null;
+    
+    Enemy enemy = null;
+    public Enemy Enemy
+    {
+        get { return enemy; }
+    }
+
+    // collisionÇ≈égóp
+    const int right = 1;
+    const int left = -1;
+
+    // bool
     bool isMove = false;
     public bool IsMove
     {
@@ -95,13 +88,29 @@ public class Actor : MonoBehaviour
     {
         set { besideEnemy = value; }
     }
-    bool besideDoor = false;
-    public bool BesideDoor
+    bool besideHouseArea = false;
+    public bool BesideHouseArea
     {
-        set { besideDoor = value;}
+        set { besideHouseArea = value; }
+        get { return besideHouseArea; }
+    }
+    bool besideWeaponArea = false;
+    public bool BesideWeaponArea
+    {
+        set { besideWeaponArea = value;}
+        get { return besideWeaponArea; }
+    }
+    bool besideArmorArea = false;
+    public bool BesideArmorArea
+    {
+        set { besideArmorArea = value;}
+        get { return besideArmorArea; }
     }
     bool isDied = false;
-    bool isDestroy = false;
+    public bool IsDied
+    {
+        get { return isDied; } 
+    }
     #endregion
 
 
@@ -109,27 +118,34 @@ public class Actor : MonoBehaviour
     void Awake()
     {
         pixcelCharactor = GetComponent<PixelCharacter>();
-        playerCollision = GetComponent<PlayerCollision>();
+        end = mapPoint.gameObject.transform.GetComponentInParent<EndPoint>();
+        current = mapPoint.gameObject.transform.GetComponentInParent<CurrentMap>();
+        spawn = mapPoint.gameObject.transform.GetComponentInParent<EnemySpawn>();
         uiManager = uiManagerObj.GetComponent<UIManager>();
+        actorSE = GetComponent<ActorSE>();
+
+
     }
     void Start()
     {
-        //SetPlayerUI();
         isMove = true;
+        ResetActorPosition();
+        LoadActorStatus();
     }
     void Update()
     {
-        //SetPlayerUI();
+        SetPlayerUI();
+        SetSystemUI();
+        if (isDied) { return; }
 
-        if (isDied) { Died(); }
-
-        if (isDestroy) { return; }
-
-        //PopupEventUI();
-
-        ShowEnemyUI(playerCollision.Enemy);
+        SetEnemyUI(enemy);
 
         MovePlayer();
+
+        
+
+        
+
 
         if (besideEnemy) { Attack(); }
     }
@@ -137,71 +153,62 @@ public class Actor : MonoBehaviour
     
     
     
-
     #region ---PlayerStatus&UI Method
+   
     void SetPlayerUI()
     {
-        faceImage_p.sprite = faceIcon;
-        nameText_p.text = name;
-        hpText_p.text = hp.ToString();
-        maxHpText_p.text = maxHp.ToString();
-        levelText_p.text = level.ToString();
-        powText_p.text = pow.ToString();
-        defText_p.text = def.ToString();
-        spdText_p.text = spd.ToString();
-        lckText_p.text = lck.ToString();
-        seText_p.text = sumEXP.ToString();
-        neText_p.text = nextExp.ToString();
-        goldText_p.text = gold.ToString();
-        statusAddPoint_p.text = statusAddPoint.ToString();
+        Died();
 
-        if(this.hp <= 0)
-        {
-            this.hp = 0;
-            isDied = true;
-        }
-
-        if (isDestroy)
-        {
-            enemyUICanvas.gameObject.SetActive(false);
-        }
-
-
+        uiManager.SetPlayerInfoUI(faceIcon, name, level);
+        uiManager.SetPlayerHPText(hp, currentHp);
+        uiManager.SetPlayerStatusText(pow, def, spd, lck, skl);
+        uiManager.SetPlayerEXPText(sumEXP, nextExp);
+        uiManager.SetplayerGoldText(gold);
+        uiManager.SetPlayerInventoryText();
+        uiManager.SetPlayerSkillText();
+        uiManager.SetPlayerHPbar(hp, currentHp);
+    }
+    void SetSystemUI()
+    {
+        uiManager.SetLevelUpPanelText(pow, def, spd, lck, skl, currentHp, statusAddPoint);
     }
 
-    void PopupEventUI()
+    
+    public void CurrentPlayerEXPAndGold(int dropEXP, int dropGold)
     {
-        if (besideDoor)
-        {
-            popupEventCanvas.gameObject.SetActive(true);
-        }
-        else if (!besideDoor)
-        {
-            popupEventCanvas.gameObject.SetActive(false);
-        }
-    }
-
-    public void CurrentPlayerEXP(int dropEXP)
-    {
-        sumEXP += dropEXP;
-        for(int i = 0; i < dropEXP; i++)
+        int skip = 0;
+        this.sumEXP += dropEXP;
+        this.gold += dropGold;
+        for (int i = 0; i < dropEXP; i++)
         {
             this.nextExp -= dropEXP/dropEXP;
-            if (nextExp == 0)
+            if (this.nextExp == 0)
             {
                 LevelUp();
+                uiManager.ShowEnemyKillPopup(1, 1, dropEXP, 1, dropGold);
+                skip++;
             }
             
         }
+        if(skip != 1)
+        {
+            uiManager.ShowEnemyKillPopup(0, 1, dropEXP, 1, dropGold);
+        }
         
+
+        SaveManager.instance.SetPlayerSumExp(this.sumEXP);
+        SaveManager.instance.SetPlayerNextExp(this.nextExp);
+        SaveManager.instance.SetPlayerGold(this.gold);
 
     }
     void LevelUp()
     {
-        Debug.Log("LevelUP!!");
         level++;
+        actorSE.LevelUpSE();
         nextExp += level * 10;
         statusAddPoint += 5;
+        SaveManager.instance.SetPlayerLevel(this.level);
+        SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
     }
 
     public void UpStatus(string status)
@@ -212,27 +219,37 @@ public class Actor : MonoBehaviour
             {
                 case "pow":
                     this.pow++;
+                    SaveManager.instance.SetPlayerPow(this.pow);
                     break;
                 case "def":
                     this.def++;
+                    SaveManager.instance.SetPlayerDef(this.def);
                     break;
                 case "spd":
                     this.spd++;
+                    SaveManager.instance.SetPlayerSpd(this.spd);
                     break;
                 case "lck":
                     this.lck++;
+                    SaveManager.instance.SetPlayerLck(this.lck);
                     break;
-                case "hp":
-                    this.hp += 5;
-                    this.maxHp += 5;
+                case "currentHp":
+                    this.currentHp += 5;
+                    SaveManager.instance.SetPlayerCurrentHp(this.currentHp);
                     break;
-                case "gold":
-                    this.gold += 5;
+                case "skl":
+                    this.skl += 5;
+                    SaveManager.instance.SetPlayerSkl(this.skl);
                     break;
             }
             statusAddPoint--;
+            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            actorSE.StatusDownSE();
         }
-        
+        else
+        {
+            actorSE.SystemErrorSE();
+        }
     }
     public void DownStatus(string status)
     {
@@ -240,109 +257,132 @@ public class Actor : MonoBehaviour
         {
             this.pow--;
             this.statusAddPoint++;
+            SaveManager.instance.SetPlayerPow(this.pow);
+            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            actorSE.StatusUpSE();
+            return;
         }
+
         if (status == "def" && this.def > 5)
         {
             this.def--;
             this.statusAddPoint++;
+            SaveManager.instance.SetPlayerDef(this.def);
+            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            actorSE.StatusUpSE();
+            return;
         }
+
         if (status == "spd" && this.spd > 5)
         {
             this.spd--;
             this.statusAddPoint++;
+            SaveManager.instance.SetPlayerSpd(this.spd);
+            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            actorSE.StatusUpSE();
+            return;
         }
+
         if (status == "lck" && this.lck > 5)
         {
             this.lck--;
             this.statusAddPoint++;
+            SaveManager.instance.SetPlayerLck(this.lck);
+            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            actorSE.StatusUpSE();
+            return;
         }
-        if (status == "maxHp" && this.maxHp > 100)
+
+        if (status == "currentHp" && this.currentHp > 100)
         {
-            this.maxHp -= 5;
-            if(this.maxHp <= this.hp)
+            this.currentHp -= 5;
+            if(this.currentHp <= this.hp)
             {
-                this.hp = this.maxHp;
+                this.hp = this.currentHp;
+                SaveManager.instance.SetPlayerHp(this.hp);
             }
             this.statusAddPoint++;
+            SaveManager.instance.SetPlayerCurrentHp(this.currentHp);
+            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            actorSE.StatusUpSE();
+            return;
         }
-        if (status == "gold" && this.gold > 20)
+
+        if (status == "skl" && this.skl > 20)
         {
-            maxHp -= 5;
+            this.skl -= 5;
 
             this.statusAddPoint++;
+            SaveManager.instance.SetPlayerSkl(this.skl);
+            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            actorSE.StatusUpSE();
+            return;
         }
+
+        actorSE.SystemErrorSE();
     }
 
-    int DamageAmount(int otherDef)
+    public void FullHelth()
+    {
+        this.hp = this.currentHp;
+        isDied = false;
+        SaveManager.instance.SetPlayerHp(this.hp);
+    }
+
+    int DamageAmount()
     {
         // todo: damageAmountÇ…ÉâÉìÉ_ÉÄê´ÇéùÇΩÇπÇÈ
         // todo: ïêäÌçUåÇóÕÇâ¡éZÇ∑ÇÈ
-        this.damageAmount = (this.pow / 2 - otherDef / 4) * this.damageAdjust;
+        this.damageAmount = this.pow + this.weaponPow;
         int critical = Random.Range(0, this.lck + maxLck);
 
         if (critical > maxLck)
         {
             Debug.Log("ÉNÉäÉeÉBÉJÉãÅIÅI");
+            actorSE.CriticalAttackSE();
             return criticalDamage = damageAmount * 2;
-
         }
         if (damageAmount > 5)
         {
+            actorSE.AttackSE();
             return damageAmount;
         }
         else
         {
+            actorSE.AttackSE();
             return Random.Range(0, 6);
         }
     }
+    
     float AttackDeleyAmount()
     {
         // attackDeleyèâä˙ílÇT
-        attackDeley = originDeleyAmount - ((originDeleyAmount / maxSpd) * this.spd);
-        return attackDeley;
+        attackDeleyAmount = maxDeleyAmount - ((maxDeleyAmount / maxSpd) * this.spd);
+
+        if (attackDeleyAmount < 0.3f)
+        {
+            attackDeleyAmount = 0.3f;
+
+        }
+        return attackDeleyAmount;
     }
 
 
-    public int GetDefAmount()
-    {
-        return this.def;
-    }
     #endregion
-
-
+    
     #region ---EnemyUI Method
-    void SetEnemyUI(Enemy enemy)
+    void SetEnemyUI(Enemy e)
     {
-        faceImage_e.sprite = enemy.GetFaceIcon();
-        nameText_e.text = enemy.GetName();
-        hpText_e.text = enemy.GetEnemyStatus("hp").ToString();
-        maxHpText_e.text = enemy.GetEnemyStatus("maxHp").ToString();
-        levelText_e.text = enemy.GetEnemyStatus("level").ToString();
-        powText_e.text = enemy.GetEnemyStatus("pow").ToString();
-        defText_e.text = enemy.GetEnemyStatus("def").ToString();
-        spdText_e.text = enemy.GetEnemyStatus("spd").ToString();
-        lckText_e.text = enemy.GetEnemyStatus("lck").ToString();
+        if (e == null) { return; }
+
+        uiManager.SetEnemyInfoUI(e.GetFaceIcon(), e.GetName(), e.GetEnemyStatus("level"));
+        uiManager.SetEnemyHPText(e.GetEnemyStatus("hp"), e.GetEnemyStatus("maxHp"));
+        uiManager.SetEnemyStatusText(e.GetEnemyStatus("pow"), e.GetEnemyStatus("def"), e.GetEnemyStatus("spd"), e.GetEnemyStatus("lck"));
+        uiManager.SetEnemyHPbar(e.GetEnemyStatus("hp"), e.GetEnemyStatus("maxHp"));
 
     }
 
-    void ShowEnemyUI(Enemy enemy)
-    {
-        
-        if (playerCollision.Enemy != null)
-        {
-            SetEnemyUI(enemy);
-            enemyUICanvas.SetActive(true);
-        }
-        else if (playerCollision.Enemy == null)
-        {
-            enemyUICanvas.SetActive(false);
-        }
-        
-    }
     #endregion
-
-
-
 
     #region ---PlayerControlls Method
     void Attack()
@@ -353,9 +393,9 @@ public class Actor : MonoBehaviour
         if (AttackDeleyAmount() < attackDeleyTime)
         {
             pixcelCharactor.Attack();
-            if(playerCollision.Enemy != null)
+            if(enemy != null)
             {
-                playerCollision.Enemy.Damage(DamageAmount(playerCollision.Enemy.GetEnemyStatus("def")));
+                enemy.Damage(DamageAmount());
             }
             attackDeleyTime = 0;
         }
@@ -363,17 +403,18 @@ public class Actor : MonoBehaviour
 
     public void Damage(int damageAmount)
     {
-        
-        
-        Debug.Log(damageAmount);
         this.hp -= damageAmount;
+        SaveManager.instance.SetPlayerHp(this.hp);
     }
 
     void Died()
     {
-        pixcelCharactor.IsDead = true;
-        Destroy(this.gameObject,2f);
-        isDestroy = true;
+        if (this.hp <= 0)
+        {
+            pixcelCharactor.IsDead = true;
+            isDied = true;
+            this.hp = 0;
+        }
     }
 
 
@@ -388,60 +429,142 @@ public class Actor : MonoBehaviour
 
         if (isRight)
         {
-            pixcelCharactor.Facing = (int)Mathf.Abs(moveSpeed / moveSpeed);
+            pixcelCharactor.Facing = (int)Mathf.Abs(Mobility / Mobility);
             if (!isMove) { return; }
             else if (isMove)
             {
                 //this.gameObject.transform.position += new Vector3(moveSpeed*Time.deltaTime, 0,0);
-                this.gameObject.transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
-                pixcelCharactor.MovingBlend = Mathf.Clamp01(moveSpeed);
+                this.gameObject.transform.Translate(Mobility * Time.deltaTime, 0, 0);
+                pixcelCharactor.MovingBlend = Mathf.Clamp01((float)(Mobility / maxMobility));
             }
         }
         else if (isLeft)
         {
-            pixcelCharactor.Facing = -(int)Mathf.Abs(moveSpeed / moveSpeed);
+            pixcelCharactor.Facing = -(int)Mathf.Abs(Mobility / Mobility);
             if (!isMove) { return; }
             else if (isMove)
             {
 
-                this.gameObject.transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);
-                pixcelCharactor.MovingBlend = Mathf.Clamp01(moveSpeed);
+                this.gameObject.transform.Translate(-Mobility * Time.deltaTime, 0, 0);
+                pixcelCharactor.MovingBlend = Mathf.Clamp01((float)(Mobility / maxMobility));
             }
+
+
         }
-
-
-
     }
 
     void MoveSpeedBlender()
     {
         if (isRight || isLeft)
         {
-            if (moveSpeed < maxMoveSpeed)
+            if (Mobility < maxMobility)
             {
-                moveSpeed += maxMoveSpeed / 10f;
+                Mobility += maxMobility / 50f;
             }
-            else if (moveSpeed >= maxMoveSpeed)
+            else if (Mobility >= maxMobility)
             {
-                moveSpeed = maxMoveSpeed;
+                Mobility = maxMobility;
             }
         }
         else if (!isRight && !isLeft)
         {
-            moveSpeed = 0f;
+            Mobility = 0f;
         }
     }
 
-
-
-
+    public void ResetActorPosition()
+    {
+        this.gameObject.transform.position = new Vector3(-4, 4, -1);
+        this.gameObject.transform.GetChild(0).localScale = new Vector3(1, 1, 1);
+    }
     #endregion
 
-    // damageíl Å®Å@damageAmount  = ((this.pow / 2 - other.def / 4) + weaponPow) * damageAdjust
-    // èÌÇ…óêêîÇ™ó~ÇµÇ¢
-    // attackDeleyíl Å® attackDeley = originDeleyAmount - ((originDeleyAmount / maxSpd) * this.spd);
-    
-    //çUåÇä‘äu=100*(å≥ÇÃçUåÇä‘äu+çUåÇä‘äuíZèkorâÑí∑)ÅÄ(100+(çUåÇë¨ìxëùâ¡oríZèk)
-    // 0.3Å`5ïbÅ@èâä˙ílÇT
-    // àÍíËílà»è„ëÅÇ≠Ç∑ÇÈÇ∆AnimaionÇ™Ç®Ç©ÇµÇ≠Ç»ÇÈÇÃÇ≈í≤êÆïKê{
+    #region ---PlayerCollisionMethod
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        EnterEndPoint(collision);
+
+        if (collision.gameObject.tag == "Enemy")
+        {
+            enemy = collision.gameObject.GetComponent<Enemy>();
+            enemy.CurrentStatus(current.GetMapAmount());
+            uiManager.ShowEnemyUI();
+        }
+        if (collision.gameObject.tag == "HouseDoor") { besideHouseArea = true; }
+        if (collision.gameObject.tag == "WeaponDoor") { besideWeaponArea = true; }
+        if (collision.gameObject.tag == "ArmorDoor") { besideArmorArea = true; }
+    }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy") 
+        {
+            enemy = null;
+            uiManager.HideEnemyUI();
+        }
+
+        if (collision.gameObject.tag == "HouseDoor") { besideHouseArea = false; }
+        if (collision.gameObject.tag == "WeaponDoor") { besideWeaponArea = false; }
+        if (collision.gameObject.tag == "ArmorDoor") { besideArmorArea = false; }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "MapEndPoint" || collision.gameObject.tag == "Enemy")
+        {
+            isMove = false;
+        }
+
+        if (collision.gameObject.tag == "Enemy") { besideEnemy = true; }
+    }
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "MapEndPoint" || collision.gameObject.tag == "Enemy")
+        {
+            isMove = true;
+        }
+
+        if (collision.gameObject.tag == "Enemy") { besideEnemy = false; }
+    }
+
+    void EnterEndPoint(Collider2D collision)
+    {
+        if (collision.tag != "RightEndPoint" && collision.tag != "LeftEndPoint") { return; }
+
+        if (collision.tag == "RightEndPoint")
+        {
+            end.SpawnPlayer(this.gameObject, right);
+            current.MapFloorChange(right);
+            spawn.SpawnControll(right, current.GetMapAmount());
+        }
+
+        if (collision.tag == "LeftEndPoint")
+        {
+            end.SpawnPlayer(this.gameObject, left);
+            current.MapFloorChange(left);
+            spawn.SpawnControll(left, current.GetMapAmount());
+        }
+
+    }
+    #endregion
+
+    #region ---SaveMethod
+    void LoadActorStatus()
+    {
+        this.name = SaveManager.instance.GetPlayerName();
+        this.hp = SaveManager.instance.GetPlayerHp();
+        this.currentHp = SaveManager.instance.GetPlayerCurrentHp();
+        this.level = SaveManager.instance.GetPlayerLevel();
+        this.pow = SaveManager.instance.GetPlayerPow();
+        this.def = SaveManager.instance.GetPlayerDef();
+        this.spd = SaveManager.instance.GetPlayerSpd();
+        this.lck = SaveManager.instance.GetPlayerLck();
+        this.skl = SaveManager.instance.GetPlayerSkl();
+        this.sumEXP = SaveManager.instance.GetPlayerSumExp();
+        this.nextExp = SaveManager.instance.GetPlayerNextExp();
+        this.gold = SaveManager.instance.GetPlayerGold();
+        this.statusAddPoint = SaveManager.instance.GetPlayerStatusAddPoint();
+
+    }
+    #endregion
 }
