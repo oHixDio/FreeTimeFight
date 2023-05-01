@@ -12,19 +12,19 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject desertBG;
     [SerializeField] GameObject graveyardBG;
     [SerializeField] GameObject snowBG;
-    List<GameObject> bgList = new List<GameObject>();
 
+    List<GameObject> bgList = new List<GameObject>();
 
     [Header("SystemUICanvas")]
     [SerializeField] GameObject systemUICanvas;
+    [SerializeField] GameObject systemMain;
+    [SerializeField] GameObject systemFooter;
+    // infoPanel
     [SerializeField] Text mapAmountText;
     [SerializeField] GameObject popupInfoFrame;
     [SerializeField] Text popupInfoText;
-    [SerializeField] GameObject systemMain;
-    [SerializeField] GameObject systemFooter;
-    [SerializeField] GameObject systemPanel;
+    // levelupPanel
     [SerializeField] GameObject levelupPanel;
-    [SerializeField] GameObject achievementPanel;
     [SerializeField] Text systemPowText;
     [SerializeField] Text systemDefText;
     [SerializeField] Text systemSpdText;
@@ -32,7 +32,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text systemSklText;
     [SerializeField] Text systemcurrentHpText;
     [SerializeField] Text systemStatusAddPointText;
+    // systemPanel
+    [SerializeField] GameObject systemPanel;
+    [SerializeField] GameObject backToHouseFrame;
+    [SerializeField] GameObject pressedBackToHouseFrame;
+    // achievementPanel
+    [SerializeField] GameObject achievementPanel;
 
+    // infoText
     string levelupLine = "<color=#ffd400>Level UP!!</color>";
     string dropExpLine = "EXP";
     string goldLine = "G";
@@ -47,9 +54,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject playerUICancvas;
     [SerializeField] GameObject playerMain;
     [SerializeField] GameObject playerfooter;
+    // hpPanel
     [SerializeField] Image playerHPBar;
     [SerializeField] Text playerHPText;
     [SerializeField] Text playerCurrentHPText;
+    [SerializeField] Image playerAttackBar;
+    // infoPanel
     [SerializeField] Image playerIcon;
     [SerializeField] Text playerNameText;
     [SerializeField] Text playerLevelText;
@@ -59,6 +69,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text playerFstSkillText;
     [SerializeField] Text playerSndSkillText;
     [SerializeField] Text playerTrdSkillText;
+    // statusPanel
     [SerializeField] Text playerPowText;
     [SerializeField] Text playerDefText;
     [SerializeField] Text playerSpdText;
@@ -66,6 +77,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text playerSklText;
     [SerializeField] Text playerSumEXPText;
     [SerializeField] Text playerNextEXPText;
+    // event&GoldPanel
     [SerializeField] GameObject playerEventButton;
     [SerializeField] Text playerEventText;
     [SerializeField] Text playerGoldText;
@@ -73,12 +85,16 @@ public class UIManager : MonoBehaviour
 
     [Header("EnemyUICanvas")]
     [SerializeField] GameObject enemyUICanvas;
+    // hpPanel
     [SerializeField] Image enemyHpBar;
     [SerializeField] Text enemyHpText;
     [SerializeField] Text enemyMaxHPText;
+    [SerializeField] Image enemyAttackbar;
+    // infoPanel
     [SerializeField] Image enemyIcon;
     [SerializeField] Text enemyNameText;
     [SerializeField] Text enemyLevelText;
+    // statusPanel
     [SerializeField] Text enemyPowText;
     [SerializeField] Text enemyDefText;
     [SerializeField] Text enemySpdText;
@@ -87,9 +103,11 @@ public class UIManager : MonoBehaviour
 
     [Header("StageUI")]
     [SerializeField] GameObject mainTileMap;
+    //  areaList
     [SerializeField] GameObject houseArea;
     [SerializeField] GameObject weaponArea;
     [SerializeField] GameObject armorArea;
+    // worldObj
     [SerializeField] GameObject worldObjManager;
     [SerializeField] GameObject firstMapHouse;
     [SerializeField] GameObject weaponShop;
@@ -98,6 +116,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject secondWorldObj;
     [SerializeField] GameObject thirdWorldObj;
     [SerializeField] GameObject bossWorldObj;
+
     List<GameObject> houseList = new List<GameObject>();
     List<GameObject> worldObjList = new List<GameObject>();
 
@@ -107,7 +126,7 @@ public class UIManager : MonoBehaviour
         set { isMainArea = value; }
     }
 
-
+    // scripts
     [SerializeField] GameObject mapPoint;
     EnemySpawn enemySpawn;
     CurrentMap currentMap;
@@ -134,7 +153,6 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         BesideAnyAreaChecker();
-        ResetEventButton();
     }
 
     void GameStartShowUI()
@@ -207,9 +225,11 @@ public class UIManager : MonoBehaviour
 
     void HideSystemMenu()
     {
-        systemPanel.SetActive(false);
+        
+        HideSystemPanel();
         levelupPanel.SetActive(false);
         achievementPanel.SetActive(false);
+
     }
     public void ShowSystemMenu(int menuNum)
     {
@@ -274,6 +294,14 @@ public class UIManager : MonoBehaviour
                 showAchievementPanel = false;
             }
         }
+    }
+
+    public void HideSystemPanel()
+    {
+        systemPanel.SetActive(false);
+        // backToHouseButton
+        backToHouseFrame.gameObject.SetActive(true);
+        pressedBackToHouseFrame.gameObject.SetActive(false);
     }
 
     public void ChangeMapAmountText(int mapAmount)
@@ -380,6 +408,20 @@ public class UIManager : MonoBehaviour
         float hpAmount = (float)hp / (float)currentHp;
         playerHPBar.fillAmount = hpAmount;
     }
+    public void SetPlayerAttackBar(float attackDeleyTime, float maxDeleyAmount)
+    {
+        if (actor.Enemy == null)
+        {
+            playerAttackBar.gameObject.SetActive(false);
+        }
+        else
+        {
+            float deleyAmount = attackDeleyTime / maxDeleyAmount;
+            playerAttackBar.gameObject.SetActive(true);
+            playerAttackBar.fillAmount = deleyAmount;
+        }
+        
+    }
     public void SetplayerGoldText(int gold)
     {
         playerGoldText.text = gold.ToString();
@@ -387,23 +429,39 @@ public class UIManager : MonoBehaviour
 
     void BesideAnyAreaChecker()
     {
-        if (actor.IsDied) { return; }
-
         if (actor.BesideHouseArea || actor.BesideWeaponArea || actor.BesideArmorArea)
         {
+            if (actor.IsDied || actor.IsKilledBoss) { return; }
+
             playerEventButton.SetActive(true);
             playerEventText.text = "入る";
         }
+        else if (actor.IsDied)
+        {
+            uiAudio.StopBGM();
+            playerEventText.text = "戻る";
+            playerEventButton.SetActive(true);
+        }
+        else if (actor.IsKilledBoss)
+        {
+            actor.IsMove = false;
+            playerEventText.text = "戻る";
+            playerEventButton.SetActive(true);
+        }
         else { playerEventButton.SetActive(false); }
     }
-    
-    void ResetEventButton()
-    {
-        if (!actor.IsDied) { return; }
-        uiAudio.StopBGM();
-        playerEventText.text = "戻る";
-        playerEventButton.SetActive(true);
-    }
+
+    // ------------------------------------------------------------------ //
+    // TODO
+    // ボス戦BGMを実装
+    // ボスを倒した時表彰する(実質のゲームクリア演出)　UI作成
+    // その後、家に戻ることができるようにする
+    // MapAmountは０に戻るが、敵、自分のステータス関係はそのまま
+    // 2週目に突入　5週目までカウントされる
+    // 実績反映　UI作成
+    // 家の回復はお金を払わないとできないようにする
+    // 家のテキストを変更できるようにする　UI作成
+    // ------------------------------------------------------------------ //
 
 
 
@@ -433,12 +491,16 @@ public class UIManager : MonoBehaviour
         float hpAmount = (float)hp / (float)maxHp;
         enemyHpBar.fillAmount = hpAmount;
     }
+    public void SetEnemyAttackBar(float attackDeleyTime, float maxDeleyAmount)
+    {
+        float deleyAmount = attackDeleyTime / maxDeleyAmount;
+        enemyAttackbar.fillAmount = deleyAmount;
+    }
 
     public void HideEnemyUI()
     {
         enemyUICanvas.SetActive(false);
     }
-
     public void ShowEnemyUI()
     {
         if (actor.Enemy == null) { return; }
@@ -572,12 +634,33 @@ public class UIManager : MonoBehaviour
         mainTileMap.SetActive(true);
     }
 
+    void BackToHouse()
+    {
+        isMainArea = false;
+        actor.IsMove = false;
+        // UI変更
+        houseArea.SetActive(true);
+        HideWorldObj();
+        HideMainArea();
+        enemySpawn.CloneEnemyDestroy();
+        
+        // Player調整
+        player.SetActive(false);
+        actor.ResetActorPosition();
+
+        // MapCurrentリセット
+        currentMap.ResetMapAmount();
+        ChangeMapAmountText(currentMap.GetMapAmount());
+        
+    }
+
     #endregion
 
     #region ---ButtonUIMethod
     public void GoOutHouse()
     {
         isMainArea = true;
+        actor.IsMove = true;
         ShowMainArea();
         ChengeBG();
         SpawnWorldObj(currentMap.GetMapAmount());
@@ -589,9 +672,10 @@ public class UIManager : MonoBehaviour
     }
     public void InTheHouse()
     {
-        if (actor.IsDied) { return; }
+        if (actor.IsDied || actor.IsKilledBoss) { return; }
 
         isMainArea = false;
+        actor.IsMove= false;
         ShowAnyArea();
         HideWorldObj();
         enemySpawn.HideCloneEnemy();
@@ -599,27 +683,40 @@ public class UIManager : MonoBehaviour
         uiAudio.StopBGM();
         uiAudio.SystemButtonSE();
     }
-
-    public void ResetButton()
+    public void ReSpawnButton()
     {
         if (!actor.IsDied) { return; }
 
-        isMainArea = false;
-
-        // UI変更
-        houseArea.SetActive(true);
-        HideWorldObj();
-        HideMainArea();
-        enemySpawn.CloneEnemyDestroy();
-
-        // Player調整
-        player.SetActive(false);
+        BackToHouse();
         actor.FullHelth();
-        actor.ResetActorPosition();
+        
 
-        // MapCurrentリセット
-        currentMap.ResetMapAmount();
-        ChangeMapAmountText(currentMap.GetMapAmount());
+        // 音楽
+        uiAudio.StopBGM();
+        uiAudio.SystemButtonSE();
+    }
+
+    public void BackToHouseButton()
+    {
+        backToHouseFrame.gameObject.SetActive(false);
+        pressedBackToHouseFrame.gameObject.SetActive(true);
+        uiAudio.SystemButtonSE();
+    }
+    public void NoBackToHouse()
+    {
+        backToHouseFrame.gameObject.SetActive(true);
+        pressedBackToHouseFrame.gameObject.SetActive(false);
+        uiAudio.SystemButtonSE();
+    }
+    public void YesBackToHouse()
+    {
+        if (actor.IsDied) 
+        {
+            uiAudio.SystemErrorSE();
+            return; 
+        }
+
+        BackToHouse();
 
         // 音楽
         uiAudio.StopBGM();
@@ -630,7 +727,6 @@ public class UIManager : MonoBehaviour
     {
         actor.DownStatus(status);
     }
-
     public void StatusPlusButton(string status)
     {
         actor.UpStatus(status);

@@ -15,26 +15,38 @@ public class Enemy : MonoBehaviour
     [SerializeField] int pow = 2;
     [SerializeField] int def = 2;
     [SerializeField] int spd = 2;
-    [SerializeField] int maxSpd = 500;
     [SerializeField] int lck = 2;
-    [SerializeField] int maxLck = 500;
+    [Space]
     [SerializeField] int dropExp = 10;
     [SerializeField] int dropGold = 10;
-    
-
-    [Header("Infoooo")]
+    [Space]
+    [SerializeField] int maxSpd = 500;
+    [SerializeField] int maxLck = 500;
     [SerializeField] float maxDeleyAmount = 5f;
-    [SerializeField] int damageAdjust = 0;
 
+    [Header("Enemies")]
+    [SerializeField] EnemyType enemyType;
+    public enum EnemyType
+    {
+        Slime,
+        Boss,
+    }
+
+    // DeleyAmount
+    float attackDeleyAmount = 5f;
+    float minDeleyAmount = 0.3f;
+
+    // Attack
+    int damageAmount = 0;
+    int criticalDamage = 0;
+
+    // component
     PixelMonster pixelMonster;
     Actor actor;
     ActorSE actorSE;
     BoxCollider2D boxCollider2D;
 
-    float deleyTime = 0f;
-    int damageAmount = 0;
-    int criticalDamage = 0;
-
+    // bool
     bool besideActor = false;
     public bool BesideActor
     {
@@ -65,7 +77,8 @@ public class Enemy : MonoBehaviour
         if (besideActor) { Attack(); }
 
     }
-
+    
+    #region ---Get Method
     public int GetEnemyStatus(string status)
     {
         int val = 0;
@@ -109,11 +122,27 @@ public class Enemy : MonoBehaviour
     {
         return this.name;
     }
-    
+    public float GetAttackDeleyAmount()
+    {
+        return this.attackDeleyAmount;
+    }
+    public float GetMaxDeleyAmount()
+    {
+        return this.maxDeleyAmount;
+    }
+    public EnemyType GetEnemyType()
+    {
+        return enemyType;
+    }
+    #endregion
+
+    #region ---AmountChanger Method
     public int DamageAmount()
     {
+        // todo: damageAmount‚Éƒ‰ƒ“ƒ_ƒ€«‚ðŽ‚½‚¹‚é
+        // todo: •ŠíUŒ‚—Í‚ð‰ÁŽZ‚·‚é
         this.damageAmount = this.pow;
-        int critical = Random.Range(0, this.lck + maxLck);
+        int critical = Random.Range(0, (this.lck + maxLck));
 
         if (critical > maxLck)
         {
@@ -131,7 +160,7 @@ public class Enemy : MonoBehaviour
             actorSE.AttackSE();
             return Random.Range(0, 6);
         }
-        
+
     }
 
     bool isStatusUp = false;
@@ -153,28 +182,29 @@ public class Enemy : MonoBehaviour
             isStatusUp = true;
         }
     }
-    
+    #endregion
 
 
-
+    #region ---Controlls Method
     void Attack()
     {
-        this.deleyTime += Time.deltaTime;
+        this.attackDeleyAmount -= Time.deltaTime;
 
-        if (maxDeleyAmount < this.deleyTime)
+        if (0 > this.attackDeleyAmount)
         {
             pixelMonster.Attack();
             if (actor != null)
             {
-                actor.Damage(DamageAmount());
-                
+                StartCoroutine(actor.Damage(DamageAmount()));
+                //actor.Damage(DamageAmount());
             }
-            this.deleyTime = 0;
+            this.attackDeleyAmount = this.maxDeleyAmount;
         }
     }
 
-    public void Damage(int damageAmount)
+    public IEnumerator Damage(int damageAmount)
     {
+        yield return new WaitForSeconds(0.2f);
         this.hp -= damageAmount;
     }
 
@@ -182,19 +212,14 @@ public class Enemy : MonoBehaviour
     {
         pixelMonster.IsDead = true;
         actor.CurrentPlayerEXPAndGold(dropExp,Random.Range(1,dropGold));
+        actor.KillEnemyChecker();
         boxCollider2D.enabled = false;
-        //this.tag = "Untagged";
-        //actor.BesideEnemy = false;
-        //actor.IsMove = true;
         Destroy(this.gameObject, 1.5f);
         isDestroy = true;
     }
+    #endregion
 
-    void DiedHide()
-    {
-        this.gameObject.SetActive(false);
-    }
-
+    #region ---Collision Method
     void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Player")
@@ -212,5 +237,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        
+    }
+    #endregion
 
 }

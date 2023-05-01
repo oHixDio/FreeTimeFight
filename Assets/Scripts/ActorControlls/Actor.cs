@@ -25,9 +25,11 @@ public class Actor : MonoBehaviour
     [Header("Info")]
     [SerializeField] GameObject uiManagerObj;
     [SerializeField] GameObject mapPoint;
-    [SerializeField] float maxMobility = 4f;
-    [SerializeField] float maxDeleyAmount = 5f;
 
+    int slimeKillAmount = 0;
+    int bossKillAmount = 0;
+
+    // maxAmount
     int maxLevel = 1250;
     int currentHp = 100;
     int maxHp = 2000;
@@ -36,27 +38,33 @@ public class Actor : MonoBehaviour
     int maxSpd = 250;  // çUåÇë¨ìxÇ…âeãø
     int maxLck = 250;  // ÉNÉäÉeÉBÉJÉãó¶Ç…âeãø
     int maxskl = 1250; // ãZî\ílÇ…âeãø
+
+    // otherAmount
     int sumEXP = 0;
     int nextExp = 10;
     int statusAddPoint = 0;
     int gold = 0;
-
+    // damage => pow
     int weaponPow = 3;
-    float Mobility = 0f;
     int damageAmount = 0;
-    int DefenseAmount = 0;
-    float attackDeleyAmount = 0;
-    float attackDeleyTime = 0f;
-    const float minDeleyTime = 0.3f;
     int criticalDamage = 0;
+    // defense => def
+    int DefenseAmount = 0;
+    // mobility => spd
+    float maxMobility = 4f;
+    float Mobility = 0f;
+    // deley => spd
+    float maxDeleyAmount = 5f;
+    float attackDeleyAmount = 5f;
+    const float minDeleyTime = 0.3f;
     
+    // component
     PixelCharacter pixcelCharactor = null;
     UIManager uiManager = null;
     EndPoint end = null;
     CurrentMap current = null;
     EnemySpawn spawn = null;
     ActorSE actorSE = null;
-    
     Enemy enemy = null;
     public Enemy Enemy
     {
@@ -110,6 +118,11 @@ public class Actor : MonoBehaviour
     public bool IsDied
     {
         get { return isDied; } 
+    }
+    bool isKilledBoss = false;
+    public bool IsKilledBoss
+    {
+        get { return isKilledBoss; }
     }
     #endregion
 
@@ -167,6 +180,7 @@ public class Actor : MonoBehaviour
         uiManager.SetPlayerInventoryText();
         uiManager.SetPlayerSkillText();
         uiManager.SetPlayerHPbar(hp, currentHp);
+        uiManager.SetPlayerAttackBar(attackDeleyAmount, maxDeleyAmount);
     }
     void SetSystemUI()
     {
@@ -353,19 +367,6 @@ public class Actor : MonoBehaviour
             return Random.Range(0, 6);
         }
     }
-    
-    float AttackDeleyAmount()
-    {
-        // attackDeleyèâä˙ílÇT
-        attackDeleyAmount = maxDeleyAmount - ((maxDeleyAmount / maxSpd) * this.spd);
-
-        if (attackDeleyAmount < 0.3f)
-        {
-            attackDeleyAmount = 0.3f;
-
-        }
-        return attackDeleyAmount;
-    }
 
 
     #endregion
@@ -379,30 +380,46 @@ public class Actor : MonoBehaviour
         uiManager.SetEnemyHPText(e.GetEnemyStatus("hp"), e.GetEnemyStatus("maxHp"));
         uiManager.SetEnemyStatusText(e.GetEnemyStatus("pow"), e.GetEnemyStatus("def"), e.GetEnemyStatus("spd"), e.GetEnemyStatus("lck"));
         uiManager.SetEnemyHPbar(e.GetEnemyStatus("hp"), e.GetEnemyStatus("maxHp"));
-
+        uiManager.SetEnemyAttackBar(e.GetAttackDeleyAmount(),e.GetMaxDeleyAmount());
     }
 
+    #endregion
+
+    #region ---PlayerAchievement Method
+    public void KillEnemyChecker()
+    {
+        if (enemy.GetEnemyType() == Enemy.EnemyType.Slime)
+        {
+            slimeKillAmount++;
+        }
+        if (enemy.GetEnemyType() == Enemy.EnemyType.Boss)
+        {
+            bossKillAmount++;
+            isKilledBoss = true;
+        }
+    }
     #endregion
 
     #region ---PlayerControlls Method
     void Attack()
     {
+        this.attackDeleyAmount -= Time.deltaTime;
 
-        attackDeleyTime += Time.deltaTime;
-
-        if (AttackDeleyAmount() < attackDeleyTime)
+        if (0 > this.attackDeleyAmount)
         {
             pixcelCharactor.Attack();
             if(enemy != null)
             {
-                enemy.Damage(DamageAmount());
+                StartCoroutine(enemy.Damage(DamageAmount()));
+                //enemy.Damage(DamageAmount());
             }
-            attackDeleyTime = 0;
+            this.attackDeleyAmount = this.maxDeleyAmount;
         }
     }
 
-    public void Damage(int damageAmount)
+    public IEnumerator Damage(int damageAmount)
     {
+        yield return new WaitForSeconds(0.4f);
         this.hp -= damageAmount;
         SaveManager.instance.SetPlayerHp(this.hp);
     }
@@ -412,6 +429,7 @@ public class Actor : MonoBehaviour
         if (this.hp <= 0)
         {
             pixcelCharactor.IsDead = true;
+            isMove = false;
             isDied = true;
             this.hp = 0;
         }

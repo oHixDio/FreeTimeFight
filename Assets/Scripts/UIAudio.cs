@@ -6,7 +6,9 @@ public class UIAudio : MonoBehaviour
 {
     [SerializeField] GameObject audioBGM;
     [SerializeField] AudioClip systembuttonSE;
+    [SerializeField] AudioClip systemErrorSE;
     [SerializeField] AudioClip hpHealSE;
+
 
     AudioSource seAudioSource;
     AudioSource bgmAudioSource;
@@ -20,6 +22,11 @@ public class UIAudio : MonoBehaviour
     public void SystemButtonSE()
     {
         seAudioSource.PlayOneShot(systembuttonSE);
+    }
+
+    public void SystemErrorSE()
+    {
+        seAudioSource.PlayOneShot(systemErrorSE);
     }
 
     public void FullHealthSE()

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7650076090094657609}
   - component: {fileID: -4258300726017056988}
   - component: {fileID: -1010761270062016068}
-  - component: {fileID: 7871736219593644576}
   - component: {fileID: 2884541475319123259}
   - component: {fileID: 2293143918473314764}
   m_Layer: 0
@@ -80,13 +79,13 @@ MonoBehaviour:
   pow: 5
   def: 5
   spd: 5
-  maxSpd: 500
   lck: 5
-  maxLck: 500
   dropExp: 5
   dropGold: 1
+  maxSpd: 500
+  maxLck: 500
   maxDeleyAmount: 5
-  damageAdjust: 0
+  enemyType: 1
 --- !u!114 &-1010761270062016068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,18 +104,6 @@ MonoBehaviour:
   statusUpSE: {fileID: 0}
   statusDownSE: {fileID: 0}
   systemErrorSE: {fileID: 0}
---- !u!114 &7871736219593644576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1927876421025776180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd784ca086ac5c04f940a329a46e3d30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &2884541475319123259
 BoxCollider2D:
   m_ObjectHideFlags: 0
