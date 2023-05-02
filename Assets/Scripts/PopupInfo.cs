@@ -5,7 +5,6 @@ using UnityEngine;
 public class PopupInfo : MonoBehaviour
 {
     Animation anim;
-    AnimationClip clip;
 
     void Awake()
     {

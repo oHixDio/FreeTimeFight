@@ -44,6 +44,26 @@ public class SaveManager : MonoBehaviour
         return saveData.mapAmount;
     }
 
+    public void SetCurrentMapAmount(int currentmapAmount)
+    {
+        saveData.currentMapAmount = currentmapAmount;
+        Save();
+    }
+    public int GetCurrentMapAmount()
+    {
+        return saveData.currentMapAmount;
+    }
+
+    public void SetCurrentFieldAmount(int currentFieldAmount)
+    {
+        saveData.currentFieldAmount = currentFieldAmount;
+        Save();
+    }
+    public int GetCurrentFieldAmount()
+    {
+        return saveData.currentFieldAmount;
+    }
+
     public void SetLeftMapIsTrigger(bool leftMapEndIsTrigger)
     {
         saveData.leftMapEndIsTrigger = leftMapEndIsTrigger;
@@ -200,6 +220,8 @@ public class SaveData
 {
     [Header("CurrentMap")]
     public int mapAmount;
+    public int currentMapAmount;
+    public int currentFieldAmount;
     public bool leftMapEndIsTrigger;
     public bool rightMapEndIsTrigger = true;
 

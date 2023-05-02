@@ -5,6 +5,9 @@ using UnityEngine;
 public class UIAudio : MonoBehaviour
 {
     [SerializeField] GameObject audioBGM;
+    [SerializeField] AudioClip mainBGM;
+    [SerializeField] AudioClip bossBGM;
+    [SerializeField] AudioClip completeBGM;
     [SerializeField] AudioClip systembuttonSE;
     [SerializeField] AudioClip systemErrorSE;
     [SerializeField] AudioClip hpHealSE;
@@ -38,8 +41,22 @@ public class UIAudio : MonoBehaviour
     {
         bgmAudioSource.Stop();
     }
-    public void PlayBGM()
+    public void PlayMainBGM()
     {
+        bgmAudioSource.Stop();
+        bgmAudioSource.clip = mainBGM;
+        bgmAudioSource.Play();
+    }
+    public void PlayBossBGM()
+    {
+        bgmAudioSource.Stop();
+        bgmAudioSource.clip = bossBGM;
+        bgmAudioSource.Play();
+    }
+    public void PlayCompleteBGM()
+    {
+        bgmAudioSource.Stop();
+        bgmAudioSource.clip = completeBGM;
         bgmAudioSource.Play();
     }
 }

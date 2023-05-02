@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject systemFooter;
     // infoPanel
     [SerializeField] Text mapAmountText;
+    [SerializeField] Text currentFieldAmountText;
     [SerializeField] GameObject popupInfoFrame;
     [SerializeField] Text popupInfoText;
     // levelupPanel
@@ -81,6 +82,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject playerEventButton;
     [SerializeField] Text playerEventText;
     [SerializeField] Text playerGoldText;
+    [SerializeField] GameObject completeFrame;
 
 
     [Header("EnemyUICanvas")]
@@ -143,7 +145,7 @@ public class UIManager : MonoBehaviour
         actor = player.GetComponent<Actor>();
         uiAudio = GetComponent<UIAudio>();
         SetBGList();
-        SethouseList();
+        SetHouseList();
         SetWorldObjList();
     }
     void Start()
@@ -159,6 +161,7 @@ public class UIManager : MonoBehaviour
     {
         // Gameが始まったときのUI
         isMainArea = true;
+        actor.IsMove = true;
         player.SetActive(true);
         mainTileMap.SetActive(true);
         playerUICancvas.SetActive(true);
@@ -171,7 +174,7 @@ public class UIManager : MonoBehaviour
             enemySpawn.SpawnControll(1, currentMap.GetMapAmount());
         }
 
-        uiAudio.PlayBGM();
+        CheckBGM();
     }
 
 
@@ -225,7 +228,7 @@ public class UIManager : MonoBehaviour
 
     void HideSystemMenu()
     {
-        
+
         HideSystemPanel();
         levelupPanel.SetActive(false);
         achievementPanel.SetActive(false);
@@ -308,6 +311,11 @@ public class UIManager : MonoBehaviour
     {
         mapAmountText.text = "MAP:" + mapAmount.ToString();
     }
+    void ChangeCurrentFiledAmountText()
+    {
+        currentMap.CurrentFieldAmountIncrement();
+        currentFieldAmountText.text = "F:"+ currentMap.GetCurrentFieldAmount().ToString();
+    }
 
     // PopupUI関係
     // type => 0:null 1:nullではない
@@ -357,6 +365,14 @@ public class UIManager : MonoBehaviour
     public void HidePopupInfoFrame()
     {
         popupInfoFrame.SetActive(false);
+    }
+    public void ShowCompleteFrame()
+    {
+        completeFrame.SetActive(true);
+    }
+    void HideCompleteFrame()
+    {
+        completeFrame.SetActive(false);
     }
     #endregion
 
@@ -420,7 +436,7 @@ public class UIManager : MonoBehaviour
             playerAttackBar.gameObject.SetActive(true);
             playerAttackBar.fillAmount = deleyAmount;
         }
-        
+
     }
     public void SetplayerGoldText(int gold)
     {
@@ -453,11 +469,6 @@ public class UIManager : MonoBehaviour
 
     // ------------------------------------------------------------------ //
     // TODO
-    // ボス戦BGMを実装
-    // ボスを倒した時表彰する(実質のゲームクリア演出)　UI作成
-    // その後、家に戻ることができるようにする
-    // MapAmountは０に戻るが、敵、自分のステータス関係はそのまま
-    // 2週目に突入　5週目までカウントされる
     // 実績反映　UI作成
     // 家の回復はお金を払わないとできないようにする
     // 家のテキストを変更できるようにする　UI作成
@@ -516,7 +527,7 @@ public class UIManager : MonoBehaviour
     /// todo 0
     /// </summary>
     // バリエーション追加したら必ずAdd()
-    void SethouseList()
+    void SetHouseList()
     {
         houseList.Add(houseArea);
         houseList.Add(weaponArea);
@@ -532,8 +543,6 @@ public class UIManager : MonoBehaviour
         worldObjList.Add(thirdWorldObj);
         worldObjList.Add(bossWorldObj);
     }
-
-
     void HideHouseList()
     {
         for (int i = 0; i < houseList.Count; i++)
@@ -563,10 +572,10 @@ public class UIManager : MonoBehaviour
 
         if (!isMainArea) { return; }
 
-        
+
 
         // if文の実行順注意
-        
+
         if (mapCurrent == 0 || mapCurrent % 10 == 0 && !(mapCurrent % 30 == 0))
         {
             firstMapHouse.gameObject.SetActive(true);
@@ -582,7 +591,7 @@ public class UIManager : MonoBehaviour
             armorShop.gameObject.SetActive(true);
             return;
         }
-        else if (mapCurrent== 1)
+        else if (mapCurrent == 1)
         {
             weaponShop.gameObject.SetActive(true);
             return;
@@ -638,12 +647,14 @@ public class UIManager : MonoBehaviour
     {
         isMainArea = false;
         actor.IsMove = false;
+        actor.IsKilledBoss = false;
+        actor.IsDied = false;
         // UI変更
         houseArea.SetActive(true);
         HideWorldObj();
         HideMainArea();
         enemySpawn.CloneEnemyDestroy();
-        
+
         // Player調整
         player.SetActive(false);
         actor.ResetActorPosition();
@@ -651,7 +662,7 @@ public class UIManager : MonoBehaviour
         // MapCurrentリセット
         currentMap.ResetMapAmount();
         ChangeMapAmountText(currentMap.GetMapAmount());
-        
+
     }
 
     #endregion
@@ -664,10 +675,11 @@ public class UIManager : MonoBehaviour
         ShowMainArea();
         ChengeBG();
         SpawnWorldObj(currentMap.GetMapAmount());
-        
-        enemySpawn.ShowCloneEnemy();
 
-        uiAudio.PlayBGM();
+        enemySpawn.ShowCloneEnemy();
+        // 音楽
+        uiAudio.PlayMainBGM();
+        currentMap.SkipIncrement();
         uiAudio.SystemButtonSE();
     }
     public void InTheHouse()
@@ -675,25 +687,36 @@ public class UIManager : MonoBehaviour
         if (actor.IsDied || actor.IsKilledBoss) { return; }
 
         isMainArea = false;
-        actor.IsMove= false;
+        actor.IsMove = false;
         ShowAnyArea();
         HideWorldObj();
         enemySpawn.HideCloneEnemy();
-        
+
         uiAudio.StopBGM();
         uiAudio.SystemButtonSE();
     }
     public void ReSpawnButton()
     {
-        if (!actor.IsDied) { return; }
+        if (actor.IsDied || actor.IsKilledBoss)
+        {
+            if (actor.IsDied)
+            {
+                actor.FullHelth();
+                currentMap.CurrentMapAmountMinus();
+            }
 
-        BackToHouse();
-        actor.FullHelth();
-        
+            if (actor.IsKilledBoss)
+            {
+                HideCompleteFrame();
+                ChangeCurrentFiledAmountText();
+            }
 
-        // 音楽
-        uiAudio.StopBGM();
-        uiAudio.SystemButtonSE();
+            BackToHouse();
+
+            // 音楽
+            uiAudio.StopBGM();
+            uiAudio.SystemButtonSE();
+        }
     }
 
     public void BackToHouseButton()
@@ -710,12 +733,12 @@ public class UIManager : MonoBehaviour
     }
     public void YesBackToHouse()
     {
-        if (actor.IsDied) 
+        if (actor.IsDied || actor.IsKilledBoss) 
         {
             uiAudio.SystemErrorSE();
             return; 
         }
-
+        currentMap.CurrentMapAmountMinus();
         BackToHouse();
 
         // 音楽
@@ -741,6 +764,10 @@ public class UIManager : MonoBehaviour
     public void RightPanelDown()
     {
         actor.IsRight = true;
+        if (!actor.IsMove && actor.Enemy != null)
+        {
+            actor.ShortingAttackDelay(0.1f);
+        }
     }
     public void RightPanelUp()
     {
@@ -750,10 +777,57 @@ public class UIManager : MonoBehaviour
     public void LeftPanelDown()
     {
         actor.IsLeft = true;
+        if (!actor.IsMove && actor.Enemy != null)
+        {
+            actor.ShortingAttackDelay(0.01f);
+        }
     }
     public void LeftPanelUp()
     {
         actor.IsLeft = false;
+    }
+    #endregion
+
+    #region --- Other
+    public void MainBGM()
+    {
+        uiAudio.PlayMainBGM();
+    }
+    public void BossBGM()
+    {
+        uiAudio.PlayBossBGM();
+    }
+    public void PlayCompleteBGM()
+    {
+        uiAudio.PlayCompleteBGM();
+        currentMap.KilledBossOfMapCurrent();
+    }
+    public void CheckBGM()
+    {
+        if (currentMap.GetMapAmount() == 30)
+        {
+            uiAudio.PlayBossBGM();
+            currentMap.SkipDecrement();
+        }
+        else
+        {
+            uiAudio.PlayMainBGM();
+            currentMap.SkipIncrement();
+        }
+    }
+
+    
+
+    public void ClearChacker()
+    {
+        if (actor.Enemy == null) { return; }
+
+        if (actor.Enemy.GetEnemyType() == Enemy.EnemyType.Boss)
+        {
+            actor.IsKilledBoss = true;
+            PlayCompleteBGM();
+            ShowCompleteFrame();
+        }
     }
     #endregion
 }

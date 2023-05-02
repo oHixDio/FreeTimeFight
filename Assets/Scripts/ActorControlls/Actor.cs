@@ -54,9 +54,9 @@ public class Actor : MonoBehaviour
     float maxMobility = 4f;
     float Mobility = 0f;
     // deley => spd
-    float maxDeleyAmount = 5f;
-    float attackDeleyAmount = 5f;
-    const float minDeleyTime = 0.3f;
+    [SerializeField] float maxDelayAmount = 10f;
+    float attackDelayAmount = 0f;
+    const float minDelayTime = 0.3f;
     
     // component
     PixelCharacter pixcelCharactor = null;
@@ -79,16 +79,19 @@ public class Actor : MonoBehaviour
     bool isMove = false;
     public bool IsMove
     {
+        get { return isMove; }
         set { isMove = value; }
     }
     bool isRight = false;
     public bool IsRight
     {
+        get { return isRight; }
         set { isRight = value; }
     }
     bool isLeft = false;
     public bool IsLeft
     {
+        get { return isLeft; }
         set { isLeft = value; }
     }
     bool besideEnemy = false;
@@ -118,11 +121,13 @@ public class Actor : MonoBehaviour
     public bool IsDied
     {
         get { return isDied; } 
+        set { isDied = value; }
     }
     bool isKilledBoss = false;
     public bool IsKilledBoss
     {
         get { return isKilledBoss; }
+        set { isKilledBoss = value; }
     }
     #endregion
 
@@ -155,11 +160,6 @@ public class Actor : MonoBehaviour
 
         MovePlayer();
 
-        
-
-        
-
-
         if (besideEnemy) { Attack(); }
     }
 
@@ -180,13 +180,17 @@ public class Actor : MonoBehaviour
         uiManager.SetPlayerInventoryText();
         uiManager.SetPlayerSkillText();
         uiManager.SetPlayerHPbar(hp, currentHp);
-        uiManager.SetPlayerAttackBar(attackDeleyAmount, maxDeleyAmount);
+        uiManager.SetPlayerAttackBar(attackDelayAmount, maxDelayAmount);
     }
     void SetSystemUI()
     {
         uiManager.SetLevelUpPanelText(pow, def, spd, lck, skl, currentHp, statusAddPoint);
     }
 
+    public void BossKilledChacker()
+    {
+        uiManager.ClearChacker();
+    }
     
     public void CurrentPlayerEXPAndGold(int dropEXP, int dropGold)
     {
@@ -368,7 +372,10 @@ public class Actor : MonoBehaviour
         }
     }
 
-
+    public void ShortingAttackDelay(float minusAmount)
+    {
+        attackDelayAmount -= minusAmount;
+    }
     #endregion
     
     #region ---EnemyUI Method
@@ -380,13 +387,13 @@ public class Actor : MonoBehaviour
         uiManager.SetEnemyHPText(e.GetEnemyStatus("hp"), e.GetEnemyStatus("maxHp"));
         uiManager.SetEnemyStatusText(e.GetEnemyStatus("pow"), e.GetEnemyStatus("def"), e.GetEnemyStatus("spd"), e.GetEnemyStatus("lck"));
         uiManager.SetEnemyHPbar(e.GetEnemyStatus("hp"), e.GetEnemyStatus("maxHp"));
-        uiManager.SetEnemyAttackBar(e.GetAttackDeleyAmount(),e.GetMaxDeleyAmount());
+        uiManager.SetEnemyAttackBar(e.GetAttackDelayAmount(),e.GetMaxDelayAmount());
     }
 
     #endregion
 
     #region ---PlayerAchievement Method
-    public void KillEnemyChecker()
+    public void KillEnemyTypeChecker()
     {
         if (enemy.GetEnemyType() == Enemy.EnemyType.Slime)
         {
@@ -395,7 +402,6 @@ public class Actor : MonoBehaviour
         if (enemy.GetEnemyType() == Enemy.EnemyType.Boss)
         {
             bossKillAmount++;
-            isKilledBoss = true;
         }
     }
     #endregion
@@ -403,9 +409,9 @@ public class Actor : MonoBehaviour
     #region ---PlayerControlls Method
     void Attack()
     {
-        this.attackDeleyAmount -= Time.deltaTime;
+        this.attackDelayAmount -= Time.deltaTime;
 
-        if (0 > this.attackDeleyAmount)
+        if (0 > this.attackDelayAmount)
         {
             pixcelCharactor.Attack();
             if(enemy != null)
@@ -413,7 +419,7 @@ public class Actor : MonoBehaviour
                 StartCoroutine(enemy.Damage(DamageAmount()));
                 //enemy.Damage(DamageAmount());
             }
-            this.attackDeleyAmount = this.maxDeleyAmount;
+            this.attackDelayAmount = this.maxDelayAmount;
         }
     }
 
@@ -505,7 +511,7 @@ public class Actor : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             enemy = collision.gameObject.GetComponent<Enemy>();
-            enemy.CurrentStatus(current.GetMapAmount());
+            enemy.CurrentStatus(current.GetCurrentMapAmount());
             uiManager.ShowEnemyUI();
         }
         if (collision.gameObject.tag == "HouseDoor") { besideHouseArea = true; }

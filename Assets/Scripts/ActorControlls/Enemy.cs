@@ -22,7 +22,8 @@ public class Enemy : MonoBehaviour
     [Space]
     [SerializeField] int maxSpd = 500;
     [SerializeField] int maxLck = 500;
-    [SerializeField] float maxDeleyAmount = 5f;
+    [SerializeField] float maxDelayAmount = 5f;
+    [SerializeField] int upHpAmount = 12;
 
     [Header("Enemies")]
     [SerializeField] EnemyType enemyType;
@@ -33,8 +34,8 @@ public class Enemy : MonoBehaviour
     }
 
     // DeleyAmount
-    float attackDeleyAmount = 5f;
-    float minDeleyAmount = 0.3f;
+    float attackDelayAmount = 5f;
+    float minDelayAmount = 0.3f;
 
     // Attack
     int damageAmount = 0;
@@ -42,9 +43,13 @@ public class Enemy : MonoBehaviour
 
     // component
     PixelMonster pixelMonster;
-    Actor actor;
     ActorSE actorSE;
     BoxCollider2D boxCollider2D;
+    Actor actor;
+    public Actor Actor
+    {
+        set { actor = value; }
+    }
 
     // bool
     bool besideActor = false;
@@ -122,13 +127,13 @@ public class Enemy : MonoBehaviour
     {
         return this.name;
     }
-    public float GetAttackDeleyAmount()
+    public float GetAttackDelayAmount()
     {
-        return this.attackDeleyAmount;
+        return this.attackDelayAmount;
     }
-    public float GetMaxDeleyAmount()
+    public float GetMaxDelayAmount()
     {
-        return this.maxDeleyAmount;
+        return this.maxDelayAmount;
     }
     public EnemyType GetEnemyType()
     {
@@ -164,21 +169,21 @@ public class Enemy : MonoBehaviour
     }
 
     bool isStatusUp = false;
-    public void CurrentStatus(int mapAmount)
+    public void CurrentStatus(int currentMapAmount)
     {
-        if (mapAmount <= 1) { return; }
+        if (currentMapAmount <= 1) { return; }
         
         if (isStatusUp == false)
         {
-            mapAmount--;
-            this.level += mapAmount;
-            this.hp += mapAmount * 12;
-            this.maxHp += mapAmount * 12;
-            this.pow += mapAmount;
-            this.def += mapAmount;
-            this.spd += mapAmount;
-            this.lck += mapAmount;
-            this.dropExp += mapAmount;
+            currentMapAmount--;
+            this.level += currentMapAmount;
+            this.hp += currentMapAmount * upHpAmount;
+            this.maxHp += currentMapAmount * upHpAmount;
+            this.pow += currentMapAmount;
+            this.def += currentMapAmount;
+            this.spd += currentMapAmount;
+            this.lck += currentMapAmount;
+            this.dropExp += currentMapAmount;
             isStatusUp = true;
         }
     }
@@ -188,9 +193,9 @@ public class Enemy : MonoBehaviour
     #region ---Controlls Method
     void Attack()
     {
-        this.attackDeleyAmount -= Time.deltaTime;
+        this.attackDelayAmount -= Time.deltaTime;
 
-        if (0 > this.attackDeleyAmount)
+        if (0 > this.attackDelayAmount)
         {
             pixelMonster.Attack();
             if (actor != null)
@@ -198,7 +203,7 @@ public class Enemy : MonoBehaviour
                 StartCoroutine(actor.Damage(DamageAmount()));
                 //actor.Damage(DamageAmount());
             }
-            this.attackDeleyAmount = this.maxDeleyAmount;
+            this.attackDelayAmount = this.maxDelayAmount;
         }
     }
 
@@ -212,7 +217,8 @@ public class Enemy : MonoBehaviour
     {
         pixelMonster.IsDead = true;
         actor.CurrentPlayerEXPAndGold(dropExp,Random.Range(1,dropGold));
-        actor.KillEnemyChecker();
+        actor.KillEnemyTypeChecker();
+        actor.BossKilledChacker();
         boxCollider2D.enabled = false;
         Destroy(this.gameObject, 1.5f);
         isDestroy = true;
