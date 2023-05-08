@@ -70,3 +70,6 @@ TagManager:
   - name: Door
     uniqueID: 3560328653
     locked: 0
+  - name: Weapon
+    uniqueID: 2406092925
+    locked: 0

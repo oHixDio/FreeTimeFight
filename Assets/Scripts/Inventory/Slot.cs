@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Orc : MonoBehaviour
+public class Slot : MonoBehaviour
 {
-    
+    [SerializeField] Item item;
+
+   
 }

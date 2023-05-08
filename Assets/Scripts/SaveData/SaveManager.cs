@@ -9,7 +9,11 @@ public class SaveManager : MonoBehaviour
     public static SaveManager instance;
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        
         Load();
     }
     [SerializeField] SaveData saveData;

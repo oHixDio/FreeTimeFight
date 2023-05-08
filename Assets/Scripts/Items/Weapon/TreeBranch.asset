@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a39634c09a75fe84db68e338bbbc738a, type: 3}
-  m_Name: SlimeKilledAmount
+  m_Script: {fileID: 11500000, guid: 872c00168f22071489bcaba2f6a3b352, type: 3}
+  m_Name: TreeBranch
   m_EditorClassIdentifier: 
-  achievementTextLine: "\u30B9\u30E9\u30A4\u30E0\n\u6483\u7834\u6570"
-  firstBreakValueAmount: 300
-  secondBreakValueAmount: 600
-  thirdBreakValueAmount: 1000
+  itemPrefab: {fileID: 5713231735461001616, guid: 829082f3bc4087948b74af5d5d6e2e6d, type: 3}
+  type: 0
+  itemName: "\u6728\u306E\u679D"
+  isHad: 1
+  weaponPow: 7

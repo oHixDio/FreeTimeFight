@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
-[CreateAssetMenu(menuName ="New Achievement", fileName ="New Achievement")]
+[CreateAssetMenu(fileName = "New Achievement", menuName = "Achievement/Create Achievement")]
 public class Achievements : ScriptableObject
 {
     [TextArea(2,2)]

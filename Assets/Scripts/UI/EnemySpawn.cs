@@ -8,6 +8,7 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] List<GameObject> spawnPointList = new List<GameObject>();
     [SerializeField] List<GameObject> enemyPrefabList = new List<GameObject>();
     [SerializeField] GameObject bossPrefab;
+    [SerializeField] Transform cloneEnemies;
 
     List<int> randomPosList = new List<int>();
     List<GameObject> cloneEnemy = new List<GameObject>();
@@ -61,7 +62,12 @@ public class EnemySpawn : MonoBehaviour
             {
                 randomPosList.Add(randomPos);
                 //prefabの値ではなく、cloneの値を変えている（顔の向き）
-                cloneEnemy.Add(Instantiate(enemyPrefabList[randomEnemy], spawnPointList[randomPos].transform.position, Quaternion.identity));
+                cloneEnemy.Add(Instantiate(
+                    enemyPrefabList[randomEnemy],
+                    spawnPointList[randomPos].transform.position,
+                    Quaternion.identity,
+                    cloneEnemies));
+
                 for (int k = 0; k < cloneEnemy.Count; k++)
                 {
                     cloneEnemy[k].transform.localScale = new Vector3(-playerDirection, 1, 1);
@@ -73,7 +79,11 @@ public class EnemySpawn : MonoBehaviour
 
     void BossSpawn(int playerDirection)
     {
-        cloneEnemy.Add(Instantiate(bossPrefab, spawnPointList[1].transform.position, Quaternion.identity));
+        cloneEnemy.Add(Instantiate(
+            bossPrefab,
+            spawnPointList[1].transform.position,
+            Quaternion.identity,
+            cloneEnemies));
         cloneEnemy[0].transform.localScale = new Vector3(-playerDirection, 1, 1);
     }
 
