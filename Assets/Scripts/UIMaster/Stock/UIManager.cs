@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text playerPetText;
     [SerializeField] Text playerFstSkillText;
     [SerializeField] Text playerSndSkillText;
-    [SerializeField] Text playerTrdSkillText;
+    [SerializeField] Text playerTrdSkillText; 
     // statusPanel
     [SerializeField] Text playerPowText;
     [SerializeField] Text playerDefText;
@@ -77,7 +77,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] Text playerLckText;
     [SerializeField] Text playerSklText;
     [SerializeField] Text playerSumEXPText;
-    [SerializeField] Text playerNextEXPText;
+    [SerializeField] Text playerNextEXPText;  // Clear
     // event&GoldPanel
     [SerializeField] GameObject playerEventButton;
     [SerializeField] Text playerEventText;

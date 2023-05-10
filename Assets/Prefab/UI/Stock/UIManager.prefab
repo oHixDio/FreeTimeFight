@@ -1,0 +1,323 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3865371858590239845
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2679497219713890830}
+  - component: {fileID: 801013033870186202}
+  - component: {fileID: 9135036444735294888}
+  - component: {fileID: 995593382789777830}
+  - component: {fileID: 3470934676445218833}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2679497219713890830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865371858590239845}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &801013033870186202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865371858590239845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2c13da8face9447b3a983558d45289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgUICanvas: {fileID: 0}
+  forestBG: {fileID: 0}
+  desertBG: {fileID: 0}
+  graveyardBG: {fileID: 0}
+  snowBG: {fileID: 0}
+  systemUICanvas: {fileID: 0}
+  systemMain: {fileID: 0}
+  systemFooter: {fileID: 0}
+  mapAmountText: {fileID: 0}
+  currentFieldAmountText: {fileID: 0}
+  popupInfoFrame: {fileID: 0}
+  popupInfoText: {fileID: 0}
+  levelupPanel: {fileID: 0}
+  systemPowText: {fileID: 0}
+  systemDefText: {fileID: 0}
+  systemSpdText: {fileID: 0}
+  systemLckText: {fileID: 0}
+  systemSklText: {fileID: 0}
+  systemcurrentHpText: {fileID: 0}
+  systemStatusAddPointText: {fileID: 0}
+  systemPanel: {fileID: 0}
+  backToHouseFrame: {fileID: 0}
+  pressedBackToHouseFrame: {fileID: 0}
+  achievementPanel: {fileID: 0}
+  player: {fileID: 0}
+  playerUICancvas: {fileID: 0}
+  playerMain: {fileID: 0}
+  playerfooter: {fileID: 0}
+  playerHPBar: {fileID: 0}
+  playerHPText: {fileID: 0}
+  playerCurrentHPText: {fileID: 0}
+  playerAttackBar: {fileID: 0}
+  playerIcon: {fileID: 0}
+  playerNameText: {fileID: 0}
+  playerLevelText: {fileID: 0}
+  playerWeaponText: {fileID: 0}
+  playerArmorText: {fileID: 0}
+  playerPetText: {fileID: 0}
+  playerFstSkillText: {fileID: 0}
+  playerSndSkillText: {fileID: 0}
+  playerTrdSkillText: {fileID: 0}
+  playerPowText: {fileID: 0}
+  playerDefText: {fileID: 0}
+  playerSpdText: {fileID: 0}
+  playerLckText: {fileID: 0}
+  playerSklText: {fileID: 0}
+  playerSumEXPText: {fileID: 0}
+  playerNextEXPText: {fileID: 0}
+  playerEventButton: {fileID: 0}
+  playerEventText: {fileID: 0}
+  playerGoldText: {fileID: 0}
+  completeFrame: {fileID: 0}
+  enemyUICanvas: {fileID: 0}
+  enemyHpBar: {fileID: 0}
+  enemyHpText: {fileID: 0}
+  enemyMaxHPText: {fileID: 0}
+  enemyAttackbar: {fileID: 0}
+  enemyIcon: {fileID: 0}
+  enemyNameText: {fileID: 0}
+  enemyLevelText: {fileID: 0}
+  enemyPowText: {fileID: 0}
+  enemyDefText: {fileID: 0}
+  enemySpdText: {fileID: 0}
+  enemyLckText: {fileID: 0}
+  mainTileMap: {fileID: 0}
+  houseArea: {fileID: 0}
+  weaponArea: {fileID: 0}
+  armorArea: {fileID: 0}
+  worldObjManager: {fileID: 0}
+  firstMapHouse: {fileID: 0}
+  weaponShop: {fileID: 0}
+  armorShop: {fileID: 0}
+  firstWorldObj: {fileID: 0}
+  secondWorldObj: {fileID: 0}
+  thirdWorldObj: {fileID: 0}
+  bossWorldObj: {fileID: 0}
+  mapPoint: {fileID: 0}
+--- !u!114 &9135036444735294888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865371858590239845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e5e8340ade64649a50b17a9893884a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioBGM: {fileID: 0}
+  mainBGM: {fileID: 8300000, guid: fd0f7515c90082e48b2ee910adb3b08f, type: 3}
+  bossBGM: {fileID: 8300000, guid: 2d9ab0f8c884ded4c8a00bdc1d7a4d0b, type: 3}
+  completeBGM: {fileID: 8300000, guid: 236a7490ad4cd0c4a9400dde877d5016, type: 3}
+  systembuttonSE: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
+  systemErrorSE: {fileID: 8300000, guid: 1ed8fb76fc64e4e46847348138782234, type: 3}
+  hpHealSE: {fileID: 8300000, guid: cfce0cea076109f478783201b2a9f57f, type: 3}
+--- !u!114 &995593382789777830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865371858590239845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63be001d07c3204a9b47b6e23f32e0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  achievementTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  valueAmountTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  firstBreakAmountTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  secondBreakAmountTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  thirdBreakAmountTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  firstClownIcons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  secondClownIcons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  thirdClownIcons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  achievements:
+  - {fileID: 11400000, guid: da7ff33bb5fba05498e2b1b2e1676e54, type: 2}
+  - {fileID: 11400000, guid: 4db34f3782aa7c44298f583cd0fbfca9, type: 2}
+  - {fileID: 11400000, guid: 7677f49233724d744960318ae2564bf8, type: 2}
+  - {fileID: 11400000, guid: 72f1f58e4f391414aa87c172a47da0f3, type: 2}
+  - {fileID: 11400000, guid: a4e2a9e9309c2c5418d73e5a4a432fbc, type: 2}
+  - {fileID: 11400000, guid: c05577924ab89164ab344043c198fcf1, type: 2}
+  firstValueAmount: 0
+  secondValueAmount: 500
+  thirdValueAmount: 0
+  fourthValueAmount: 700
+  fifthValueAmount: 0
+  sixthValueAmount: 12000
+  player: {fileID: 0}
+--- !u!82 &3470934676445218833
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865371858590239845}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

@@ -16,4 +16,5 @@ MonoBehaviour:
   type: 0
   itemName: "\u6728\u306E\u679D"
   isHad: 1
+  iconImage: {fileID: 21300042, guid: b217a154a8231e54bbb50405bdfafbaf, type: 3}
   weaponPow: 7

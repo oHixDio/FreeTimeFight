@@ -12,6 +12,7 @@ TagManager:
   - HouseDoor
   - WeaponDoor
   - ArmorDoor
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -72,4 +73,7 @@ TagManager:
     locked: 0
   - name: Weapon
     uniqueID: 2406092925
+    locked: 0
+  - name: TitleUI
+    uniqueID: 386357007
     locked: 0

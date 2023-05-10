@@ -6,9 +6,6 @@ using UnityEngine.UI;
 
 public class CurrentMap : MonoBehaviour
 {
-    [SerializeField] Text mapText;
-    [SerializeField] GameObject uiManagerobj;
-    UIManager uiManager;
     EndPoint endPoint;
 
     bool rightMapEndIsTrigger = true;
@@ -20,14 +17,12 @@ public class CurrentMap : MonoBehaviour
 
     void Awake()
     {
-        uiManager = uiManagerobj.GetComponent<UIManager>();
         endPoint = GetComponent<EndPoint>();
 
         LoadCurrentMapDate();
     }
     void Start()
     {
-        uiManager.ChangeMapAmountText(mapAmount);
     }
 
     public void MapFloorChange(int num)
@@ -37,7 +32,6 @@ public class CurrentMap : MonoBehaviour
             
             mapAmount++;
             currentMapAmount++;
-            uiManager.ChangeMapAmountText(mapAmount);
             this.leftMapEndIsTrigger = true;
             endPoint.LeftMapEndPointCollider.isTrigger = leftMapEndIsTrigger;
 
@@ -53,7 +47,6 @@ public class CurrentMap : MonoBehaviour
             {
                 mapAmount--;
                 currentMapAmount--;
-                uiManager.ChangeMapAmountText(mapAmount);
                 this.rightMapEndIsTrigger = true;
                 endPoint.RightMapEndPointCollider.isTrigger = rightMapEndIsTrigger;
 
@@ -68,12 +61,11 @@ public class CurrentMap : MonoBehaviour
             {
                 mapAmount = 0;
                 currentMapAmount = 0;
-                uiManager.ChangeMapAmountText(mapAmount);
             }
         }
 
         BGMChanger();
-        uiManager.SpawnWorldObj(mapAmount);
+        // uiManager.SpawnWorldObj(mapAmount);
 
         SaveCurrentMapDate();
     }
@@ -120,13 +112,13 @@ public class CurrentMap : MonoBehaviour
         
         if (mapAmount == 30)
         {
-            uiManager.BossBGM();
+            // uiManager.BossBGM();
             skip = 0;
         }
         else if (skip == 0)
         {
             skip = 1;
-            uiManager.MainBGM();
+            // uiManager.MainBGM();
         }
     }
 
@@ -139,6 +131,7 @@ public class CurrentMap : MonoBehaviour
         endPoint.LeftMapEndPointCollider.isTrigger = leftMapEndIsTrigger;
         SaveCurrentMapDate();
     }
+
     public int GetMapAmount()
     {
         return this.mapAmount;

@@ -6,13 +6,14 @@ public enum ItemType
 {
     TreeBranch,
     WoodenSword,
-    Knife,
+    PirateSword,
     Axe,
     SilverSword,
     goldenSword,
 
     GreenArmor,
     LeatherArmor,
+    PirateArmor,
     VikingArmor,
     SilverArmor,
     GoldenArmor,
