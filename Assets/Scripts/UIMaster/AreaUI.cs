@@ -15,6 +15,11 @@ public class AreaUI : MonoBehaviour
         armorArea.SetActive(false);
     }
 
+    public void ShowHouseArea()
+    {
+        houseArea.SetActive(true);
+    }
+
     public void ShowAnyArea()
     {
         if (UIMaster.instance.Actor.BesideHouseArea)

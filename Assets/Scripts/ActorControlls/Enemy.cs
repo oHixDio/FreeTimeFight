@@ -218,7 +218,7 @@ public class Enemy : MonoBehaviour
         pixelMonster.IsDead = true;
         actor.CurrentPlayerEXPAndGold(dropExp,Random.Range(1,dropGold));
         actor.KillEnemyTypeChecker();
-        actor.BossKilledChacker();
+        //actor.BossKilledChacker();
         boxCollider2D.enabled = false;
         Destroy(this.gameObject, 1.5f);
         isDestroy = true;

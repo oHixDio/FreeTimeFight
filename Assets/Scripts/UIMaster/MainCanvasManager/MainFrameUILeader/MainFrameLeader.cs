@@ -11,14 +11,14 @@ public class MainFrameLeader : MonoBehaviour
     public EventUI EventUI { get { return eventUI; } }
 
     [SerializeField] InfoPanelUI infoPanelUI;
-    public InfoPanelUI InfoPanelUI { get { return infoPanelUI;} }
+    public InfoPanelUI InfoPanelUI { get { return infoPanelUI; } }
 
     [Header("PlayerUI")]
     [SerializeField] PlayerUI playerUI;
     public PlayerUI PlayerUI { get { return playerUI; } }
 
     [SerializeField] PlayerInfoUI playerInfoUI;
-    public PlayerInfoUI PlayerInfoUI { get { return playerInfoUI;} }
+    public PlayerInfoUI PlayerInfoUI { get { return playerInfoUI; } }
 
     [SerializeField] PlayerStatusUI playerStatusUI;
     public PlayerStatusUI PlayerStatusUI { get { return playerStatusUI; } }
@@ -28,4 +28,11 @@ public class MainFrameLeader : MonoBehaviour
 
     [SerializeField] GoldUI goldUI;
     public GoldUI GoldUI { get { return goldUI; } }
+
+    [Header("SystemUI")]
+    [SerializeField] SystemButtonUI systemButtonUI;
+    public SystemButtonUI SystemButtonUI { get { return systemButtonUI; } }
+
+    [SerializeField] LevelupPanel levelupPanelUI;
+    public LevelupPanel LevelupPanelUI { get { return levelupPanelUI; } }
 }

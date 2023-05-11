@@ -16,7 +16,7 @@ public class PlayerStatusUI : MonoBehaviour
     [SerializeField] Text playerNextEXPText;
 
     // "v" => virtual
-    int vPow  = 0;
+    int vPow = 0;
     int vDef = 0;
     int vSpd = 0;
     int vLck = 0;

@@ -26,7 +26,7 @@ public class PlayerUI : MonoBehaviour
 
         playerStatusPanel.SetActive(true);
         playerInfoPanel.SetActive(true);
-        playerGoldPanel.SetActive(false);
+        playerGoldPanel.SetActive(true);
     }
 
     // EnemyStatus‚ð•\Ž¦‚·‚é‚Æ‚«

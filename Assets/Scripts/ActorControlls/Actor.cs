@@ -22,9 +22,6 @@ public class Actor : MonoBehaviour
     int lck = 5;
     int skl = 20;
 
-    [Header("Info")]
-    [SerializeField] GameObject uiManagerObj;
-    [SerializeField] GameObject mapPoint;
 
     int slimeKillAmount = 0;
     int bossKillAmount = 0;
@@ -42,7 +39,7 @@ public class Actor : MonoBehaviour
     // otherAmount
     int sumEXP = 0;
     int nextExp = 10;
-    int statusAddPoint = 0;
+    [SerializeField] int statusAddPoint = 0;
     int gold = 0;
     // damage => pow
     int weaponPow = 3;
@@ -60,11 +57,6 @@ public class Actor : MonoBehaviour
     
     // component
     PixelCharacter pixcelCharactor = null;
-    UIManager uiManager = null;
-    EndPoint end = null;
-    CurrentMap current = null;
-    EnemySpawn spawn = null;
-    ActorSE actorSE = null;
     Enemy enemy = null;
     public Enemy Enemy
     {
@@ -136,13 +128,6 @@ public class Actor : MonoBehaviour
     void Awake()
     {
         pixcelCharactor = GetComponent<PixelCharacter>();
-        end = mapPoint.gameObject.transform.GetComponentInParent<EndPoint>();
-        current = mapPoint.gameObject.transform.GetComponentInParent<CurrentMap>();
-        spawn = mapPoint.gameObject.transform.GetComponentInParent<EnemySpawn>();
-        uiManager = uiManagerObj.GetComponent<UIManager>();
-        actorSE = GetComponent<ActorSE>();
-
-
     }
     void Start()
     {
@@ -156,41 +141,34 @@ public class Actor : MonoBehaviour
         SetSystemUI();
         if (isDied) { return; }
 
-        SetEnemyUI(enemy);
 
         MovePlayer();
 
         if (besideEnemy) { Attack(); }
     }
 
-    
-    
-    
-    #region ---PlayerStatus&UI Method
-   
+
     void SetPlayerUI()
     {
-        Died();
-
-        uiManager.SetPlayerInfoUI(faceIcon, name, level);
-        uiManager.SetPlayerHPText(hp, currentHp);
-        uiManager.SetPlayerStatusText(pow, def, spd, lck, skl);
-        uiManager.SetPlayerEXPText(sumEXP, nextExp);
-        uiManager.SetplayerGoldText(gold);
-        uiManager.SetPlayerInventoryText();
-        uiManager.SetPlayerSkillText();
-        uiManager.SetPlayerHPbar(hp, currentHp);
-        uiManager.SetPlayerAttackBar(attackDelayAmount, maxDelayAmount);
+        UIMaster.instance.MainManager.MainFrameLeader.PlayerStatusUI.SetAmount(this.pow, this.def, this.spd, this.lck,
+                                                                               this.skl, this.sumEXP, this.nextExp);
+        UIMaster.instance.MainManager.MainFrameLeader.GoldUI.SetText(this.gold);
+        UIMaster.instance.MainManager.MainFrameLeader.PlayerInfoUI.SetPlayerInfoUI(this.faceIcon, this.name, this.level);
+        UIMaster.instance.MainManager.HPFrameUI.SetPlayerHPText(this.hp,this.currentHp);
+        UIMaster.instance.MainManager.HPFrameUI.SetPlayerHPbar(this.hp,this.currentHp);
+        UIMaster.instance.MainManager.HPFrameUI.SetPlayerAttackBar(this.attackDelayAmount,this.maxDelayAmount);
     }
+
     void SetSystemUI()
     {
-        uiManager.SetLevelUpPanelText(pow, def, spd, lck, skl, currentHp, statusAddPoint);
-    }
+        UIMaster.instance.MainManager.MainFrameLeader.LevelupPanelUI.SetAmount(this.pow, this.def, this.spd, this.lck,
+                                                                               this.skl, this.currentHp, this.statusAddPoint);
 
-    public void BossKilledChacker()
-    {
-        uiManager.ClearChacker();
     }
+    
+    
+
+   
     
     public void CurrentPlayerEXPAndGold(int dropEXP, int dropGold)
     {
@@ -203,14 +181,14 @@ public class Actor : MonoBehaviour
             if (this.nextExp == 0)
             {
                 LevelUp();
-                uiManager.ShowEnemyKillPopup(1, 1, dropEXP, 1, dropGold);
+                // uiManager.ShowEnemyKillPopup(1, 1, dropEXP, 1, dropGold);
                 skip++;
             }
             
         }
         if(skip != 1)
         {
-            uiManager.ShowEnemyKillPopup(0, 1, dropEXP, 1, dropGold);
+            // uiManager.ShowEnemyKillPopup(0, 1, dropEXP, 1, dropGold);
         }
         
 
@@ -222,7 +200,7 @@ public class Actor : MonoBehaviour
     void LevelUp()
     {
         level++;
-        actorSE.LevelUpSE();
+        // actorSE.LevelUpSE();
         nextExp += level * 10;
         statusAddPoint += 5;
         SaveManager.instance.SetPlayerLevel(this.level);
@@ -262,11 +240,11 @@ public class Actor : MonoBehaviour
             }
             statusAddPoint--;
             SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
-            actorSE.StatusDownSE();
+            // actorSE.StatusDownSE();
         }
         else
         {
-            actorSE.SystemErrorSE();
+            // actorSE.SystemErrorSE();
         }
     }
     public void DownStatus(string status)
@@ -277,7 +255,7 @@ public class Actor : MonoBehaviour
             this.statusAddPoint++;
             SaveManager.instance.SetPlayerPow(this.pow);
             SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
-            actorSE.StatusUpSE();
+            // actorSE.StatusUpSE();
             return;
         }
 
@@ -287,7 +265,7 @@ public class Actor : MonoBehaviour
             this.statusAddPoint++;
             SaveManager.instance.SetPlayerDef(this.def);
             SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
-            actorSE.StatusUpSE();
+            // actorSE.StatusUpSE();
             return;
         }
 
@@ -297,7 +275,7 @@ public class Actor : MonoBehaviour
             this.statusAddPoint++;
             SaveManager.instance.SetPlayerSpd(this.spd);
             SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
-            actorSE.StatusUpSE();
+            // actorSE.StatusUpSE();
             return;
         }
 
@@ -307,7 +285,7 @@ public class Actor : MonoBehaviour
             this.statusAddPoint++;
             SaveManager.instance.SetPlayerLck(this.lck);
             SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
-            actorSE.StatusUpSE();
+            // actorSE.StatusUpSE();
             return;
         }
 
@@ -322,7 +300,7 @@ public class Actor : MonoBehaviour
             this.statusAddPoint++;
             SaveManager.instance.SetPlayerCurrentHp(this.currentHp);
             SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
-            actorSE.StatusUpSE();
+            // actorSE.StatusUpSE();
             return;
         }
 
@@ -333,11 +311,11 @@ public class Actor : MonoBehaviour
             this.statusAddPoint++;
             SaveManager.instance.SetPlayerSkl(this.skl);
             SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
-            actorSE.StatusUpSE();
+            // actorSE.StatusUpSE();
             return;
         }
 
-        actorSE.SystemErrorSE();
+        // actorSE.SystemErrorSE();
     }
 
     public void FullHelth()
@@ -357,17 +335,17 @@ public class Actor : MonoBehaviour
         if (critical > maxLck)
         {
             Debug.Log("クリティカル！！");
-            actorSE.CriticalAttackSE();
+            // actorSE.CriticalAttackSE();
             return criticalDamage = damageAmount * 2;
         }
         if (damageAmount > 5)
         {
-            actorSE.AttackSE();
+            // actorSE.AttackSE();
             return damageAmount;
         }
         else
         {
-            actorSE.AttackSE();
+            // actorSE.AttackSE();
             return Random.Range(0, 6);
         }
     }
@@ -376,21 +354,6 @@ public class Actor : MonoBehaviour
     {
         attackDelayAmount -= minusAmount;
     }
-    #endregion
-    
-    #region ---EnemyUI Method
-    void SetEnemyUI(Enemy e)
-    {
-        if (e == null) { return; }
-
-        uiManager.SetEnemyInfoUI(e.GetFaceIcon(), e.GetName(), e.GetEnemyStatus("level"));
-        uiManager.SetEnemyHPText(e.GetEnemyStatus("hp"), e.GetEnemyStatus("maxHp"));
-        uiManager.SetEnemyStatusText(e.GetEnemyStatus("pow"), e.GetEnemyStatus("def"), e.GetEnemyStatus("spd"), e.GetEnemyStatus("lck"));
-        uiManager.SetEnemyHPbar(e.GetEnemyStatus("hp"), e.GetEnemyStatus("maxHp"));
-        uiManager.SetEnemyAttackBar(e.GetAttackDelayAmount(),e.GetMaxDelayAmount());
-    }
-
-    #endregion
 
     #region ---PlayerAchievement Method
     public void KillEnemyTypeChecker()
@@ -457,7 +420,6 @@ public class Actor : MonoBehaviour
             if (!isMove) { return; }
             else if (isMove)
             {
-                //this.gameObject.transform.position += new Vector3(moveSpeed*Time.deltaTime, 0,0);
                 this.gameObject.transform.Translate(Mobility * Time.deltaTime, 0, 0);
                 pixcelCharactor.MovingBlend = Mathf.Clamp01((float)(Mobility / maxMobility));
             }
@@ -511,8 +473,8 @@ public class Actor : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             enemy = collision.gameObject.GetComponent<Enemy>();
-            enemy.CurrentStatus(current.GetCurrentMapAmount());
-            uiManager.ShowEnemyUI();
+            // enemy.CurrentStatus(current.GetCurrentMapAmount());
+            // uiManager.ShowEnemyUI();
         }
         if (collision.gameObject.tag == "HouseDoor") { besideHouseArea = true; }
         if (collision.gameObject.tag == "WeaponDoor") { besideWeaponArea = true; }
@@ -524,7 +486,7 @@ public class Actor : MonoBehaviour
         if (collision.gameObject.tag == "Enemy") 
         {
             enemy = null;
-            uiManager.HideEnemyUI();
+            // uiManager.HideEnemyUI();
         }
 
         if (collision.gameObject.tag == "HouseDoor") { besideHouseArea = false; }
@@ -557,16 +519,16 @@ public class Actor : MonoBehaviour
 
         if (collision.tag == "RightEndPoint")
         {
-            end.SpawnPlayer(this.gameObject, right);
-            current.MapFloorChange(right);
-            spawn.SpawnControll(right, current.GetMapAmount());
+            // end.SpawnPlayer(this.gameObject, right);
+            // current.MapFloorChange(right);
+            // spawn.SpawnControll(right, current.GetMapAmount());
         }
 
         if (collision.tag == "LeftEndPoint")
         {
-            end.SpawnPlayer(this.gameObject, left);
-            current.MapFloorChange(left);
-            spawn.SpawnControll(left, current.GetMapAmount());
+            // end.SpawnPlayer(this.gameObject, left);
+            // current.MapFloorChange(left);
+            // spawn.SpawnControll(left, current.GetMapAmount());
         }
 
     }

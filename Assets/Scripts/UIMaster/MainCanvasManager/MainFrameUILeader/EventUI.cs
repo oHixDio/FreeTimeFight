@@ -7,6 +7,8 @@ public class EventUI : MonoBehaviour
     [SerializeField] GameObject Rightpanel;
     [SerializeField] GameObject Leftpanel;
 
+    
+
     public void RightPanelDown()
     {
         UIMaster.instance.Actor.IsRight = true;

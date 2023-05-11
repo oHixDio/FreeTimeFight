@@ -50,14 +50,4 @@ public class UIMaster : MonoBehaviour
     public CurrentMap CurrentMap { get {  return currentMap; } }
 
 
-
-    
-    // ゲーム開始時のUI表示メソッドはここで定義
-    private void Start()
-    {
-        // titleUI.ShowTitle();
-        // gridUI.ShowMainMap();
-        // backgroundUI.ShowCorrectBG(0);
-        // complateUI.ShowComplateFrame();
-    }
 }

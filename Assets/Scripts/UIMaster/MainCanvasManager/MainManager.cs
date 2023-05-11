@@ -19,6 +19,16 @@ public class MainManager : MonoBehaviour
 
     // Leader
     [SerializeField] MainFrameLeader mainFrameLeader;
-    public MainFrameLeader MainFrameLeader { get {  return mainFrameLeader; } }
+    public MainFrameLeader MainFrameLeader { get { return mainFrameLeader; } }
+
+    [SerializeField] SystemButtonUI systemButtonUI;
+    public SystemButtonUI SystemButtonUI { get { return systemButtonUI; } }
+
+    [Header("ShopUI")]
+    [SerializeField] ShopUI shopUI;
+    public ShopUI ShopUI { get { return shopUI; } }
+
+    [SerializeField] HealHouse healHouseUI;
+    public HealHouse HealHouseUI { get { return healHouseUI; } }
     
 }
