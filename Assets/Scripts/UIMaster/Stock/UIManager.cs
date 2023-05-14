@@ -797,11 +797,7 @@ public class UIManager : MonoBehaviour
     {
         uiAudio.PlayBossBGM();
     }
-    public void PlayCompleteBGM()
-    {
-        uiAudio.PlayCompleteBGM();
-        currentMap.KilledBossOfMapCurrent();
-    }
+    
     public void CheckBGM()
     {
         if (currentMap.GetMapAmount() == 30)
@@ -825,7 +821,6 @@ public class UIManager : MonoBehaviour
         if (actor.Enemy.GetEnemyType() == Enemy.EnemyType.Boss)
         {
             actor.IsKilledBoss = true;
-            PlayCompleteBGM();
             ShowCompleteFrame();
         }
     }

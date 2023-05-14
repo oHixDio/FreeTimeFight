@@ -6,56 +6,31 @@ using UnityEngine.UI;
 
 public class CurrentMap : MonoBehaviour
 {
-    EndPoint endPoint;
-
-    bool rightMapEndIsTrigger = true;
-    bool leftMapEndIsTrigger;
-
     [SerializeField] int mapAmount = 0;
     [SerializeField] int currentMapAmount = 0;
     [SerializeField] int currentFieldAmount = 0;
 
     void Awake()
     {
-        endPoint = GetComponent<EndPoint>();
-
         LoadCurrentMapDate();
     }
-    void Start()
-    {
-    }
 
-    public void MapFloorChange(int num)
+    public void MapFloorChange(int playerDirection)
     {
-        if (num == 1)
+        if (playerDirection == 1)
         {
             
             mapAmount++;
             currentMapAmount++;
-            this.leftMapEndIsTrigger = true;
-            endPoint.LeftMapEndPointCollider.isTrigger = leftMapEndIsTrigger;
-
-            if (mapAmount == 30)
-            {
-                this.rightMapEndIsTrigger = false;
-                endPoint.RightMapEndPointCollider.isTrigger = rightMapEndIsTrigger;
-            }
+            
         }
-        else if (num == -1)
+        else if (playerDirection == -1)
         {
             if (mapAmount > 0)
             {
                 mapAmount--;
                 currentMapAmount--;
-                this.rightMapEndIsTrigger = true;
-                endPoint.RightMapEndPointCollider.isTrigger = rightMapEndIsTrigger;
-
-                if (mapAmount == 0)
-                {
-                    this.leftMapEndIsTrigger = false;
-                    endPoint.LeftMapEndPointCollider.isTrigger = leftMapEndIsTrigger;
-                }
-
+                
             }
             else
             {
@@ -70,13 +45,7 @@ public class CurrentMap : MonoBehaviour
         SaveCurrentMapDate();
     }
 
-    public void KilledBossOfMapCurrent()
-    {
-        this.rightMapEndIsTrigger = false;
-        this.leftMapEndIsTrigger = false ;
-        endPoint.RightMapEndPointCollider.isTrigger = rightMapEndIsTrigger;
-        endPoint.LeftMapEndPointCollider.isTrigger = leftMapEndIsTrigger;
-    }
+    
 
     int skip = 1;
     public void SkipIncrement()
@@ -98,13 +67,13 @@ public class CurrentMap : MonoBehaviour
         else
         {
             CurrentMapAmountMinus();
+            SaveCurrentMapDate();
         }
     }
 
     public void CurrentMapAmountMinus()
     {
         currentMapAmount -= mapAmount; 
-        SaveCurrentMapDate();
     }
 
     void BGMChanger()
@@ -124,11 +93,8 @@ public class CurrentMap : MonoBehaviour
 
     public void ResetMapAmount()
     {
+        CurrentMapAmountMinus();
         mapAmount = 0;
-        this.rightMapEndIsTrigger = true;
-        endPoint.RightMapEndPointCollider.isTrigger = rightMapEndIsTrigger;
-        this.leftMapEndIsTrigger = false;
-        endPoint.LeftMapEndPointCollider.isTrigger = leftMapEndIsTrigger;
         SaveCurrentMapDate();
     }
 
@@ -151,17 +117,11 @@ public class CurrentMap : MonoBehaviour
         SaveManager.instance.SetMapAmount(this.mapAmount);
         SaveManager.instance.SetCurrentMapAmount(this.currentMapAmount);
         SaveManager.instance.SetCurrentFieldAmount(this.currentFieldAmount);
-        SaveManager.instance.SetRightMapIsTrigger(this.rightMapEndIsTrigger);
-        SaveManager.instance.SetLeftMapIsTrigger(this.leftMapEndIsTrigger);
     }
     void LoadCurrentMapDate()
     {
         this.mapAmount = SaveManager.instance.GetMapAmount();
         this.currentMapAmount = SaveManager.instance.GetCurrentMapAmount();
         this.currentFieldAmount = SaveManager.instance.GetCurrentFieldAmount();
-        this.rightMapEndIsTrigger = SaveManager.instance.GetRightMapIsTrigger();
-        this.leftMapEndIsTrigger = SaveManager.instance.GetLeftMapIsTrigger();
-        endPoint.RightMapEndPointCollider.isTrigger = rightMapEndIsTrigger;
-        endPoint.LeftMapEndPointCollider.isTrigger = leftMapEndIsTrigger;
     }
 }

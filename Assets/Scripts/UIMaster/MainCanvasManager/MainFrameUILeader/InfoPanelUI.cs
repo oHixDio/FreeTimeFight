@@ -15,10 +15,18 @@ public class InfoPanelUI : MonoBehaviour
     [SerializeField] GameObject popupInfoFrame;
     [SerializeField] Text popupInfoText;
 
+    [SerializeField] GameObject mapPoint;
+
+    CurrentMap currentMap;
+
     string levelupLine = "<color=#ffd400>Level UP!!</color>";
     string dropExpLine = "EXP";
     string goldLine = "G";
 
+    void Awake()
+    {
+        currentMap = mapPoint.GetComponent<CurrentMap>();
+    }
     void Update()
     {
         ChangeMapAmountText();
@@ -27,11 +35,11 @@ public class InfoPanelUI : MonoBehaviour
 
     void ChangeMapAmountText()
     {
-        mapAmountText.text = "MAP:" + UIMaster.instance.CurrentMap.GetMapAmount().ToString();
+        mapAmountText.text = "MAP:" + currentMap.GetMapAmount().ToString();
     }
     void ChangeCurrentFiledAmountText()
     {
-        currentFieldAmountText.text = "F:" + UIMaster.instance.CurrentMap.GetCurrentFieldAmount().ToString();
+        currentFieldAmountText.text = "F:" + currentMap.GetCurrentFieldAmount().ToString();
     }
 
     // PopupUIŠÖŒW

@@ -2,56 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType
+public class Item : ScriptableObject
 {
-    TreeBranch,
-    WoodenSword,
-    PirateSword,
-    Axe,
-    SilverSword,
-    goldenSword,
+    [SerializeField] GameObject objPrefab;
+    [SerializeField] string itemName;
+    [SerializeField] int itemValue;
+    [SerializeField] int itemSklAmount;
 
-    GreenArmor,
-    LeatherArmor,
-    PirateArmor,
-    VikingArmor,
-    SilverArmor,
-    GoldenArmor,
-
-    Slime,
-    Spider,
-    Zombie,
-    Skeleton,
-
-
-}
-
-
-public abstract class Item : ScriptableObject
-{
-    [SerializeField] protected GameObject itemPrefab;
-    [SerializeField] protected ItemType type;
-    [SerializeField] protected string itemName;
-    [SerializeField] protected bool isHad;
-
-    public void HaveItem()
+    public GameObject GetPrefab()
     {
-        isHad = true;
+        return objPrefab;
     }
 
-    public void UnHaveItem()
-    {
-        isHad = false;
-    }
-
-    public bool GetIsHad()
-    {
-        return isHad;
-    }
-
-    public string GetItemName()
+    public string GetName()
     {
         return itemName;
     }
 
+    public int GetValue()
+    {
+        return itemValue;
+    }
+
+    public int GetSklAmount()
+    {
+        return itemSklAmount;
+    }
 }

@@ -8,9 +8,19 @@ public class BackToHouse : MonoBehaviour
     [SerializeField] GameObject backToHouseFrame;
     [SerializeField] GameObject pressedBackToHouseFrame;
 
+    [SerializeField] GameObject mapPoint;
+
+    CurrentMap currentMap;
+    EnemySpawn enemySpawn;
+
     bool isNonePressedFrame = false;
     bool isPressedFrame = false;
 
+    void Awake()
+    {
+        currentMap = mapPoint.GetComponent<CurrentMap>();
+        enemySpawn = mapPoint.GetComponent<EnemySpawn>();
+    }
     void Start()
     {
         isNonePressedFrame = true;
@@ -52,12 +62,12 @@ public class BackToHouse : MonoBehaviour
         isNonePressedFrame = true;
         isPressedFrame = false;
 
-        UIMaster.instance.CurrentMap.CurrentMapAmountMinus();
+        currentMap.ResetMapAmount();
+        enemySpawn.CloneEnemyDestroy();
+
         UIMaster.instance.Actor.ResetActorPosition();
 
-        UIMaster.instance.MainManager.HealHouseUI.ShowHouseUI();
-        UnActiveMainUI();
-        HidePlayer();
+        UIMaster.instance.MainManager.ShopUI.ShowHealHouse();
         // ‰¹Šy
         //uiAudio.StopBGM();
         //uiAudio.SystemButtonSE();
@@ -65,15 +75,5 @@ public class BackToHouse : MonoBehaviour
 
     
 
-    void UnActiveMainUI()
-    {
-        UIMaster.instance.MainManager.HPFrameUI.gameObject.SetActive(false);
-        UIMaster.instance.MainManager.MainFrameLeader.gameObject.SetActive(false);
-        UIMaster.instance.MainManager.SystemButtonUI.gameObject.SetActive(false);
-    }
-
-    void HidePlayer()
-    {
-        UIMaster.instance.Actor.gameObject.SetActive(false);
-    }
+    
 }

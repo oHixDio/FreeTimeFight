@@ -9,7 +9,9 @@ public class Background : MonoBehaviour
     [SerializeField] GameObject graveyardBG;
     [SerializeField] GameObject showBG;
 
-    void HideAllBG()
+    int amount;
+
+    public void HideAllBG()
     {
         forestBG.SetActive(false);
         desertBG.SetActive(false);
@@ -41,17 +43,19 @@ public class Background : MonoBehaviour
         showBG.SetActive(true);
     }
 
-    public void ShowCorrectBG(int currentFieldAmount)
+    public void ShowCorrectBG(CurrentMap currentMap)
     {
-        if (currentFieldAmount <= 5)
+        amount = currentMap.GetCurrentFieldAmount();
+
+        if (amount <= 5)
         {
             ShowForestBG();
         }
-        else if (currentFieldAmount <= 10)
+        else if (amount <= 10)
         {
             ShowDesertBG();
         }
-        else if (currentFieldAmount <= 15)
+        else if (amount <= 15)
         {
             ShowGraveyardBG();
         }

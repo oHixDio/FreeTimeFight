@@ -26,9 +26,15 @@ public class MainManager : MonoBehaviour
 
     [Header("ShopUI")]
     [SerializeField] ShopUI shopUI;
-    public ShopUI ShopUI { get { return shopUI; } }
+    public ShopUI ShopUI { get { return shopUI;} }
+
+    [SerializeField] ShopPlayerImage shopPlayerImage;
+    public ShopPlayerImage ShopPlayerImage { get {  return shopPlayerImage; } }
 
     [SerializeField] HealHouse healHouseUI;
     public HealHouse HealHouseUI { get { return healHouseUI; } }
+
+    [SerializeField] WeaponShop weaponShopUI;
+    public WeaponShop WeaponShopUI { get { return weaponShopUI;} }
     
 }

@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 872c00168f22071489bcaba2f6a3b352, type: 3}
+  m_Script: {fileID: 0}
   m_Name: TreeBranch
-  m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 5713231735461001616, guid: 829082f3bc4087948b74af5d5d6e2e6d, type: 3}
-  type: 0
+  m_EditorClassIdentifier: Assembly-CSharp::Weapon
+  objPrefab: {fileID: 5713231735461001616, guid: 829082f3bc4087948b74af5d5d6e2e6d, type: 3}
   itemName: "\u6728\u306E\u679D"
-  isHad: 1
-  iconImage: {fileID: 21300042, guid: b217a154a8231e54bbb50405bdfafbaf, type: 3}
+  itemValue: 0
+  itemSklAmount: 5
   weaponPow: 7
+  icon: {fileID: 21300042, guid: b217a154a8231e54bbb50405bdfafbaf, type: 3}

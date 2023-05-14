@@ -68,23 +68,23 @@ public class SaveManager : MonoBehaviour
         return saveData.currentFieldAmount;
     }
 
-    public void SetLeftMapIsTrigger(bool leftMapEndIsTrigger)
+    public void SetLeftEndPoint(bool leftActive)
     {
-        saveData.leftMapEndIsTrigger = leftMapEndIsTrigger;
+        saveData.leftEndPoint = leftActive;
         Save();
     }
-    public bool GetLeftMapIsTrigger()
+    public bool GetLeftEndPoint()
     {
-        return saveData.leftMapEndIsTrigger;
+        return saveData.leftEndPoint;
     }
-    public void SetRightMapIsTrigger(bool rightMapEndIsTrigger)
+    public void SetRightEndPoint(bool rightActive)
     {
-        saveData.rightMapEndIsTrigger = rightMapEndIsTrigger;
+        saveData.rightEndPoint = rightActive;
         Save();
     }
-    public bool GetRightMapIsTrigger()
+    public bool GetRightEndPoint()
     {
-        return saveData.rightMapEndIsTrigger;
+        return saveData.rightEndPoint;
     }
 
     public void SetPlayerName(string name)
@@ -226,8 +226,8 @@ public class SaveData
     public int mapAmount;
     public int currentMapAmount;
     public int currentFieldAmount;
-    public bool leftMapEndIsTrigger;
-    public bool rightMapEndIsTrigger = true;
+    public bool leftEndPoint;
+    public bool rightEndPoint;
 
     [Header("PlayerStatus")]
     public string playerNameÅ@= "Ç‰Ç§ÇµÇ·";

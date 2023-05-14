@@ -12,7 +12,10 @@ public class WorldObjUI : MonoBehaviour
     [SerializeField] GameObject thirdWorldObj;
     [SerializeField] GameObject bossWorldObj;
 
-    void HideWorldObj()
+
+    int mapAmount;
+
+    public void HideWorldObj()
     {
         firstMapHouse.SetActive(false);
         weaponShop.SetActive(false);
@@ -23,40 +26,40 @@ public class WorldObjUI : MonoBehaviour
         bossWorldObj.SetActive(false);
     }
 
-    public void ShowWorldObj()
+    public void ShowWorldObj(CurrentMap map)
     {
         HideWorldObj();
 
-        int val = UIMaster.instance.CurrentMap.GetMapAmount();
+        mapAmount = map.GetMapAmount();
 
         // ifï∂ÇÃé¿çsèáíçà”
 
-        if (val == 0 || val % 10 == 0 && !(val % 30 == 0))
+        if (mapAmount == 0 || mapAmount % 10 == 0 && !(mapAmount % 30 == 0))
         {
             firstMapHouse.gameObject.SetActive(true);
             return;
         }
-        if (val % 30 == 0)
+        if (mapAmount % 30 == 0)
         {
             bossWorldObj.gameObject.SetActive(true);
             return;
         }
-        else if (val == 2)
+        else if (mapAmount == 2)
         {
             armorShop.gameObject.SetActive(true);
             return;
         }
-        else if (val == 1)
+        else if (mapAmount == 1)
         {
             weaponShop.gameObject.SetActive(true);
             return;
         }
-        else if (val % 2 == 0 && !(val == 2))
+        else if (mapAmount % 2 == 0 && !(mapAmount == 2))
         {
             secondWorldObj.gameObject.SetActive(true);
             return;
         }
-        else if (val % 3 == 0)
+        else if (mapAmount % 3 == 0)
         {
             thirdWorldObj.gameObject.SetActive(true);
             return;

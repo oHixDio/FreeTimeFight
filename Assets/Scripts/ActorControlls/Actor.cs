@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class Actor : MonoBehaviour
 {
-    #region ---Field
+    
 
     [Header("Status")]
     [SerializeField] Sprite faceIcon;
@@ -21,10 +21,10 @@ public class Actor : MonoBehaviour
     int def = 5;
     int lck = 5;
     int skl = 20;
-
-
-    int slimeKillAmount = 0;
-    int bossKillAmount = 0;
+    int sumEXP = 0;
+    int nextExp = 10;
+    [SerializeField] int statusAddPoint = 0;
+    int gold = 0;
 
     // maxAmount
     int maxLevel = 1250;
@@ -36,11 +36,6 @@ public class Actor : MonoBehaviour
     int maxLck = 250;  // クリティカル率に影響
     int maxskl = 1250; // 技能値に影響
 
-    // otherAmount
-    int sumEXP = 0;
-    int nextExp = 10;
-    [SerializeField] int statusAddPoint = 0;
-    int gold = 0;
     // damage => pow
     int weaponPow = 3;
     int damageAmount = 0;
@@ -51,12 +46,24 @@ public class Actor : MonoBehaviour
     float maxMobility = 4f;
     float Mobility = 0f;
     // deley => spd
-    [SerializeField] float maxDelayAmount = 10f;
+    float maxDelayAmount = 10f;
     float attackDelayAmount = 0f;
     const float minDelayTime = 0.3f;
     
+    // ahievement Amount
+    int slimeKillAmount = 0;
+    int bossKillAmount = 0;
+
+    [Header("Other")]
+    [SerializeField] GameObject uiMasterObj;
+    [SerializeField] GameObject mapPoint;
+
     // component
     PixelCharacter pixcelCharactor = null;
+    UIMaster uiMaster = null;
+    CurrentMap currentMap = null;
+    EndPoint endPoint = null;
+    EnemySpawn enemySpawn = null;
     Enemy enemy = null;
     public Enemy Enemy
     {
@@ -67,7 +74,8 @@ public class Actor : MonoBehaviour
     const int right = 1;
     const int left = -1;
 
-    // bool
+    
+    #region ---プロパティ
     bool isMove = false;
     public bool IsMove
     {
@@ -122,17 +130,23 @@ public class Actor : MonoBehaviour
         set { isKilledBoss = value; }
     }
     #endregion
+    
 
 
 
     void Awake()
     {
         pixcelCharactor = GetComponent<PixelCharacter>();
+        uiMaster = uiMasterObj.GetComponent<UIMaster>();
+        endPoint = mapPoint.GetComponent<EndPoint>();
+        enemySpawn = mapPoint.GetComponent<EnemySpawn>();
+        currentMap = mapPoint.GetComponent<CurrentMap>();
     }
     void Start()
     {
         isMove = true;
         ResetActorPosition();
+        SetMapPoint();
         LoadActorStatus();
     }
     void Update()
@@ -147,29 +161,34 @@ public class Actor : MonoBehaviour
         if (besideEnemy) { Attack(); }
     }
 
-
+    #region ---UI Method
     void SetPlayerUI()
     {
-        UIMaster.instance.MainManager.MainFrameLeader.PlayerStatusUI.SetAmount(this.pow, this.def, this.spd, this.lck,
+        uiMaster.MainManager.MainFrameLeader.PlayerStatusUI.SetAmount(this.pow, this.def, this.spd, this.lck,
                                                                                this.skl, this.sumEXP, this.nextExp);
-        UIMaster.instance.MainManager.MainFrameLeader.GoldUI.SetText(this.gold);
-        UIMaster.instance.MainManager.MainFrameLeader.PlayerInfoUI.SetPlayerInfoUI(this.faceIcon, this.name, this.level);
-        UIMaster.instance.MainManager.HPFrameUI.SetPlayerHPText(this.hp,this.currentHp);
-        UIMaster.instance.MainManager.HPFrameUI.SetPlayerHPbar(this.hp,this.currentHp);
-        UIMaster.instance.MainManager.HPFrameUI.SetPlayerAttackBar(this.attackDelayAmount,this.maxDelayAmount);
+        uiMaster.MainManager.MainFrameLeader.GoldUI.SetText(this.gold);
+        uiMaster.MainManager.MainFrameLeader.PlayerInfoUI.SetPlayerInfoUI(this.faceIcon, this.name, this.level);
+        uiMaster.MainManager.HPFrameUI.SetPlayerHPText(this.hp,this.currentHp);
+        uiMaster.MainManager.HPFrameUI.SetPlayerHPbar(this.hp,this.currentHp);
+        uiMaster.MainManager.HPFrameUI.SetPlayerAttackBar(this.attackDelayAmount,this.maxDelayAmount);
     }
 
     void SetSystemUI()
     {
-        UIMaster.instance.MainManager.MainFrameLeader.LevelupPanelUI.SetAmount(this.pow, this.def, this.spd, this.lck,
+        uiMaster.MainManager.MainFrameLeader.LevelupPanelUI.SetAmount(this.pow, this.def, this.spd, this.lck,
                                                                                this.skl, this.currentHp, this.statusAddPoint);
 
     }
-    
-    
 
-   
-    
+    void SetMapPoint()
+    {
+        endPoint.SetEndPoint(currentMap);
+        enemySpawn.SpawnControll(right, currentMap.GetMapAmount());
+        uiMaster.WorldObjUI.ShowWorldObj(currentMap);
+    }
+    #endregion
+
+    #region ---StatusPointChanger Method
     public void CurrentPlayerEXPAndGold(int dropEXP, int dropGold)
     {
         int skip = 0;
@@ -354,6 +373,7 @@ public class Actor : MonoBehaviour
     {
         attackDelayAmount -= minusAmount;
     }
+    #endregion
 
     #region ---PlayerAchievement Method
     public void KillEnemyTypeChecker()
@@ -380,7 +400,6 @@ public class Actor : MonoBehaviour
             if(enemy != null)
             {
                 StartCoroutine(enemy.Damage(DamageAmount()));
-                //enemy.Damage(DamageAmount());
             }
             this.attackDelayAmount = this.maxDelayAmount;
         }
@@ -476,9 +495,8 @@ public class Actor : MonoBehaviour
             // enemy.CurrentStatus(current.GetCurrentMapAmount());
             // uiManager.ShowEnemyUI();
         }
-        if (collision.gameObject.tag == "HouseDoor") { besideHouseArea = true; }
-        if (collision.gameObject.tag == "WeaponDoor") { besideWeaponArea = true; }
-        if (collision.gameObject.tag == "ArmorDoor") { besideArmorArea = true; }
+
+        ShowAnyDoor(collision);
     }
 
     void OnTriggerExit2D(Collider2D collision)
@@ -489,9 +507,7 @@ public class Actor : MonoBehaviour
             // uiManager.HideEnemyUI();
         }
 
-        if (collision.gameObject.tag == "HouseDoor") { besideHouseArea = false; }
-        if (collision.gameObject.tag == "WeaponDoor") { besideWeaponArea = false; }
-        if (collision.gameObject.tag == "ArmorDoor") { besideArmorArea = false; }
+        HideAnyDoor(collision);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -519,18 +535,64 @@ public class Actor : MonoBehaviour
 
         if (collision.tag == "RightEndPoint")
         {
-            // end.SpawnPlayer(this.gameObject, right);
-            // current.MapFloorChange(right);
-            // spawn.SpawnControll(right, current.GetMapAmount());
+            currentMap.MapFloorChange(right);
+            endPoint.SpawnPlayer(this.gameObject, right);
+            endPoint.SetEndPoint(currentMap);
+            enemySpawn.SpawnControll(right, currentMap.GetMapAmount());
+            uiMaster.WorldObjUI.ShowWorldObj(currentMap);
         }
 
         if (collision.tag == "LeftEndPoint")
         {
-            // end.SpawnPlayer(this.gameObject, left);
-            // current.MapFloorChange(left);
-            // spawn.SpawnControll(left, current.GetMapAmount());
+            currentMap.MapFloorChange(left);
+            endPoint.SpawnPlayer(this.gameObject, left);
+            endPoint.SetEndPoint(currentMap);
+            enemySpawn.SpawnControll(left, currentMap.GetMapAmount());
+            uiMaster.WorldObjUI.ShowWorldObj(currentMap);
         }
 
+    }
+
+    void ShowAnyDoor(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "HouseDoor") 
+        { 
+            besideHouseArea = true;
+            uiMaster.MainManager.MainFrameLeader.EventButtonUI.ShowThis();
+        }
+
+        if (collision.gameObject.tag == "WeaponDoor") 
+        { 
+            besideWeaponArea = true;
+            uiMaster.MainManager.MainFrameLeader.EventButtonUI.ShowThis();
+        }
+
+        if (collision.gameObject.tag == "ArmorDoor") 
+        { 
+            besideArmorArea = true;
+            uiMaster.MainManager.MainFrameLeader.EventButtonUI.ShowThis();
+        }
+    }
+
+    void HideAnyDoor(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "HouseDoor")
+        {
+            besideHouseArea = false;
+            uiMaster.MainManager.MainFrameLeader.EventButtonUI.HideThis();
+        }
+
+        if (collision.gameObject.tag == "WeaponDoor")
+        {
+            besideWeaponArea = false;
+            uiMaster.MainManager.MainFrameLeader.EventButtonUI.HideThis();
+        }
+
+        if (collision.gameObject.tag == "ArmorDoor")
+        {
+            besideArmorArea = false;
+            uiMaster.MainManager.MainFrameLeader.EventButtonUI.HideThis();
+        }
     }
     #endregion
 
@@ -553,4 +615,6 @@ public class Actor : MonoBehaviour
 
     }
     #endregion
+
+    
 }

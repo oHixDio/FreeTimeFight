@@ -11,6 +11,9 @@ public class HealHouse : MonoBehaviour
     [SerializeField] Text leftButtonText;
     [SerializeField] Text rightButtonText;
 
+    [SerializeField] GameObject player;
+    Actor actor;
+
     int randomSentence;
     
     string[] chatSentence = 
@@ -31,6 +34,10 @@ public class HealHouse : MonoBehaviour
     string leftSentence = "äOÇ…èoÇÈ";
     string rightSentence = "ëÃóÕÇ\nëSâÒïú";
 
+    void Awake()
+    {
+        actor = player.GetComponent<Actor>();
+    }
     void Start()
     {
         SetText();
@@ -68,59 +75,17 @@ public class HealHouse : MonoBehaviour
 
     public void HealButton()
     {
-        UIMaster.instance.Actor.FullHelth();
+        actor.FullHelth();
     }
 
     public void GoOutHouseButton()
     {
-        ActiveMainUI();
-        ShowMainUI();
-        HideHealHouse();
-        ShowPlayer();
+        UIMaster.instance.MainManager.ShopUI.ShowMainUI();
     }
 
-    void ActiveMainUI()
+    public void InTheHealHouse()
     {
-        UIMaster.instance.MainManager.HPFrameUI.gameObject.SetActive(true);
-        UIMaster.instance.MainManager.MainFrameLeader.gameObject.SetActive(true);
-        UIMaster.instance.MainManager.SystemButtonUI.gameObject.SetActive(true);
-    }
-    void ShowMainUI()
-    {
-        UIMaster.instance.MainManager.MainFrameLeader.PlayerUI.ShowMainPanel();
-        UIMaster.instance.GridUI.ShowMainMap();
-        UIMaster.instance.MainManager.MainFrameLeader.SystemButtonUI.HideSystems();
-
-        if (UIMaster.instance.Actor.BesideArmorArea ||
-           UIMaster.instance.Actor.BesideWeaponArea ||
-           UIMaster.instance.Actor.BesideHouseArea)
-        {
-            UIMaster.instance.MainManager.MainFrameLeader.PlayerUI.ShowEventPanel();
-        }
-
-        if (UIMaster.instance.Actor.Enemy != null)
-        {
-            // ShowEnemyStatus();
-        }
-    }
-
-    public void ShowHouseUI()
-    {
-        UIMaster.instance.AreaUI.ShowHouseArea();
-        UIMaster.instance.GridUI.ShowHouseMap();
-        UIMaster.instance.MainManager.ShopUI.ShowHealHouse();
         ChangeChatText();
         ChangeMainText();
-    }
-
-    void HideHealHouse()
-    {
-        UIMaster.instance.MainManager.ShopUI.HideShopUI();
-        UIMaster.instance.AreaUI.HideAnyArea();
-    }
-
-    void ShowPlayer()
-    {
-        UIMaster.instance.Actor.gameObject.SetActive(true);
     }
 }

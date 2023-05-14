@@ -35,4 +35,7 @@ public class MainFrameLeader : MonoBehaviour
 
     [SerializeField] LevelupPanel levelupPanelUI;
     public LevelupPanel LevelupPanelUI { get { return levelupPanelUI; } }
+
+    [SerializeField] AchievementUI achievementUI;
+    public AchievementUI AchievementUI { get { return achievementUI; } }
 }

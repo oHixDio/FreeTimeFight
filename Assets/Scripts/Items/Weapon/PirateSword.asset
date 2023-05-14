@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 872c00168f22071489bcaba2f6a3b352, type: 3}
+  m_Script: {fileID: 11500000, guid: b5346ba8bfeb5ef4bbfd661801e67e6b, type: 3}
   m_Name: PirateSword
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 4736312639932936769, guid: 948252cb70453af4b89d71934dec4323, type: 3}
-  type: 2
+  objPrefab: {fileID: 4736312639932936769, guid: 948252cb70453af4b89d71934dec4323, type: 3}
   itemName: "\u6D77\u8CCA\u306E\u5263"
-  isHad: 0
-  iconImage: {fileID: 21300052, guid: b217a154a8231e54bbb50405bdfafbaf, type: 3}
-  weaponPow: 21
+  itemValue: 750
+  itemSklAmount: 100
+  weaponPow: 26
+  icon: {fileID: 21300052, guid: b217a154a8231e54bbb50405bdfafbaf, type: 3}

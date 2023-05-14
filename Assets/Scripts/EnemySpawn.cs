@@ -84,33 +84,55 @@ public class EnemySpawn : MonoBehaviour
             spawnPointList[1].transform.position,
             Quaternion.identity,
             cloneEnemies));
-        cloneEnemy[0].transform.localScale = new Vector3(-playerDirection, 1, 1);
+
+        for (int i = 0; i < cloneEnemy.Count; i++)
+        {
+            cloneEnemy[i].transform.localScale = new Vector3(-playerDirection, 1, 1);
+        }
     }
 
     public void CloneEnemyDestroy()
     {
+        foreach (Transform child in cloneEnemies)
+        {
+            Destroy(child.gameObject);
+        }
+        /*
         for(int i = 0; i < cloneEnemy.Count; i++)
         {
             Destroy(cloneEnemy[i]);
         }
+        */
         cloneEnemy.Clear();
     }
 
     public void HideCloneEnemy()
     {
+        foreach (Transform child in cloneEnemies)
+        {
+            child.gameObject.SetActive(false);
+        }
+        /*
         for (int i = 0; i < cloneEnemy.Count; i++)
         {
             if (cloneEnemy[i] == null) { continue; }
             cloneEnemy[i].gameObject.SetActive(false);
         }
+        */
     }
     public void ShowCloneEnemy()
     {
+        foreach (Transform child in cloneEnemies)
+        {
+            child.gameObject.SetActive(true);
+        }
+        /*
         for (int i = 0; i < cloneEnemy.Count; i++)
         {
             if (cloneEnemy[i] == null) { continue; }
             cloneEnemy[i].gameObject.SetActive(true);
         }
+        */
     }
 
     public bool SamePointCheck(int randomPos)

@@ -44,10 +44,7 @@ public class UIMaster : MonoBehaviour
     [SerializeField] MainManager mainManager;
     public MainManager MainManager { get { return mainManager; } }
 
-    //--------------------Manager--------------------//
-    [Header("MapPoint")]
-    [SerializeField] CurrentMap currentMap;
-    public CurrentMap CurrentMap { get {  return currentMap; } }
+    
 
 
 }

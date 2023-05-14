@@ -1,18 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EventButtonUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] Actor actor;
+    [SerializeField] Text buttonText;
+
+    public void ShowThis()
     {
+        gameObject.SetActive(true);
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void HideThis()
     {
+        gameObject.SetActive(false);
+    }
+
+    public void ShowAnyArea()
+    {
+        if(actor.IsDied || actor.IsKilledBoss) { return; }
+
+        if (actor.BesideHouseArea)
+        {
+            UIMaster.instance.MainManager.ShopUI.ShowHealHouse();
+        }
+        if (actor.BesideArmorArea)
+        {
+            UIMaster.instance.MainManager.ShopUI.ShowArmorShop();
+        }
+        if (actor.BesideWeaponArea)
+        {
+            UIMaster.instance.MainManager.ShopUI.ShowWeaponShop();
+        }
         
     }
+
 }
