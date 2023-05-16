@@ -38,4 +38,8 @@ public class MainFrameLeader : MonoBehaviour
 
     [SerializeField] AchievementUI achievementUI;
     public AchievementUI AchievementUI { get { return achievementUI; } }
+
+    [Header("EnemyUI")]
+    [SerializeField] EnemyUI enemyUI;
+    public EnemyUI EnemyUI { get { return enemyUI; } }
 }

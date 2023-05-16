@@ -111,15 +111,17 @@ public class SystemButtonUI : MonoBehaviour
 
         if (UIMaster.instance.Actor.Enemy != null)
         {
-            // ShowEnemyStatus();
-        }
+            UIMaster.instance.MainManager.MainFrameLeader.EnemyUI.ShowUI();
+            UIMaster.instance.MainManager.HPFrameUI.ShowEnemyHPFrame();
+            UIMaster.instance.MainManager.MainFrameLeader.PlayerUI.HideStatusPanel();
+        }   
     }
     void HideMainUI()
     {
         UIMaster.instance.MainManager.MainFrameLeader.PlayerUI.HidePlayerUI();
         if (UIMaster.instance.Actor.Enemy != null)
         {
-            // HideEnemyStatus();
+            UIMaster.instance.MainManager.MainFrameLeader.EnemyUI.HideUI();
         }
     }
 

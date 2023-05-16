@@ -169,21 +169,23 @@ public class Enemy : MonoBehaviour
     }
 
     bool isStatusUp = false;
-    public void CurrentStatus(int currentMapAmount)
+    int num = 0;
+    public void CurrentStatus(CurrentMap c)
     {
-        if (currentMapAmount <= 1) { return; }
+        num = c.GetCurrentMapAmount();
+        if (num <= 1) { return; }
         
         if (isStatusUp == false)
         {
-            currentMapAmount--;
-            this.level += currentMapAmount;
-            this.hp += currentMapAmount * upHpAmount;
-            this.maxHp += currentMapAmount * upHpAmount;
-            this.pow += currentMapAmount;
-            this.def += currentMapAmount;
-            this.spd += currentMapAmount;
-            this.lck += currentMapAmount;
-            this.dropExp += currentMapAmount;
+            num--;
+            this.level += num;
+            this.hp += num * upHpAmount;
+            this.maxHp += num * upHpAmount;
+            this.pow += num;
+            this.def += num;
+            this.spd += num;
+            this.lck += num;
+            this.dropExp += num;
             isStatusUp = true;
         }
     }

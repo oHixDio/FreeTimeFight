@@ -1,25 +1,24 @@
+using Cainos.CustomizablePixelCharacter;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ShopPlayerImage : MonoBehaviour
 {
-    [SerializeField] List<Transform> weaponSlots = new List<Transform>();
+    [SerializeField] Transform weaponSlot;
 
-    public void SetWeapon(GameObject obj)
+    [SerializeField] PixelCharacter character;
+
+
+    public void SetWeaponSlot(GameObject obj)
     {
-        for (int i = 0; i < weaponSlots.Count; i++)
+
+        foreach (Transform child in weaponSlot)
         {
-            foreach (Transform child in weaponSlots[i])
-            {
-                Destroy(child.gameObject);
-            }
-            Instantiate(obj, weaponSlots[i].position, Quaternion.identity, weaponSlots[i]);
+            Destroy(child.gameObject);
         }
+        Instantiate(obj, weaponSlot.position, Quaternion.identity, weaponSlot);
     }
 
-    public void SetPlayerImage()
-    {
-
-    }
 }

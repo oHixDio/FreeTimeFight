@@ -46,7 +46,7 @@ public class Actor : MonoBehaviour
     float maxMobility = 4f;
     float Mobility = 0f;
     // deley => spd
-    float maxDelayAmount = 10f;
+    [SerializeField] float maxDelayAmount = 10f;
     float attackDelayAmount = 0f;
     const float minDelayTime = 0.3f;
     
@@ -132,8 +132,6 @@ public class Actor : MonoBehaviour
     #endregion
     
 
-
-
     void Awake()
     {
         pixcelCharactor = GetComponent<PixelCharacter>();
@@ -154,6 +152,8 @@ public class Actor : MonoBehaviour
         SetPlayerUI();
         SetSystemUI();
         if (isDied) { return; }
+
+        SetEnemyUI();
 
 
         MovePlayer();
@@ -180,6 +180,15 @@ public class Actor : MonoBehaviour
 
     }
 
+    void SetEnemyUI()
+    {
+        if(enemy == null) { return; }
+
+        uiMaster.MainManager.MainFrameLeader.EnemyUI.SetUI(enemy);
+        uiMaster.MainManager.HPFrameUI.SetEnemyHPbar(enemy);
+        uiMaster.MainManager.HPFrameUI.SetEnemyAttackBar(enemy);
+    }
+
     void SetMapPoint()
     {
         endPoint.SetEndPoint(currentMap);
@@ -200,14 +209,14 @@ public class Actor : MonoBehaviour
             if (this.nextExp == 0)
             {
                 LevelUp();
-                // uiManager.ShowEnemyKillPopup(1, 1, dropEXP, 1, dropGold);
+                uiMaster.MainManager.MainFrameLeader.InfoPanelUI.ShowEnemyKillPopup(1, 1, dropEXP, 1, dropGold);
                 skip++;
             }
             
         }
         if(skip != 1)
         {
-            // uiManager.ShowEnemyKillPopup(0, 1, dropEXP, 1, dropGold);
+            uiMaster.MainManager.MainFrameLeader.InfoPanelUI.ShowEnemyKillPopup(0, 1, dropEXP, 1, dropGold);
         }
         
 
@@ -492,8 +501,7 @@ public class Actor : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             enemy = collision.gameObject.GetComponent<Enemy>();
-            // enemy.CurrentStatus(current.GetCurrentMapAmount());
-            // uiManager.ShowEnemyUI();
+            ShowEnemyUI();
         }
 
         ShowAnyDoor(collision);
@@ -504,7 +512,7 @@ public class Actor : MonoBehaviour
         if (collision.gameObject.tag == "Enemy") 
         {
             enemy = null;
-            // uiManager.HideEnemyUI();
+            HideEnemyUI();
         }
 
         HideAnyDoor(collision);
@@ -593,6 +601,21 @@ public class Actor : MonoBehaviour
             besideArmorArea = false;
             uiMaster.MainManager.MainFrameLeader.EventButtonUI.HideThis();
         }
+    }
+
+    void ShowEnemyUI()
+    {
+        enemy.CurrentStatus(currentMap);
+        uiMaster.MainManager.MainFrameLeader.EnemyUI.ShowUI();
+        uiMaster.MainManager.HPFrameUI.ShowEnemyHPFrame();
+        uiMaster.MainManager.MainFrameLeader.PlayerUI.HideStatusPanel();
+    }
+
+    void HideEnemyUI()
+    {
+        uiMaster.MainManager.MainFrameLeader.EnemyUI.HideUI();
+        uiMaster.MainManager.HPFrameUI.HideEnemyHPFrame();
+        uiMaster.MainManager.MainFrameLeader.PlayerUI.ShowStatusPanel();
     }
     #endregion
 

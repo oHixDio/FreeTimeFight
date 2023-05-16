@@ -47,7 +47,6 @@ public class WeaponShop : MonoBehaviour
         nameText.text = shopSlots[index].Weapon.GetName();
         amountText.text = shopSlots[index].Weapon.GetWeaponPow().ToString();
         sklAmountText.text = shopSlots[index].Weapon.GetSklAmount().ToString();
-        UIMaster.instance.MainManager.ShopPlayerImage.SetWeapon(shopSlots[index].Weapon.GetPrefab());
         isPressed = true;
         choiseItem = index;
         SetButtonColor();

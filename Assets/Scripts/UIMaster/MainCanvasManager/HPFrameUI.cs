@@ -56,19 +56,20 @@ public class HPFrameUI : MonoBehaviour
         playerHPFrame.SetActive(false);
     }
 
-    // EnemyHPFrame
-    public void SetEnemyHPText(int hp, int maxHp)
+    
+    public void SetEnemyHPbar(Enemy e)
     {
-        enemyHpText.text = hp.ToString();
-        enemyMaxHPText.text = maxHp.ToString();
-    }
-    public void SetEnemyHPbar(int hp, int maxHp)
-    {
+        int hp = e.GetEnemyStatus("hp");
+        int maxHp = e.GetEnemyStatus("maxhp");
+
         float hpAmount = (float)hp / (float)maxHp;
         enemyHpBar.fillAmount = hpAmount;
     }
-    public void SetEnemyAttackBar(float attackDeleyTime, float maxDeleyAmount)
+    public void SetEnemyAttackBar(Enemy e)
     {
+        float attackDeleyTime = e.GetAttackDelayAmount();
+        float maxDeleyAmount = e.GetMaxDelayAmount();
+
         float deleyAmount = attackDeleyTime / maxDeleyAmount;
         enemyAttackbar.fillAmount = deleyAmount;
     }

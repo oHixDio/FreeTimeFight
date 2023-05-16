@@ -44,7 +44,7 @@ public class InfoPanelUI : MonoBehaviour
 
     // PopupUIŠÖŒW
     // type => 0:null 1:null‚Å‚Í‚È‚¢
-    public string SetLevelLine(int num)
+    string SetLevelLine(int num)
     {
         if (num == 1)
         {
@@ -55,7 +55,7 @@ public class InfoPanelUI : MonoBehaviour
             return string.Empty;
         }
     }
-    public string SetDropExpLine(int num, int otherDropExp)
+    string SetDropExpLine(int num, int otherDropExp)
     {
         if (num == 1)
         {
@@ -66,7 +66,7 @@ public class InfoPanelUI : MonoBehaviour
             return string.Empty;
         }
     }
-    public string SetGoldLine(int num, int otherDropGold)
+    string SetGoldLine(int num, int otherDropGold)
     {
         if (num == 1)
         {
@@ -77,7 +77,7 @@ public class InfoPanelUI : MonoBehaviour
             return string.Empty;
         }
     }
-    public string SetEnemyKillLine(string l, string e, string g)
+    string SetEnemyKillLine(string l, string e, string g)
     {
         return l + " " + e + " " + g;
     }
