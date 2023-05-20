@@ -56,5 +56,4 @@ public class Item : ScriptableObject
         return itemSklAmount;
     }
 
-    
 }

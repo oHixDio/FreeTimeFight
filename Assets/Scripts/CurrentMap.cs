@@ -12,7 +12,6 @@ public class CurrentMap : MonoBehaviour
 
     void Awake()
     {
-        LoadCurrentMapDate();
     }
 
     public void MapFloorChange(int playerDirection)
@@ -42,7 +41,6 @@ public class CurrentMap : MonoBehaviour
         BGMChanger();
         // uiManager.SpawnWorldObj(mapAmount);
 
-        SaveCurrentMapDate();
     }
 
     
@@ -62,12 +60,10 @@ public class CurrentMap : MonoBehaviour
         if(currentFieldAmount < 5)
         {
             currentFieldAmount++;
-            SaveCurrentMapDate();
         }
         else
         {
             CurrentMapAmountMinus();
-            SaveCurrentMapDate();
         }
     }
 
@@ -95,7 +91,6 @@ public class CurrentMap : MonoBehaviour
     {
         CurrentMapAmountMinus();
         mapAmount = 0;
-        SaveCurrentMapDate();
     }
 
     public int GetMapAmount()
@@ -112,16 +107,5 @@ public class CurrentMap : MonoBehaviour
     }
 
 
-    void SaveCurrentMapDate()
-    {
-        SaveManager.instance.SetMapAmount(this.mapAmount);
-        SaveManager.instance.SetCurrentMapAmount(this.currentMapAmount);
-        SaveManager.instance.SetCurrentFieldAmount(this.currentFieldAmount);
-    }
-    void LoadCurrentMapDate()
-    {
-        this.mapAmount = SaveManager.instance.GetMapAmount();
-        this.currentMapAmount = SaveManager.instance.GetCurrentMapAmount();
-        this.currentFieldAmount = SaveManager.instance.GetCurrentFieldAmount();
-    }
+    
 }

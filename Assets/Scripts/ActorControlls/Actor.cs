@@ -145,7 +145,6 @@ public class Actor : MonoBehaviour
         isMove = true;
         ResetActorPosition();
         SetMapPoint();
-        LoadActorStatus();
     }
     void Update()
     {
@@ -219,10 +218,7 @@ public class Actor : MonoBehaviour
             uiMaster.MainManager.MainFrameLeader.InfoPanelUI.ShowEnemyKillPopup(0, 1, dropEXP, 1, dropGold);
         }
         
-
-        SaveManager.instance.SetPlayerSumExp(this.sumEXP);
-        SaveManager.instance.SetPlayerNextExp(this.nextExp);
-        SaveManager.instance.SetPlayerGold(this.gold);
+        //Save
 
     }
     void LevelUp()
@@ -231,8 +227,7 @@ public class Actor : MonoBehaviour
         // actorSE.LevelUpSE();
         nextExp += level * 10;
         statusAddPoint += 5;
-        SaveManager.instance.SetPlayerLevel(this.level);
-        SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+        //Save
     }
 
     public void UpStatus(string status)
@@ -243,37 +238,31 @@ public class Actor : MonoBehaviour
             {
                 case "pow":
                     this.pow++;
-                    SaveManager.instance.SetPlayerPow(this.pow);
                     break;
                 case "def":
                     this.def++;
-                    SaveManager.instance.SetPlayerDef(this.def);
                     break;
                 case "spd":
                     this.spd++;
-                    SaveManager.instance.SetPlayerSpd(this.spd);
                     break;
                 case "lck":
                     this.lck++;
-                    SaveManager.instance.SetPlayerLck(this.lck);
                     break;
                 case "currentHp":
                     this.currentHp += 5;
-                    SaveManager.instance.SetPlayerCurrentHp(this.currentHp);
                     break;
                 case "skl":
                     this.skl += 5;
-                    SaveManager.instance.SetPlayerSkl(this.skl);
                     break;
             }
             statusAddPoint--;
-            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
             // actorSE.StatusDownSE();
         }
         else
         {
             // actorSE.SystemErrorSE();
         }
+        //Save
     }
     public void DownStatus(string status)
     {
@@ -281,8 +270,7 @@ public class Actor : MonoBehaviour
         {
             this.pow--;
             this.statusAddPoint++;
-            SaveManager.instance.SetPlayerPow(this.pow);
-            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            // save
             // actorSE.StatusUpSE();
             return;
         }
@@ -291,8 +279,7 @@ public class Actor : MonoBehaviour
         {
             this.def--;
             this.statusAddPoint++;
-            SaveManager.instance.SetPlayerDef(this.def);
-            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            // save
             // actorSE.StatusUpSE();
             return;
         }
@@ -301,8 +288,7 @@ public class Actor : MonoBehaviour
         {
             this.spd--;
             this.statusAddPoint++;
-            SaveManager.instance.SetPlayerSpd(this.spd);
-            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            // save
             // actorSE.StatusUpSE();
             return;
         }
@@ -311,8 +297,7 @@ public class Actor : MonoBehaviour
         {
             this.lck--;
             this.statusAddPoint++;
-            SaveManager.instance.SetPlayerLck(this.lck);
-            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            // save
             // actorSE.StatusUpSE();
             return;
         }
@@ -323,11 +308,10 @@ public class Actor : MonoBehaviour
             if(this.currentHp <= this.hp)
             {
                 this.hp = this.currentHp;
-                SaveManager.instance.SetPlayerHp(this.hp);
+                //save
             }
             this.statusAddPoint++;
-            SaveManager.instance.SetPlayerCurrentHp(this.currentHp);
-            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            //save
             // actorSE.StatusUpSE();
             return;
         }
@@ -337,8 +321,7 @@ public class Actor : MonoBehaviour
             this.skl -= 5;
 
             this.statusAddPoint++;
-            SaveManager.instance.SetPlayerSkl(this.skl);
-            SaveManager.instance.SetPlayerStatusAddPoint(this.statusAddPoint);
+            //Save
             // actorSE.StatusUpSE();
             return;
         }
@@ -350,7 +333,7 @@ public class Actor : MonoBehaviour
     {
         this.hp = this.currentHp;
         isDied = false;
-        SaveManager.instance.SetPlayerHp(this.hp);
+        //Save
     }
 
     int DamageAmount()
@@ -418,7 +401,7 @@ public class Actor : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         this.hp -= damageAmount;
-        SaveManager.instance.SetPlayerHp(this.hp);
+        //Save
     }
 
     void Died()
@@ -620,23 +603,7 @@ public class Actor : MonoBehaviour
     #endregion
 
     #region ---SaveMethod
-    void LoadActorStatus()
-    {
-        this.name = SaveManager.instance.GetPlayerName();
-        this.hp = SaveManager.instance.GetPlayerHp();
-        this.currentHp = SaveManager.instance.GetPlayerCurrentHp();
-        this.level = SaveManager.instance.GetPlayerLevel();
-        this.pow = SaveManager.instance.GetPlayerPow();
-        this.def = SaveManager.instance.GetPlayerDef();
-        this.spd = SaveManager.instance.GetPlayerSpd();
-        this.lck = SaveManager.instance.GetPlayerLck();
-        this.skl = SaveManager.instance.GetPlayerSkl();
-        this.sumEXP = SaveManager.instance.GetPlayerSumExp();
-        this.nextExp = SaveManager.instance.GetPlayerNextExp();
-        this.gold = SaveManager.instance.GetPlayerGold();
-        this.statusAddPoint = SaveManager.instance.GetPlayerStatusAddPoint();
-
-    }
+    
     #endregion
 
     

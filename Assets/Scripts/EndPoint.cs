@@ -17,7 +17,6 @@ public class EndPoint : MonoBehaviour
 
     void Awake()
     {
-        LoadEndPoint();
     }
     void Update()
     {
@@ -47,7 +46,6 @@ public class EndPoint : MonoBehaviour
             rightActive = true;
         }
 
-        SaveEndPoint();
     }
 
     public void SpawnPlayer(GameObject player, int num)
@@ -62,17 +60,7 @@ public class EndPoint : MonoBehaviour
         }
     }
 
-    void SaveEndPoint()
-    {
-        SaveManager.instance.SetRightEndPoint(rightActive);
-        SaveManager.instance.SetLeftEndPoint(leftActive);
-    }
-
-    void LoadEndPoint()
-    {
-        rightActive = SaveManager.instance.GetRightEndPoint();
-        leftActive = SaveManager.instance.GetLeftEndPoint();
-    }
+    
 
 
 
