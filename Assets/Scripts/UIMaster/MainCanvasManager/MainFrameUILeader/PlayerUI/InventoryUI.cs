@@ -9,19 +9,6 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] GameObject armorInventory;
     [SerializeField] GameObject petInventory;
 
-    // ItemはisHadで管理する
-    // isHadがtrueなら
-
-    // InventoryのスロットのItemのisHadがtrueなら
-    // テキストを変更
-    // Buttonをアクティブ
-
-    // Buttonでやりたいこと
-    // アイテムの装備(PlayerのWeaponslotの子要素にItemのPrefabを生成する)
-    // 確定を押したらそのアイテムを所持する
-    // 戻るを押したら前のアイテムを所持する
-    // PlayerのWeaponPowにItemのWeaponPowを足す
-
     // Button Methods
     public void ShowWeaponInventory()
     {

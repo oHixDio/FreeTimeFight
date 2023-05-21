@@ -41,5 +41,7 @@ public class TitleUI : MonoBehaviour
         mainCanvas.SetActive(true);
         areaUI.SetActive(true);
         worldObjUI.SetActive(true);
+
+        AudioManager.instance.PlayBGM(AudioManager.instance.MainBGM);
     }
 }

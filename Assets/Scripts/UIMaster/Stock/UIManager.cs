@@ -174,7 +174,6 @@ public class UIManager : MonoBehaviour
             enemySpawn.SpawnControll(1, currentMap.GetMapAmount());
         }
 
-        CheckBGM();
     }
 
 
@@ -679,7 +678,6 @@ public class UIManager : MonoBehaviour
         enemySpawn.ShowCloneEnemy();
         // ‰¹Šy
         uiAudio.PlayMainBGM();
-        currentMap.SkipIncrement();
         uiAudio.SystemButtonSE();
     }
     public void InTheHouse()
@@ -798,19 +796,6 @@ public class UIManager : MonoBehaviour
         uiAudio.PlayBossBGM();
     }
     
-    public void CheckBGM()
-    {
-        if (currentMap.GetMapAmount() == 30)
-        {
-            uiAudio.PlayBossBGM();
-            currentMap.SkipDecrement();
-        }
-        else
-        {
-            uiAudio.PlayMainBGM();
-            currentMap.SkipIncrement();
-        }
-    }
 
     
 

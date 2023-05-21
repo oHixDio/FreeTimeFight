@@ -27,6 +27,7 @@ public class SaveManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(saveData);
         PlayerPrefs.SetString(SAVE_KEY, json);
+        Debug.Log(json);
     }
 
     void JsonDataLoad()
@@ -73,245 +74,59 @@ public class SaveManager : MonoBehaviour
         saveData.SetItemData(itemData);
         JsonDataSave();
     }
-
-
-    /*
-    #region
-
-    public void SetMapAmount(int mapAmount)
-    {
-        saveData.mapAmount = mapAmount;
-        Save();
-    }
-    public int GetMapAmount()
-    {
-        return saveData.mapAmount;
-    }
-
-    public void SetCurrentMapAmount(int currentmapAmount)
-    {
-        saveData.currentMapAmount = currentmapAmount;
-        Save();
-    }
-    public int GetCurrentMapAmount()
-    {
-        return saveData.currentMapAmount;
-    }
-
-    public void SetCurrentFieldAmount(int currentFieldAmount)
-    {
-        saveData.currentFieldAmount = currentFieldAmount;
-        Save();
-    }
-    public int GetCurrentFieldAmount()
-    {
-        return saveData.currentFieldAmount;
-    }
-
-    public void SetLeftEndPoint(bool leftActive)
-    {
-        saveData.leftEndPoint = leftActive;
-        Save();
-    }
-    public bool GetLeftEndPoint()
-    {
-        return saveData.leftEndPoint;
-    }
-    public void SetRightEndPoint(bool rightActive)
-    {
-        saveData.rightEndPoint = rightActive;
-        Save();
-    }
-    public bool GetRightEndPoint()
-    {
-        return saveData.rightEndPoint;
-    }
-
-    public void SetPlayerName(string name)
-    {
-        saveData.playerName = name;
-        Save();
-    }
-    public string GetPlayerName()
-    {
-        return saveData.playerName;
-    }
-
-    public void SetPlayerHp(int hp)
-    {
-        saveData.playerHp = hp;
-        Save();
-    }
-    public int GetPlayerHp()
-    {
-        return saveData.playerHp;
-    }
-
-    public void SetPlayerCurrentHp(int currentHp)
-    {
-        saveData.playerCurrentHp = currentHp;
-        Save();
-    }
-    public int GetPlayerCurrentHp()
-    {
-        return saveData.playerCurrentHp;
-    }
-
-    public void SetPlayerLevel(int level)
-    {
-        saveData.playerLevel = level;
-        Save();
-    }
-    public int GetPlayerLevel()
-    {
-        return saveData.playerLevel;
-    }
-
-    public void SetPlayerPow(int pow)
-    {
-        saveData.playerPow = pow;
-        Save();
-    }
-    public int GetPlayerPow()
-    {
-        return saveData.playerPow;
-    }
-
-    public void SetPlayerDef(int def)
-    {
-        saveData.playerDef = def;
-        Save();
-    }
-    public int GetPlayerDef()
-    {
-        return saveData.playerDef;
-    }
-
-    public void SetPlayerSpd(int spd)
-    {
-        saveData.playerSpd = spd;
-        Save();
-    }
-    public int GetPlayerSpd()
-    {
-        return saveData.playerSpd;
-    }
-
-    public void SetPlayerLck(int lck)
-    {
-        saveData.playerLck = lck;
-        Save();
-    }
-    public int GetPlayerLck()
-    {
-        return saveData.playerLck;
-    }
-
-    public void SetPlayerSkl(int skl)
-    {
-        saveData.playerSkl = skl;
-        Save();
-    }
-    public int GetPlayerSkl()
-    {
-        return saveData.playerSkl;
-    }
-
-    public void SetPlayerSumExp(int sumExp)
-    {
-        saveData.playerSumExp = sumExp;
-        Save();
-    }
-    public int GetPlayerSumExp()
-    {
-        return saveData.playerSumExp;
-    }
-
-    public void SetPlayerNextExp(int nextExp)
-    {
-        saveData.playerNextExp = nextExp;
-        Save();
-    }
-    public int GetPlayerNextExp()
-    {
-        return saveData.playerNextExp;
-    }
-
-    public void SetPlayerGold(int gold)
-    {
-        saveData.playerGold = gold;
-        Save();
-    }
-    public int GetPlayerGold()
-    {
-        return saveData.playerGold;
-    }
-
-    public void SetPlayerStatusAddPoint(int statusAddPoint)
-    {
-        saveData.playerStatusAddPoint = statusAddPoint;
-        Save();
-    }
-    public int GetPlayerStatusAddPoint()
-    {
-        return saveData.playerStatusAddPoint;
-    }
-    
-    #endregion
-    */
 }
 
 
 [Serializable]
 public class SaveData
 {
-    string playerName      = string.Empty;
-    int playerLevel        = 0;
-    int playerHp           = 0;
-    int playerCurrentHp    = 0;
-    int playerPow          = 0;
-    int playerDef          = 0;
-    int playerSpd          = 0;
-    int playerLck          = 0;
-    int playerSkl          = 0;
-    int playerSumExp       = 0;
-    int playerNextExp      = 0;
-    int playerGold         = 0;
-    int playerStatusPoint  = 0;
+    public string playerName      = "ゆうしゃ";
+    public int playerLevel        = 1;
+    public int playerHp           = 100;
+    public int playerCurrentHp    = 100;
+    public int playerPow          = 5;
+    public int playerDef          = 5;
+    public int playerSpd          = 5;
+    public int playerLck          = 5;
+    public int playerSkl          = 5;
+    public int playerSumExp       = 0;
+    public int playerNextExp      = 10;
+    public int playerGold         = 0;
+    public int playerStatusPoint  = 0;
 
 
-    int mapAmount          = 0;
-    int currentMapAmount   = 0;
-    int currentFieldAmount = 0;
-    bool isLeftEnd         = false;
-    bool isRightEnd        = false;
-    bool[] hadItems        = new bool[(int)ItemType.max];
-    int hasWeaponIndex     = 0;
-    int hasArmorIndex      = 0;
-    int hasPetIndex        = 0;
+    public int mapAmount          = 0;
+    public int currentMapAmount   = 0;
+    public int currentFieldAmount = 0;
+    public bool isLeftEnd         = false;
+    public bool isRightEnd        = false;
+    public bool[] hadItems        = new bool[(int)ItemType.max];
+    public int hasWeaponIndex     = 0;
+    public int hasArmorIndex      = 0;
+    public int hasPetIndex        = 0;
 
-    public string PlayerName      { get; }
-    public int PlayerLevel        { get; }
-    public int PlayerHp           { get; }
-    public int PlayerCurrentHp    { get; }
-    public int PlayerPow          { get; }
-    public int PlayerDef          { get; }
-    public int PlayerSpd          { get; }
-    public int PlayerLck          { get; }
-    public int PlayerSkl          { get; }
-    public int PlayerSumExp       { get; }
-    public int PlayerNextExp      { get; }
-    public int PlayerGold         { get; }
-    public int PlayerStatusPoint  { get; }
-    public int MapAmount          { get; }
-    public int CurrentMapAmount   { get; }
-    public int CurrentFieldAmount { get; }
-    public bool IsLeftEnd         { get; }
-    public bool IsRightEnd        { get; }
-    public bool[] HadItems        { get; }                // アイテムの取得bool情報
-    public int HasWeaponIndex     { get; }                // 所持しているWeaponのIndex情報
-    public int HasArmorIndex      { get; }                // 所持しているArmorのIndex情報
-    public int HasPetIndex        { get; }                // 所持しているPetのIndex情報
+    public string PlayerName      { get => playerName        ; }
+    public int PlayerLevel        { get => playerLevel       ; }
+    public int PlayerHp           { get => playerHp          ; }
+    public int PlayerCurrentHp    { get => playerCurrentHp   ; }
+    public int PlayerPow          { get => playerPow         ; }
+    public int PlayerDef          { get => playerDef         ; }
+    public int PlayerSpd          { get => playerSpd         ; }
+    public int PlayerLck          { get => playerLck         ; }
+    public int PlayerSkl          { get => playerSkl         ; }
+    public int PlayerSumExp       { get => playerSumExp      ; }
+    public int PlayerNextExp      { get => playerNextExp     ; }
+    public int PlayerGold         { get => playerGold        ; }
+    public int PlayerStatusPoint  { get => playerStatusPoint ; }
+    public int MapAmount          { get => mapAmount         ; }
+    public int CurrentMapAmount   { get => currentMapAmount  ; }
+    public int CurrentFieldAmount { get => currentFieldAmount; }
+    public bool IsLeftEnd         { get => isLeftEnd         ; }
+    public bool IsRightEnd        { get => isRightEnd        ; }
+    public bool[] HadItems        { get => hadItems          ; }                // アイテムの取得bool情報
+    public int HasWeaponIndex     { get => hasWeaponIndex    ; }                // 所持しているWeaponのIndex情報
+    public int HasArmorIndex      { get => hasArmorIndex     ; }                // 所持しているArmorのIndex情報
+    public int HasPetIndex        { get => hasPetIndex       ; }                // 所持しているPetのIndex情報
 
     public void SetPlayerData(GameData.PlayerData playerData)
     {
@@ -349,32 +164,4 @@ public class SaveData
         hasArmorIndex  = itemData.HasArmorIndex;
         hasPetIndex    = itemData.HasPetIndex;
     }
-
-
-    #region
-    /*
-    [Header("CurrentMap")]
-    public int mapAmount;
-    public int currentMapAmount;
-    public int currentFieldAmount;
-    public bool leftEndPoint;
-    public bool rightEndPoint;
-
-    [Header("PlayerStatus")]
-    public string playerName　= "ゆうしゃ";
-    public int playerHp　= 100;
-    public int playerCurrentHp = 100;
-    public int playerLevel = 1;
-    public int playerPow = 5; 
-    public int playerDef = 5;
-    public int playerSpd = 5;
-    public int playerLck = 5;
-    public int playerSkl = 20;
-    public int playerSumExp = 0;
-    public int playerNextExp = 10;
-    public int playerGold = 0;
-    public int playerStatusAddPoint = 0;
-    */
-    #endregion
-
 }

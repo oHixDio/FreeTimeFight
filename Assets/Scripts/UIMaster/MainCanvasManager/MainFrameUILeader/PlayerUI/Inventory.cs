@@ -7,12 +7,6 @@ public class Inventory : MonoBehaviour
 {
     InventorySlot[] slots;
 
-    GameObject hasItem;
-    public GameObject HasItem
-    {
-        get { return hasItem; }
-    }
-
     [SerializeField] Transform weaponSlot;
 
     void Awake()
@@ -32,8 +26,7 @@ public class Inventory : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        hasItem = Instantiate(slots[num].GetItemPrefab(), weaponSlot.position, Quaternion.identity, weaponSlot);
-        //hasItem.transform.localScale = 
+        //hasItem = Instantiate(slots[num].GetItemPrefab(), weaponSlot.position, Quaternion.identity, weaponSlot);
     }
 
     

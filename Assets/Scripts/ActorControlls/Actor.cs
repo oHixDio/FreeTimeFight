@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using GameData;
 
 public class Actor : MonoBehaviour
 {
@@ -13,46 +14,30 @@ public class Actor : MonoBehaviour
 
     [Header("Status")]
     [SerializeField] Sprite faceIcon;
-    new string name = "‚ä‚¤‚µ‚á";
-    [SerializeField] int hp = 100;
-    int level = 1;
-    [SerializeField] int pow = 5;
-    int spd = 5;
-    int def = 5;
-    int lck = 5;
-    int skl = 20;
-    int sumEXP = 0;
-    int nextExp = 10;
-    [SerializeField] int statusAddPoint = 0;
-    int gold = 0;
 
-    // maxAmount
-    int maxLevel = 1250;
-    int currentHp = 100;
-    int maxHp = 2000;
-    int maxPow = 250;  // UŒ‚—Í‚É‰e‹¿
-    int maxDef = 250;  // –hŒä—Í‚É‰e‹¿
-    int maxSpd = 250;  // UŒ‚‘¬“x‚É‰e‹¿
-    int maxLck = 250;  // ƒNƒŠƒeƒBƒJƒ‹—¦‚É‰e‹¿
-    int maxskl = 1250; // ‹Z”\’l‚É‰e‹¿
+    PlayerData playerData;
 
-    // damage => pow
-    int weaponPow = 3;
-    int damageAmount = 0;
-    int criticalDamage = 0;
-    // defense => def
-    int DefenseAmount = 0;
-    // mobility => spd
-    float maxMobility = 4f;
-    float Mobility = 0f;
-    // deley => spd
-    [SerializeField] float maxDelayAmount = 10f;
-    float attackDelayAmount = 0f;
-    const float minDelayTime = 0.3f;
+    int maxLevel  = 1250;
+    int maxHp     = 2000;
+    int maxPow    = 250;
+    int maxDef    = 250;
+    int maxSpd    = 250;
+    int maxLck    = 250;
+    int maxskl    = 1250;
+
+    int         weaponPow         = 3;
+    int         damageAmount      = 0;
+    int         criticalDamage    = 0;
+    int         DefenseAmount     = 0;
+    float       maxMobility       = 4f;
+    float       Mobility          = 0f;
+    float       attackDelayAmount = 0f;
+    const float minDelayTime      = 0.3f;
+    float       maxDelayAmount    = 10f;
     
     // ahievement Amount
     int slimeKillAmount = 0;
-    int bossKillAmount = 0;
+    int bossKillAmount  = 0;
 
     [Header("Other")]
     [SerializeField] GameObject uiMasterObj;
@@ -60,85 +45,47 @@ public class Actor : MonoBehaviour
 
     // component
     PixelCharacter pixcelCharactor = null;
-    UIMaster uiMaster = null;
-    CurrentMap currentMap = null;
-    EndPoint endPoint = null;
-    EnemySpawn enemySpawn = null;
-    Enemy enemy = null;
-    public Enemy Enemy
-    {
-        get { return enemy; }
-    }
+    UIMaster       uiMaster        = null;
+    CurrentMap     currentMap      = null;
+    EnemySpawn     enemySpawn      = null;
+    Enemy          enemy           = null;
+    public Enemy Enemy { get => enemy; }
 
     // collision‚ÅŽg—p
     const int right = 1;
-    const int left = -1;
+    const int left  = -1;
 
     
     #region ---ƒvƒƒpƒeƒB
-    bool isMove = false;
-    public bool IsMove
-    {
-        get { return isMove; }
-        set { isMove = value; }
-    }
-    bool isRight = false;
-    public bool IsRight
-    {
-        get { return isRight; }
-        set { isRight = value; }
-    }
-    bool isLeft = false;
-    public bool IsLeft
-    {
-        get { return isLeft; }
-        set { isLeft = value; }
-    }
-    bool besideEnemy = false;
-    public bool BesideEnemy
-    {
-        set { besideEnemy = value; }
-    }
-    bool besideHouseArea = false;
-    public bool BesideHouseArea
-    {
-        set { besideHouseArea = value; }
-        get { return besideHouseArea; }
-    }
+    bool isMove           = false;
+    bool isRight          = false;
+    bool isLeft           = false;
+    bool besideEnemy      = false;
+    bool besideHouseArea  = false;
     bool besideWeaponArea = false;
-    public bool BesideWeaponArea
-    {
-        set { besideWeaponArea = value;}
-        get { return besideWeaponArea; }
-    }
-    bool besideArmorArea = false;
-    public bool BesideArmorArea
-    {
-        set { besideArmorArea = value;}
-        get { return besideArmorArea; }
-    }
-    bool isDied = false;
-    public bool IsDied
-    {
-        get { return isDied; } 
-        set { isDied = value; }
-    }
-    bool isKilledBoss = false;
-    public bool IsKilledBoss
-    {
-        get { return isKilledBoss; }
-        set { isKilledBoss = value; }
-    }
+    bool besideArmorArea  = false;
+    bool isDied           = false;
+    bool isKilledBoss     = false;
+    
+    public bool IsMove           { get => isMove;           set => isMove           = value; }
+    public bool IsRight          { get => isRight;          set => isRight          = value; }
+    public bool IsLeft           { get => isLeft;           set => isLeft           = value; }
+    public bool BesideEnemy      {                          set => besideEnemy      = value; }
+    public bool BesideHouseArea  { get => besideHouseArea;  set => besideHouseArea  = value; }
+    public bool BesideWeaponArea { get => besideWeaponArea; set => besideWeaponArea = value; }
+    public bool BesideArmorArea  { get => besideArmorArea;  set => besideArmorArea  = value; }
+    public bool IsDied           { get => isDied;           set => isDied           = value; }
+    public bool IsKilledBoss     { get => isKilledBoss;     set => isKilledBoss     = value; }
     #endregion
     
 
     void Awake()
     {
+        playerData      = new PlayerData();
         pixcelCharactor = GetComponent<PixelCharacter>();
-        uiMaster = uiMasterObj.GetComponent<UIMaster>();
-        endPoint = mapPoint.GetComponent<EndPoint>();
-        enemySpawn = mapPoint.GetComponent<EnemySpawn>();
-        currentMap = mapPoint.GetComponent<CurrentMap>();
+        uiMaster        = uiMasterObj.GetComponent<UIMaster>();
+        enemySpawn      = mapPoint.GetComponent<EnemySpawn>();
+        currentMap      = mapPoint.GetComponent<CurrentMap>();
     }
     void Start()
     {
@@ -163,20 +110,40 @@ public class Actor : MonoBehaviour
     #region ---UI Method
     void SetPlayerUI()
     {
-        uiMaster.MainManager.MainFrameLeader.PlayerStatusUI.SetAmount(this.pow, this.def, this.spd, this.lck,
-                                                                               this.skl, this.sumEXP, this.nextExp);
-        uiMaster.MainManager.MainFrameLeader.GoldUI.SetText(this.gold);
-        uiMaster.MainManager.MainFrameLeader.PlayerInfoUI.SetPlayerInfoUI(this.faceIcon, this.name, this.level);
-        uiMaster.MainManager.HPFrameUI.SetPlayerHPText(this.hp,this.currentHp);
-        uiMaster.MainManager.HPFrameUI.SetPlayerHPbar(this.hp,this.currentHp);
-        uiMaster.MainManager.HPFrameUI.SetPlayerAttackBar(this.attackDelayAmount,this.maxDelayAmount);
+        uiMaster.MainManager.MainFrameLeader.PlayerStatusUI.SetAmount
+        (
+            playerData.PlayerPow,
+            playerData.PlayerDef,
+            playerData.PlayerSpd,
+            playerData.PlayerLck,
+            playerData.PlayerSkl,
+            playerData.PlayerSumExp,
+            playerData.PlayerNextExp
+        );
+        uiMaster.MainManager.MainFrameLeader.PlayerInfoUI.SetPlayerInfoUI
+        (
+            this.faceIcon,
+            playerData.PlayerName,
+            playerData.PlayerLevel
+        );
+        uiMaster.MainManager.MainFrameLeader.GoldUI.SetText(playerData.PlayerGold);
+        uiMaster.MainManager.HPFrameUI.SetPlayerHPText(playerData.PlayerHp, playerData.PlayerCurrentHp);
+        uiMaster.MainManager.HPFrameUI.SetPlayerHPbar(playerData.PlayerHp, playerData.PlayerCurrentHp);
+        uiMaster.MainManager.HPFrameUI.SetPlayerAttackBar(this.attackDelayAmount, this.maxDelayAmount);
     }
 
     void SetSystemUI()
     {
-        uiMaster.MainManager.MainFrameLeader.LevelupPanelUI.SetAmount(this.pow, this.def, this.spd, this.lck,
-                                                                               this.skl, this.currentHp, this.statusAddPoint);
-
+        uiMaster.MainManager.MainFrameLeader.LevelupPanelUI.SetAmount
+        (
+            playerData.PlayerPow,
+            playerData.PlayerDef,
+            playerData.PlayerSpd,
+            playerData.PlayerLck,
+            playerData.PlayerSkl,
+            playerData.PlayerCurrentHp,
+            playerData.PlayerStatusPoint
+        );
     }
 
     void SetEnemyUI()
@@ -190,22 +157,23 @@ public class Actor : MonoBehaviour
 
     void SetMapPoint()
     {
-        endPoint.SetEndPoint(currentMap);
+        currentMap.SetEndPoint();
         enemySpawn.SpawnControll(right, currentMap.GetMapAmount());
         uiMaster.WorldObjUI.ShowWorldObj(currentMap);
     }
+
     #endregion
 
     #region ---StatusPointChanger Method
     public void CurrentPlayerEXPAndGold(int dropEXP, int dropGold)
     {
         int skip = 0;
-        this.sumEXP += dropEXP;
-        this.gold += dropGold;
+        playerData.PlayerSumExp += dropEXP;
+        playerData.PlayerGold += dropGold;
         for (int i = 0; i < dropEXP; i++)
         {
-            this.nextExp -= dropEXP/dropEXP;
-            if (this.nextExp == 0)
+            playerData.PlayerNextExp -= dropEXP/dropEXP;
+            if (playerData.PlayerNextExp == 0)
             {
                 LevelUp();
                 uiMaster.MainManager.MainFrameLeader.InfoPanelUI.ShowEnemyKillPopup(1, 1, dropEXP, 1, dropGold);
@@ -218,145 +186,122 @@ public class Actor : MonoBehaviour
             uiMaster.MainManager.MainFrameLeader.InfoPanelUI.ShowEnemyKillPopup(0, 1, dropEXP, 1, dropGold);
         }
         
-        //Save
 
     }
     void LevelUp()
     {
-        level++;
-        // actorSE.LevelUpSE();
-        nextExp += level * 10;
-        statusAddPoint += 5;
-        //Save
+        playerData.PlayerLevel++;
+        playerData.PlayerNextExp += playerData.PlayerLevel * 10;
+        playerData.PlayerStatusPoint += 5;
+        AudioManager.instance.PlayOneShotSE(AudioManager.instance.LevelUpSE);
     }
 
     public void UpStatus(string status)
     {
-        if(statusAddPoint > 0)
+        if(playerData.PlayerStatusPoint > 0)
         {
             switch (status)
             {
                 case "pow":
-                    this.pow++;
+                    playerData.PlayerPow++;
                     break;
                 case "def":
-                    this.def++;
+                    playerData.PlayerDef++;
                     break;
                 case "spd":
-                    this.spd++;
+                    playerData.PlayerSpd++;
                     break;
                 case "lck":
-                    this.lck++;
+                    playerData.PlayerLck++;
                     break;
                 case "currentHp":
-                    this.currentHp += 5;
+                    playerData.PlayerCurrentHp += 5;
                     break;
                 case "skl":
-                    this.skl += 5;
+                    playerData.PlayerSkl += 5;
                     break;
             }
-            statusAddPoint--;
-            // actorSE.StatusDownSE();
+            playerData.PlayerStatusPoint--;
         }
         else
         {
-            // actorSE.SystemErrorSE();
+            AudioManager.instance.PlayOneShotSE(AudioManager.instance.SystemErrerSE);
+            return;
         }
-        //Save
+        AudioManager.instance.PlayOneShotSE(AudioManager.instance.StatusUpSE);
     }
     public void DownStatus(string status)
     {
-        if(status == "pow" && this.pow > 5)
+        if(status == "pow" && playerData.PlayerPow > 5)
         {
-            this.pow--;
-            this.statusAddPoint++;
-            // save
-            // actorSE.StatusUpSE();
-            return;
+            playerData.PlayerPow--;
+            playerData.PlayerStatusPoint++;
         }
-
-        if (status == "def" && this.def > 5)
+        else if (status == "def" && playerData.PlayerDef > 5)
         {
-            this.def--;
-            this.statusAddPoint++;
-            // save
-            // actorSE.StatusUpSE();
-            return;
+            playerData.PlayerDef--;
+            playerData.PlayerStatusPoint++;
         }
-
-        if (status == "spd" && this.spd > 5)
+        else if (status == "spd" && playerData.PlayerSpd > 5)
         {
-            this.spd--;
-            this.statusAddPoint++;
-            // save
-            // actorSE.StatusUpSE();
-            return;
+            playerData.PlayerSpd--;
+            playerData.PlayerStatusPoint++;
         }
-
-        if (status == "lck" && this.lck > 5)
+        else if (status == "lck" && playerData.PlayerLck > 5)
         {
-            this.lck--;
-            this.statusAddPoint++;
-            // save
-            // actorSE.StatusUpSE();
-            return;
+            playerData.PlayerLck--;
+            playerData.PlayerStatusPoint++;
         }
-
-        if (status == "currentHp" && this.currentHp > 100)
+        else if (status == "currentHp" && playerData.PlayerCurrentHp > 100)
         {
-            this.currentHp -= 5;
-            if(this.currentHp <= this.hp)
+            playerData.PlayerCurrentHp -= 5;
+            if(playerData.PlayerCurrentHp <= playerData.PlayerHp)
             {
-                this.hp = this.currentHp;
-                //save
+                playerData.PlayerHp = playerData.PlayerCurrentHp;
             }
-            this.statusAddPoint++;
-            //save
-            // actorSE.StatusUpSE();
-            return;
+            playerData.PlayerStatusPoint++;
         }
-
-        if (status == "skl" && this.skl > 20)
+        else if (status == "skl" && playerData.PlayerSkl > 20)
         {
-            this.skl -= 5;
+            playerData.PlayerSkl -= 5;
 
-            this.statusAddPoint++;
-            //Save
-            // actorSE.StatusUpSE();
+            playerData.PlayerStatusPoint++;
+        }
+        else
+        {
+            AudioManager.instance.PlayOneShotSE(AudioManager.instance.SystemErrerSE);
             return;
         }
 
-        // actorSE.SystemErrorSE();
+        AudioManager.instance.PlayOneShotSE(AudioManager.instance.StatusDownSE);
     }
 
     public void FullHelth()
     {
-        this.hp = this.currentHp;
+        playerData.PlayerHp = playerData.PlayerCurrentHp;
         isDied = false;
-        //Save
     }
 
     int DamageAmount()
     {
         // todo: damageAmount‚Éƒ‰ƒ“ƒ_ƒ€«‚ðŽ‚½‚¹‚é
         // todo: •ŠíUŒ‚—Í‚ð‰ÁŽZ‚·‚é
-        this.damageAmount = this.pow + this.weaponPow;
-        int critical = Random.Range(0, this.lck + maxLck);
+        this.damageAmount = playerData.PlayerPow + this.weaponPow;
+        int critical = Random.Range(0, playerData.PlayerLck + maxLck);
 
         if (critical > maxLck)
         {
-            Debug.Log("ƒNƒŠƒeƒBƒJƒ‹II");
-            // actorSE.CriticalAttackSE();
+            AudioManager.instance.PlayOneShotSE(AudioManager.instance.CriticalSE);
             return criticalDamage = damageAmount * 2;
         }
         if (damageAmount > 5)
         {
-            // actorSE.AttackSE();
+            AudioManager.instance.PlayOneShotSE(AudioManager.instance.AttackSE);
             return damageAmount;
         }
         else
         {
-            // actorSE.AttackSE();
+            AudioManager.instance.PlayOneShotSE(AudioManager.instance.AttackSE);
             return Random.Range(0, 6);
         }
     }
@@ -364,6 +309,7 @@ public class Actor : MonoBehaviour
     public void ShortingAttackDelay(float minusAmount)
     {
         attackDelayAmount -= minusAmount;
+        AudioManager.instance.PlayOneShotSE(AudioManager.instance.ShortingSE);
     }
     #endregion
 
@@ -400,18 +346,17 @@ public class Actor : MonoBehaviour
     public IEnumerator Damage(int damageAmount)
     {
         yield return new WaitForSeconds(0.4f);
-        this.hp -= damageAmount;
-        //Save
+        playerData.PlayerHp -= damageAmount;
     }
 
     void Died()
     {
-        if (this.hp <= 0)
+        if (playerData.PlayerHp <= 0)
         {
             pixcelCharactor.IsDead = true;
             isMove = false;
             isDied = true;
-            this.hp = 0;
+            playerData.PlayerHp = 0;
         }
     }
 
@@ -527,8 +472,8 @@ public class Actor : MonoBehaviour
         if (collision.tag == "RightEndPoint")
         {
             currentMap.MapFloorChange(right);
-            endPoint.SpawnPlayer(this.gameObject, right);
-            endPoint.SetEndPoint(currentMap);
+            currentMap.SpawnPlayer(this.gameObject, right);
+            currentMap.SetEndPoint();
             enemySpawn.SpawnControll(right, currentMap.GetMapAmount());
             uiMaster.WorldObjUI.ShowWorldObj(currentMap);
         }
@@ -536,12 +481,13 @@ public class Actor : MonoBehaviour
         if (collision.tag == "LeftEndPoint")
         {
             currentMap.MapFloorChange(left);
-            endPoint.SpawnPlayer(this.gameObject, left);
-            endPoint.SetEndPoint(currentMap);
+            currentMap.SpawnPlayer(this.gameObject, left);
+            currentMap.SetEndPoint();
             enemySpawn.SpawnControll(left, currentMap.GetMapAmount());
             uiMaster.WorldObjUI.ShowWorldObj(currentMap);
         }
 
+        SaveManager.instance.SavePlayerData(playerData);
     }
 
     void ShowAnyDoor(Collider2D collision)

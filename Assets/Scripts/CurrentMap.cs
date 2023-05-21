@@ -3,109 +3,128 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
+using GameData;
 
 public class CurrentMap : MonoBehaviour
 {
-    [SerializeField] int mapAmount = 0;
-    [SerializeField] int currentMapAmount = 0;
-    [SerializeField] int currentFieldAmount = 0;
+    [SerializeField] GameObject rightSpawnPoint;
+    [SerializeField] GameObject leftSpawnPoint;
+    [SerializeField] GameObject rightEndPoint;
+    [SerializeField] GameObject leftEndPoint;
 
-    void Awake()
+    MapData mapData;
+
+    private void Awake()
     {
+        mapData = new MapData();
+    }
+    void Update()
+    {
+        SetSpawnPoint();
     }
 
     public void MapFloorChange(int playerDirection)
     {
         if (playerDirection == 1)
         {
-            
-            mapAmount++;
-            currentMapAmount++;
-            
+            mapData.MapAmount++;
+            mapData.CurrentMapAmount++;
         }
         else if (playerDirection == -1)
         {
-            if (mapAmount > 0)
+            if (mapData.MapAmount > 0)
             {
-                mapAmount--;
-                currentMapAmount--;
-                
+                mapData.MapAmount--;
+                mapData.CurrentMapAmount--;
             }
             else
             {
-                mapAmount = 0;
-                currentMapAmount = 0;
+                mapData.MapAmount = 0;
+                mapData.CurrentMapAmount = 0;
             }
         }
-
-        BGMChanger();
-        // uiManager.SpawnWorldObj(mapAmount);
-
-    }
-
-    
-
-    int skip = 1;
-    public void SkipIncrement()
-    {
-        skip = 1;
-    }
-    public void SkipDecrement()
-    {
-        skip = 0;
+        SaveMapData();
     }
 
     public void CurrentFieldAmountIncrement()
     {
-        if(currentFieldAmount < 5)
+        if(mapData.CurrentFieldAmount < 5)
         {
-            currentFieldAmount++;
+            mapData.CurrentFieldAmount++; 
         }
-        else
+        else 
         {
-            CurrentMapAmountMinus();
+            CurrentMapAmountMinus(); 
         }
+        SaveMapData();
     }
 
     public void CurrentMapAmountMinus()
     {
-        currentMapAmount -= mapAmount; 
-    }
-
-    void BGMChanger()
-    {
-        
-        if (mapAmount == 30)
-        {
-            // uiManager.BossBGM();
-            skip = 0;
-        }
-        else if (skip == 0)
-        {
-            skip = 1;
-            // uiManager.MainBGM();
-        }
+        mapData.CurrentMapAmount -= mapData.MapAmount; 
     }
 
     public void ResetMapAmount()
     {
         CurrentMapAmountMinus();
-        mapAmount = 0;
+        mapData.MapAmount = 0;
+        SaveMapData();
     }
 
     public int GetMapAmount()
     {
-        return this.mapAmount;
+        return mapData.MapAmount;
     }
     public int GetCurrentMapAmount()
     {
-        return this.currentMapAmount;
+        return mapData.CurrentMapAmount;
     }
     public int GetCurrentFieldAmount()
     {
-        return this.currentFieldAmount;
+        return mapData.CurrentFieldAmount;
     }
 
 
+    // ----------MapEnd---------- //
+    void SetSpawnPoint()
+    {
+        rightEndPoint.SetActive(mapData.IsRightEnd);
+        leftEndPoint.gameObject.SetActive(mapData.IsLeftEnd);
+    }
+
+    public void SetEndPoint()
+    {
+
+        mapData.IsLeftEnd = false;
+        mapData.IsRightEnd = false;
+
+        if (mapData.MapAmount == 0)
+        {
+            mapData.IsLeftEnd = true;
+        }
+
+        if (mapData.MapAmount == 30)
+        {
+            mapData.IsRightEnd = true;
+        }
+
+    }
+
+    public void SpawnPlayer(GameObject player, int num)
+    {
+        if (num == 1)
+        {
+            player.transform.position = leftSpawnPoint.transform.position;
+        }
+        else if (num == -1)
+        {
+            player.transform.position = rightSpawnPoint.transform.position;
+        }
+    }
+
+    void SaveMapData()
+    {
+        SaveManager.instance.SaveMapData(mapData);
+    }
     
 }

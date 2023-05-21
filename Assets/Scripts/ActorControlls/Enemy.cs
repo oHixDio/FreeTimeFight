@@ -43,7 +43,6 @@ public class Enemy : MonoBehaviour
 
     // component
     PixelMonster pixelMonster;
-    ActorSE actorSE;
     BoxCollider2D boxCollider2D;
     Actor actor;
     public Actor Actor
@@ -64,7 +63,6 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         pixelMonster = GetComponent<PixelMonster>();
-        actorSE = GetComponent<ActorSE>();
         boxCollider2D = GetComponent<BoxCollider2D>();
     }
     void Update()
@@ -152,17 +150,17 @@ public class Enemy : MonoBehaviour
         if (critical > maxLck)
         {
             Debug.Log("クリティカル！！");
-            actorSE.CriticalAttackSE();
+            AudioManager.instance.PlayOneShotSESub(AudioManager.instance.EnemyCriticalSE);
             return criticalDamage = damageAmount * 2;
         }
         if (damageAmount > 5)
         {
-            actorSE.AttackSE();
+            AudioManager.instance.PlayOneShotSESub(AudioManager.instance.EnemyAttackSE);
             return damageAmount;
         }
         else
         {
-            actorSE.AttackSE();
+            AudioManager.instance.PlayOneShotSESub(AudioManager.instance.EnemyAttackSE);
             return Random.Range(0, 6);
         }
 
@@ -203,7 +201,6 @@ public class Enemy : MonoBehaviour
             if (actor != null)
             {
                 StartCoroutine(actor.Damage(DamageAmount()));
-                //actor.Damage(DamageAmount());
             }
             this.attackDelayAmount = this.maxDelayAmount;
         }
@@ -220,7 +217,6 @@ public class Enemy : MonoBehaviour
         pixelMonster.IsDead = true;
         actor.CurrentPlayerEXPAndGold(dropExp,Random.Range(1,dropGold));
         actor.KillEnemyTypeChecker();
-        //actor.BossKilledChacker();
         boxCollider2D.enabled = false;
         Destroy(this.gameObject, 1.5f);
         isDestroy = true;
@@ -245,10 +241,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        
-    }
     #endregion
 
 }

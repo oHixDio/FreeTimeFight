@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GameData
 {
@@ -19,19 +21,19 @@ namespace GameData
         int    playerGold        = 0;
         int    playerStatusPoint = 0;
 
-        public string PlayerName        { get; set; }
-        public int    PlayerLevel       { get; set; }
-        public int    PlayerHp          { get; set; }
-        public int    PlayerCurrentHp   { get; set; }
-        public int    PlayerPow         { get; set; }
-        public int    PlayerDef         { get; set; }
-        public int    PlayerSpd         { get; set; }
-        public int    PlayerLck         { get; set; }
-        public int    PlayerSkl         { get; set; }
-        public int    PlayerSumExp      { get; set; }
-        public int    PlayerNextExp     { get; set; }
-        public int    PlayerGold        { get; set; }
-        public int    PlayerStatusPoint { get; set; }
+        public string PlayerName        { get => playerName;        set => playerName        = value; }
+        public int    PlayerLevel       { get => playerLevel;       set => playerLevel       = value; }
+        public int    PlayerHp          { get => playerHp;          set => playerHp          = value; }
+        public int    PlayerCurrentHp   { get => playerCurrentHp;   set => playerCurrentHp   = value; }
+        public int    PlayerPow         { get => playerPow;         set => playerPow         = value; }
+        public int    PlayerDef         { get => playerDef;         set => playerDef         = value; }
+        public int    PlayerSpd         { get => playerSpd;         set => playerSpd         = value; }
+        public int    PlayerLck         { get => playerLck;         set => playerLck         = value; }
+        public int    PlayerSkl         { get => playerSkl;         set => playerSkl         = value; }
+        public int    PlayerSumExp      { get => playerSumExp;      set => playerSumExp      = value; }
+        public int    PlayerNextExp     { get => playerNextExp;     set => playerNextExp     = value; }
+        public int    PlayerGold        { get => playerGold;        set => playerGold        = value; }
+        public int    PlayerStatusPoint { get => playerStatusPoint; set => playerStatusPoint = value; }
 
 
         public PlayerData()
@@ -56,20 +58,6 @@ namespace GameData
             playerStatusPoint = saveData.PlayerStatusPoint;
         }
 
-        /*
-        public void ChangePlayerName       (string s) { playerName        = s; }
-        public void ChangePlayerLevel      (int val)  { playerLevel       = val; }
-        public void ChangePlayerHp         (int val)  { playerHp          = val; }
-        public void ChangePlayerCurrentHp  (int val)  { playerCurrentHp   = val; }
-        public void ChangePlayerPow        (int val)  { playerPow         = val; }
-        public void ChangePlayerDef        (int val)  { playerDef         = val; }
-        public void ChangePlayerSpd        (int val)  { playerSpd         = val; }
-        public void ChangePlayerSkl        (int val)  { playerSkl         = val; }
-        public void ChangePlayerSumExp     (int val)  { playerSumExp      = val; }
-        public void ChangePlayerNextExp    (int val)  { playerNextExp     = val; }
-        public void ChangePlayerGold       (int val)  { playerGold        = val; }
-        public void ChangePlayerStatusPoint(int val)  { playerStatusPoint = val; }
-        */
     }
 
     public class MapData
@@ -80,17 +68,17 @@ namespace GameData
         bool isLeftEnd          = false;
         bool isRightEnd         = false;
 
-        public int  MapAmount          { get; set; }
-        public int  CurrentMapAmount   { get; set; }
-        public int  CurrentFieldAmount { get; set; }
-        public bool IsLeftEnd          { get; set; }
-        public bool IsRightEnd         { get; set; }
-
+        public int  MapAmount          { get => mapAmount;          set => mapAmount          = value; }
+        public int  CurrentMapAmount   { get => currentMapAmount;   set => currentMapAmount   = value; }
+        public int  CurrentFieldAmount { get => currentFieldAmount; set => currentFieldAmount = value; }
+        public bool IsLeftEnd          { get => isLeftEnd;          set => isLeftEnd          = value; }
+        public bool IsRightEnd         { get => isRightEnd;         set => isRightEnd         = value; }
+        
         public MapData()
         {
             SaveManager.instance.LoadMapData(this);
         }
-
+        
         public void SetMapData(SaveData saveData)
         {
             mapAmount          = saveData.MapAmount;
@@ -99,14 +87,6 @@ namespace GameData
             isLeftEnd          = saveData.IsLeftEnd;
             isRightEnd         = saveData.IsRightEnd;
         }
-
-        /*
-        public void ChangeMapAmount         (int val) { mapAmount = val; }
-        public void ChangeCurrentMapAmount  (int val) { currentMapAmount = val; }
-        public void ChangeCurrentFieldAmount(int val) { currentFieldAmount = val; }
-        public void ChangeIsLeftEnd         (bool b)  { isLeftEnd = b; }
-        public void ChangeIsRightEnd        (bool b)  { isRightEnd = b; }
-        */
     }
 
     public class ItemData
@@ -116,10 +96,10 @@ namespace GameData
         int    hasArmorIndex  = 0;
         int    hasPetIndex    = 0;
 
-        public bool[] HadItems       { get; set; }                // アイテムの取得bool情報
-        public int    HasWeaponIndex { get; set; }                // 所持しているWeaponのIndex情報
-        public int    HasArmorIndex  { get; set; }                // 所持しているArmorのIndex情報
-        public int    HasPetIndex    { get; set; }                // 所持しているPetのIndex情報
+        public bool[] HadItems       { get => hadItems;       set => hadItems       = value; }                // アイテムの取得bool情報
+        public int    HasWeaponIndex { get => hasWeaponIndex; set => hasWeaponIndex = value; }                // 所持しているWeaponのIndex情報
+        public int    HasArmorIndex  { get => hasArmorIndex;  set => hasArmorIndex  = value; }                // 所持しているArmorのIndex情報
+        public int    HasPetIndex    { get => hasPetIndex;    set => hasPetIndex    = value; }                // 所持しているPetのIndex情報
 
         public ItemData() 
         {
@@ -136,12 +116,5 @@ namespace GameData
             hasArmorIndex  = saveData.HasArmorIndex;
             hasPetIndex    = saveData.HasPetIndex;
         }
-
-        /*
-        public void ChangeHadItems      (int index, bool b) { hadItems[index] = b; }
-        public void ChangeHasWeaponIndex(int val)           { hasWeaponIndex = val; }
-        public void ChangeHasArmorIndex (int val)           { hasArmorIndex = val; }
-        public void ChangeHasPetIndex   (int val)           { hasPetIndex = val; }
-        */
     }
 }
