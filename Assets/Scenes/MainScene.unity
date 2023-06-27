@@ -13249,6 +13249,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7785872354015224698, guid: a2af519f9e5e5184a922bff6d18e16d4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1256721732}
+    - target: {fileID: 7785872354015224698, guid: a2af519f9e5e5184a922bff6d18e16d4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowMainUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7785872354015224698, guid: a2af519f9e5e5184a922bff6d18e16d4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ShopUI, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 8287767576165758759, guid: a2af519f9e5e5184a922bff6d18e16d4, type: 3}
       propertyPath: m_IsActive
       value: 1

@@ -1,3 +1,4 @@
+using GameData;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -20,9 +21,15 @@ public class WeaponShop : MonoBehaviour
 
     [SerializeField] ShopSlot[] shopSlots;
 
+    ItemData itemDate;
+
     private void Awake()
     {
         shopSlots = this.gameObject.GetComponentsInChildren<ShopSlot>();
+    }
+    private void Start()
+    {
+        itemDate = new ItemData();
     }
     void Update()
     {
@@ -63,7 +70,15 @@ public class WeaponShop : MonoBehaviour
         if (!isPressed) { return; }
 
         shopSlots[choiseItem].BoughtItem();
-
+        Save();
+        
         HideUI();
+    }
+
+    void Save()
+    {
+        itemDate.HadItems[choiseItem+1] = true;
+        
+        SaveManager.instance.SaveItemData(itemDate);
     }
 }
