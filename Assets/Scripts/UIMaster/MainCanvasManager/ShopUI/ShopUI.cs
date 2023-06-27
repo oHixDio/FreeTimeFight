@@ -71,6 +71,8 @@ public class ShopUI : MonoBehaviour
         UIMaster.instance.MainManager.MainFrameLeader.gameObject.SetActive(true);
         UIMaster.instance.MainManager.SystemButtonUI.gameObject.SetActive(true);
         player.SetActive(true);
+
+        
     }
 
     void HideMainUI()

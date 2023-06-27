@@ -1,3 +1,4 @@
+using GameData;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,12 +10,25 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] Transform weaponSlot;
 
+    ItemData itemDate;
+
     void Awake()
     {
         slots = this.gameObject.GetComponentsInChildren<InventorySlot>();
     }
     void Start()
     {
+        itemDate = new ItemData();
+        SetSlot();
+        
+    }
+
+    public void SetSlot()
+    {
+        for(int i = 0;i< slots.Length;i++)
+        {
+            slots[i].IsHad = itemDate.HadItems[i];
+        }
         slots[0].IsHad = true;
     }
 
@@ -26,7 +40,7 @@ public class Inventory : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        //hasItem = Instantiate(slots[num].GetItemPrefab(), weaponSlot.position, Quaternion.identity, weaponSlot);
+        Instantiate(slots[num].GetItemPrefab(), weaponSlot.position, Quaternion.identity, weaponSlot);
     }
 
     

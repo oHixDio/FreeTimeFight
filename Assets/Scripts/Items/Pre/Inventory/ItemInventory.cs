@@ -14,10 +14,15 @@ public class ItemInventory : MonoBehaviour
     {
         itemData = new ItemData();
         slots = this.gameObject.GetComponentsInChildren<ItemInventorySlot>();
+        
+    }
+    private void Start()
+    {
         SetHadItems();
     }
     private void Update()
     {
+        
         SetSlotsText();
     }
 

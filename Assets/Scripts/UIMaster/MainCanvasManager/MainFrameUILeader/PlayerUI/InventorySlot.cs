@@ -44,7 +44,5 @@ public class InventorySlot : MonoBehaviour
     {
         return item.GetPrefab();
     }
-    
-    
    
 }
