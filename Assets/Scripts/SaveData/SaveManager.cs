@@ -81,18 +81,18 @@ public class SaveManager : MonoBehaviour
 public class SaveData
 {
     public string playerName      = "‚ä‚¤‚µ‚á";
-    public int playerLevel        = 1;
+    public int playerLevel        = 20;
     public int playerHp           = 100;
     public int playerCurrentHp    = 100;
     public int playerPow          = 5;
     public int playerDef          = 5;
     public int playerSpd          = 5;
     public int playerLck          = 5;
-    public int playerSkl          = 5;
+    public int playerSkl          = 20;
     public int playerSumExp       = 0;
     public int playerNextExp      = 10;
     public int playerGold         = 0;
-    public int playerStatusPoint  = 0;
+    public int playerStatusPoint  = 100;
 
 
     public int mapAmount          = 0;

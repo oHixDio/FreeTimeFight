@@ -33,7 +33,7 @@ public class Actor : MonoBehaviour
     float       Mobility          = 0f;
     float       attackDelayAmount = 0f;
     const float minDelayTime      = 0.3f;
-    float       maxDelayAmount    = 10f;
+    float       maxDelayAmount    = 5f;
     
     // ahievement Amount
     int slimeKillAmount = 0;
@@ -101,10 +101,11 @@ public class Actor : MonoBehaviour
 
         SetEnemyUI();
 
-
         MovePlayer();
 
         if (besideEnemy) { Attack(); }
+
+        Died();
     }
 
     #region ---UI Method
@@ -160,6 +161,16 @@ public class Actor : MonoBehaviour
         currentMap.SetEndPoint();
         enemySpawn.SpawnControll(right, currentMap.GetMapAmount());
         uiMaster.WorldObjUI.ShowWorldObj(currentMap);
+    }
+
+    public void ClearChacker(Enemy enemy)
+    {
+        if (enemy.GetEnemyType() == Enemy.EnemyType.Boss)
+        {
+            isKilledBoss = true;
+            uiMaster.MainManager.ComplateUI.ShowComplateFrame();
+            uiMaster.MainManager.MainFrameLeader.EventButtonUI.ShowThis();
+        }
     }
 
     #endregion
@@ -308,7 +319,7 @@ public class Actor : MonoBehaviour
 
     public void ShortingAttackDelay(float minusAmount)
     {
-        attackDelayAmount -= minusAmount;
+        attackDelayAmount -= minusAmount * ((float)(playerData.PlayerSpd / (float)maxSpd) * 100f);
         AudioManager.instance.PlayOneShotSE(AudioManager.instance.ShortingSE);
     }
     #endregion
@@ -357,7 +368,16 @@ public class Actor : MonoBehaviour
             isMove = false;
             isDied = true;
             playerData.PlayerHp = 0;
+            uiMaster.MainManager.MainFrameLeader.EventButtonUI.ShowThis();
         }
+    }
+
+    public void Revive()
+    {
+        pixcelCharactor.IsDead = false;
+        isMove = true;
+        isDied = false;
+        isKilledBoss = false;
     }
 
 

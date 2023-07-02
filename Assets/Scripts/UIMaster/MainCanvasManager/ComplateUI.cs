@@ -9,5 +9,10 @@ public class ComplateUI : MonoBehaviour
     public void ShowComplateFrame()
     {
         complateFrame.SetActive(true);
+        AudioManager.instance.PlayBGM(AudioManager.instance.CompleteBGM);
+    }
+    public void HideComplateFrame()
+    {
+        complateFrame.SetActive(false);
     }
 }

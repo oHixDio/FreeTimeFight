@@ -36,6 +36,7 @@ public class ShopUI : MonoBehaviour
         HideMainUI();
         enemySpawn.HideCloneEnemy();
         healHouse.SetActive(true);
+        AudioManager.instance.StopBGM();
     }
 
     public void ShowWeaponShop()
@@ -45,6 +46,7 @@ public class ShopUI : MonoBehaviour
         HideMainUI();
         enemySpawn.HideCloneEnemy();
         weaponShop.SetActive(true);
+        AudioManager.instance.StopBGM();
     }
 
     public void ShowArmorShop()
@@ -54,6 +56,7 @@ public class ShopUI : MonoBehaviour
         HideMainUI();
         enemySpawn.HideCloneEnemy();
         armorShop.SetActive(true);
+        AudioManager.instance.StopBGM();
     }
 
     public void ShowMainUI()
@@ -72,7 +75,7 @@ public class ShopUI : MonoBehaviour
         UIMaster.instance.MainManager.SystemButtonUI.gameObject.SetActive(true);
         player.SetActive(true);
 
-        
+        AudioManager.instance.PlayBGM(AudioManager.instance.MainBGM);
     }
 
     void HideMainUI()

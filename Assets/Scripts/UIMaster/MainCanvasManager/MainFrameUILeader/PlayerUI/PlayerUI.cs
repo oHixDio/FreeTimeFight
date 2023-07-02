@@ -12,21 +12,22 @@ public class PlayerUI : MonoBehaviour
 
     public void HidePlayerUI()
     {
-        playerStatusPanel.SetActive(false);
-        playerInfoPanel.SetActive(false);
-        playerInventoryPanel.SetActive(false);
-        playerGoldPanel.SetActive(false);
-        playerEventPanel.SetActive(false);
+        this.gameObject.SetActive(false);
+        //playerStatusPanel.SetActive(false);
+        //playerInfoPanel.SetActive(false);
+        //playerInventoryPanel.SetActive(false);
+       // playerGoldPanel.SetActive(false);
+       // playerEventPanel.SetActive(false);
     }
 
     // default‚Å‚æ‚­Žg‚¤
     public void ShowMainPanel()
     {
         HidePlayerUI();
-
-        playerStatusPanel.SetActive(true);
-        playerInfoPanel.SetActive(true);
-        playerGoldPanel.SetActive(true);
+        this.gameObject.SetActive(true);
+        //playerStatusPanel.SetActive(true);
+        // playerInfoPanel.SetActive(true);
+        //playerGoldPanel.SetActive(true);
     }
 
     // EnemyStatus‚ð•\Ž¦‚·‚é‚Æ‚«

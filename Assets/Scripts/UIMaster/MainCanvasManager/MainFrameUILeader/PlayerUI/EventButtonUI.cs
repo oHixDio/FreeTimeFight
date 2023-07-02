@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class EventButtonUI : MonoBehaviour
 {
     [SerializeField] Actor actor;
+    [SerializeField] CurrentMap map;
+    [SerializeField] EnemySpawn spn;
     [SerializeField] Text buttonText;
 
     public void ShowThis()
@@ -21,8 +23,6 @@ public class EventButtonUI : MonoBehaviour
 
     public void ShowAnyArea()
     {
-        if(actor.IsDied || actor.IsKilledBoss) { return; }
-
         if (actor.BesideHouseArea)
         {
             UIMaster.instance.MainManager.ShopUI.ShowHealHouse();
@@ -34,6 +34,17 @@ public class EventButtonUI : MonoBehaviour
         if (actor.BesideWeaponArea)
         {
             UIMaster.instance.MainManager.ShopUI.ShowWeaponShop();
+        }
+        if (actor.IsDied || actor.IsKilledBoss)
+        {
+            UIMaster.instance.MainManager.ComplateUI.HideComplateFrame();
+            UIMaster.instance.MainManager.ShopUI.ShowHealHouse();
+            actor.FullHelth();
+            actor.Revive();
+            map.ResetMapAmount();
+            spn.CloneEnemyDestroy();
+            map.SetEndPoint();
+            actor.ResetActorPosition();
         }
         
     }

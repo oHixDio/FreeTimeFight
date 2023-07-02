@@ -14,7 +14,7 @@ public class EventUI : MonoBehaviour
         UIMaster.instance.Actor.IsRight = true;
         if (!UIMaster.instance.Actor.IsMove && UIMaster.instance.Actor.Enemy != null)
         {
-            UIMaster.instance.Actor.ShortingAttackDelay(0.1f);
+            UIMaster.instance.Actor.ShortingAttackDelay(0.01f);
         }
     }
     public void RightPanelUp()

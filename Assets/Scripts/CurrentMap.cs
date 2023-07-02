@@ -29,6 +29,12 @@ public class CurrentMap : MonoBehaviour
         {
             mapData.MapAmount++;
             mapData.CurrentMapAmount++;
+
+            if(mapData.CurrentMapAmount == 30)
+            {
+                AudioManager.instance.PlayBGM(AudioManager.instance.BossBGM);
+            }
+
         }
         else if (playerDirection == -1)
         {
@@ -107,8 +113,9 @@ public class CurrentMap : MonoBehaviour
         {
             mapData.IsRightEnd = true;
         }
-
+        SaveMapData();
     }
+    
 
     public void SpawnPlayer(GameObject player, int num)
     {
